@@ -20,8 +20,9 @@ glApplication::glApplication(void)
    
    int argc = 1;
    const char* argv = "CWCApp";
-   char* aux = (char*)argv;
-   glutInit(&argc, &aux);
+   char* argv2=(char*)argv;
+   
+   glutInit(&argc, &argv2);
 }
 
 //-----------------------------------------------------------------------------

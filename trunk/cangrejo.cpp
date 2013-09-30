@@ -6,7 +6,9 @@
  */
 
 #include "cangrejo.h"
-
+#include <cstdio>
+#include <iostream>
+using namespace std;
 PataCangrejo::PataCangrejo(myWindow* ventana) {
 	this->window=ventana;
 }
@@ -41,4 +43,5 @@ Cangrejo::Cangrejo(myWindow* ventana):pata1(ventana),pata2(ventana),pata3(ventan
 }
 Cangrejo::~Cangrejo() { }
 void Cangrejo::renderizar(glm::mat4 model_matrix) {
+	this->window->renderSpiralSphere(model_matrix);
 }
