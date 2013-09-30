@@ -26,7 +26,7 @@ int main(void)
 	myWindow* myWin = new myWindow();
 
 	Cangrejo cangrejo (myWin);
-
+	myWin->agregar_figura(&cangrejo);
     GLenum err = glewInit();
     if (GLEW_OK != err)
     {
