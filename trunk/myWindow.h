@@ -36,6 +36,8 @@ public:
 	void renderCube(glm::mat4 model_matrix);
 	virtual void agregar_figura(Figura* fig);
 private:
+	float x,y,z;
+	float atX,atY,angz;
 	std::vector<Figura*>figs;
     void changeObjectColor(float r, float g, float b);
 

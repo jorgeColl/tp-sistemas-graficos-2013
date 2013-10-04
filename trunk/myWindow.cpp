@@ -421,6 +421,14 @@ myWindow::myWindow()
     this->cube_index_buffer = NULL;
     this->cube_vertex_buffer = NULL;
     this->cube_normal_buffer = NULL;
+
+    this->x=8.0f;
+    this->y=0.0f;
+    this->z=3.0f;
+
+    this->atX=0;
+    this->atY=0;
+    this->angz=0;
 }
 
 void myWindow::changeObjectColor(float r, float g, float b)
@@ -442,9 +450,7 @@ void myWindow::OnRender(void)
     // View and Projection Matrices Setting
     //
     // View (camera) Matrix
-    this->view_matrix = glm::lookAt ( glm::vec3 ( 8.0, 0.0, 3.0 ),
-                                      glm::vec3 ( 0.0, 0.0, 0.0 ),
-                                      glm::vec3 ( 0.0, 0.0, 1.0 ) );
+    this->view_matrix = glm::lookAt ( glm::vec3 ( x, y, z ), glm::vec3 (atX, atY, angz ), glm::vec3 ( 0.0, 0.0, 1.0 ) );
 
     // Projection Matrix
     glm::mat4 projection_matrix = glm::mat4 ( 1.0f );
@@ -689,7 +695,40 @@ void myWindow::OnKeyDown(int nKey, char cAscii)
 	if (cAscii == 27) // 0x1b = ESC
 	{
 		this->Close(); // Close Window!
-	} 
+	}
+	switch(cAscii){
+	case('4'):
+		this->atY--;
+		break;
+	case('6'):
+		this->atY++;
+		break;
+	case('8'):
+		this->angz++;
+		break;
+	case('5'):
+		this->angz--;
+		break;
+	}
+	switch(nKey){
+	case(GLUT_KEY_UP):
+		this->x--;
+		this->atX--;
+		break;
+	case(GLUT_KEY_DOWN):
+		this->x++;
+		this->atX++;
+		break;
+	case(GLUT_KEY_LEFT ):
+		this->y--;
+		this->atY--;
+		break;
+	case(GLUT_KEY_RIGHT):
+		this->atY++;
+		this->y++;
+		break;
+	}
+	this->OnRender();
 };
 
 void myWindow::OnKeyUp(int nKey, char cAscii)
