@@ -19,7 +19,7 @@ PataCangrejo::PataCangrejo(myWindow* ventana) {
 PataCangrejo::~PataCangrejo() {
 }
 void PataCangrejo::renderizar(glm::mat4 model_matrix) {
-	// primera parte del brazo
+	/*// primera parte del brazo
 	this->window->renderArm(model_matrix);
 
 	model_matrix = glm::translate(model_matrix, glm::vec3 (0.0f, 0.0f, 3.5f));
@@ -36,7 +36,7 @@ void PataCangrejo::renderizar(glm::mat4 model_matrix) {
 
 	// mano del brazo 1
 	this->window->renderArm(  model_matrix*rot3);
-
+	*/
 }
 
 CabezaCangrejo::CabezaCangrejo(myWindow* ventana) {
