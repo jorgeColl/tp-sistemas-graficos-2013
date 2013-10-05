@@ -412,7 +412,7 @@ const char* loadShaderAsString(const char* file)
     return str.c_str();
 }
 
-myWindow::myWindow()
+myWindow::myWindow():m_pos(8.0f, 0.0f,3.0f), m_direct(1.0f,0.0f,0.0f)
 {
     this->sphere_vertex_buffer = NULL;
     this->sphere_index_buffer = NULL;
@@ -421,14 +421,6 @@ myWindow::myWindow()
     this->cube_index_buffer = NULL;
     this->cube_vertex_buffer = NULL;
     this->cube_normal_buffer = NULL;
-
-    this->x=8.0f;
-    this->y=0.0f;
-    this->z=3.0f;
-
-    this->atX=0;
-    this->atY=0;
-    this->angz=0;
 }
 
 void myWindow::changeObjectColor(float r, float g, float b)
@@ -450,7 +442,8 @@ void myWindow::OnRender(void)
     // View and Projection Matrices Setting
     //
     // View (camera) Matrix
-    this->view_matrix = glm::lookAt ( glm::vec3 ( x, y, z ), glm::vec3 (atX, atY, angz ), glm::vec3 ( 0.0, 0.0, 1.0 ) );
+
+    this->view_matrix = glm::lookAt ( this->m_pos,this->m_direct, glm::vec3 ( 0.0, 0.0, 1.0 ) );
 
     // Projection Matrix
     glm::mat4 projection_matrix = glm::mat4 ( 1.0f );
@@ -692,40 +685,46 @@ void myWindow::OnMouseWheel(int nWheelNumber, int nDirection, int x, int y)
 
 void myWindow::OnKeyDown(int nKey, char cAscii)
 {       
+	glm::vec3 dir = (m_pos-m_direct);
+	dir = glm::normalize(dir);
+	glm::vec3 costado = glm::normalize( glm::cross(dir,glm::vec3 (0.0,0.0,1.0)) );
+	glm::vec3 ejeZ (0.0,0.0,1.0);
+	glm::vec3 rotx = glm::cross(dir,ejeZ);
+
 	if (cAscii == 27) // 0x1b = ESC
 	{
 		this->Close(); // Close Window!
 	}
+
 	switch(cAscii){
 	case('4'):
-		this->atY--;
+		m_direct+=rotx;
 		break;
 	case('6'):
-		this->atY++;
+		m_direct-=rotx;
 		break;
 	case('8'):
-		this->angz++;
+		m_direct.z++;
 		break;
 	case('5'):
-		this->angz--;
+		m_direct.z--;
 		break;
 	}
-	switch(nKey){
+
+	switch(nKey) {
 	case(GLUT_KEY_UP):
-		this->x--;
-		this->atX--;
+		this->m_pos-=dir;
 		break;
 	case(GLUT_KEY_DOWN):
-		this->x++;
-		this->atX++;
+		this->m_pos+=dir;
 		break;
 	case(GLUT_KEY_LEFT ):
-		this->y--;
-		this->atY--;
+		this->m_pos+=costado;
+		m_direct+=costado;
 		break;
 	case(GLUT_KEY_RIGHT):
-		this->atY++;
-		this->y++;
+		this->m_pos-=costado;
+		m_direct-=costado;
 		break;
 	}
 	this->OnRender();
