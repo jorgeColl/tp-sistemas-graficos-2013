@@ -30,9 +30,7 @@ public:
 class BrazoCangrejo : public Figura {
 protected:
 	// para manejo de brazo
-	float ang_braz1_Y;
-	float ang_braz1_X;
-	float ang_braz1_Z;
+
 
 	float ang_braz2_X;
 	float ang_braz2_Z;

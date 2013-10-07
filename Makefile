@@ -16,7 +16,7 @@ SRCDIR   = src
 INCDIR   = inc
 OBJDIR   = obj
 RESDIR   = res
-BINDIR   = bin
+BINDIR   = .
 TEMPDIR  = tmp
 
 # Wildcards
@@ -92,5 +92,5 @@ vexe:
 .PHONY: clean
 clean:
 	@echo "\nLIMPIEZA:"
-	@$(RMDIR) $(OBJDIR) $(TEMPDIR) $(BINDIR)
+	@$(RMDIR) $(OBJDIR) $(TEMPDIR)
 	@echo "	. El repositorio ha sido limpiado exitosamente!"

@@ -7,7 +7,7 @@
 #include <glm/gtx/projection.hpp>
 
 #include "myWindow.h"
-   
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -202,7 +202,7 @@ void myWindow::createGrid(int size)
     this->grid_vertex_buffer[offset++] = size;
     this->grid_vertex_buffer[offset++] = 0;
 
-    for (unsigned int i=0; i< this->grid_index_buffer_size; i++)
+    for (int i=0; i< this->grid_index_buffer_size; i++)
     {
         this->grid_index_buffer[i] = i;
     }
@@ -412,6 +412,46 @@ const char* loadShaderAsString(const char* file)
     return str.c_str();
 }
 
+#define SENSIBILIDAD 15
+void myWindow::axuuu(int a, int b){
+	std::cout<<"x:"<<a<<" y:"<<b<<std::endl;
+	std::cout<<"centroX: "<<width/2<<" centroY: "<<height/2<<std::endl;
+	int centroX = (width/2);
+	int centroY = (height/2);
+	float difx = ( centroX - a);
+	float difY = ( centroY -b);
+	std::cout<<"difereciaX: "<<difx<<" diferenciaY: "<<difY<<std::endl;
+
+	glm::vec3 dir = (m_pos-m_direct);
+	dir = glm::normalize(dir);
+	//glm::vec3 costado = glm::normalize( glm::cross(dir,glm::vec3 (0.0,0.0,1.0)) );
+	//costado = (costado * difx);
+	glm::vec3 ejeZ (0.0,0.0,1.0);
+	glm::vec3 rotx = glm::cross(dir,ejeZ);
+	rotx=glm::normalize(rotx);
+
+	if(difx < 0){
+		m_direct-=rotx;
+		glutWarpPointer(width/2,height/2);
+	}else if(difx>0){
+		m_direct+=rotx;
+		glutWarpPointer(width/2,height/2);
+	}
+	if(difY>0){
+		m_direct.z+=0.5;
+		glutWarpPointer(width/2,height/2);
+	}else if (difY<0){
+		m_direct.z-=0.5;
+		glutWarpPointer(width/2,height/2);
+	}
+
+	this->Repaint();
+
+}
+extern void* instancia;
+void aux (int a, int b){
+	((myWindow*)instancia)->axuuu(a,b);
+}
 myWindow::myWindow():m_pos(8.0f, 0.0f,3.0f), m_direct(1.0f,0.0f,0.0f)
 {
     this->sphere_vertex_buffer = NULL;
@@ -421,6 +461,11 @@ myWindow::myWindow():m_pos(8.0f, 0.0f,3.0f), m_direct(1.0f,0.0f,0.0f)
     this->cube_index_buffer = NULL;
     this->cube_vertex_buffer = NULL;
     this->cube_normal_buffer = NULL;
+
+    full_screen = false;
+    this->posMouseX =this->width/2;
+    this->posMouseY=this->height/2;
+    glutPassiveMotionFunc(aux);
 }
 
 void myWindow::changeObjectColor(float r, float g, float b)
@@ -500,7 +545,7 @@ void myWindow::OnRender(void)
     glm::mat4 model_matrix = glm::mat4 ( 1.0f );
     changeObjectColor(0.8, 0.8, 0.3);
     
-    for (unsigned int i = 0; i < figs.size(); ++i) {
+    for (int i = 0; i < figs.size(); ++i) {
    		figs[i]->renderizar(model_matrix);
    	}
 
@@ -682,6 +727,11 @@ void myWindow::OnMouseUp(int button, int x, int y)
 void myWindow::OnMouseWheel(int nWheelNumber, int nDirection, int x, int y)
 {
 }
+//! Called when Mouse is moved (without pressing any button)
+void myWindow::OnMouseMove(int x, int y){
+std::cout<<"se movio en x: "<<x<<std::endl;
+std::cout<<"se movio en y: "<<y<<std::endl;
+}
 
 void myWindow::OnKeyDown(int nKey, char cAscii)
 {       
@@ -696,48 +746,49 @@ void myWindow::OnKeyDown(int nKey, char cAscii)
 		this->Close(); // Close Window!
 	}
 
-	switch(cAscii){
-	case('4'):
-		m_direct+=rotx;
+	switch(cAscii) {
+	case ('4'):
+		m_direct += rotx;
 		break;
-	case('6'):
-		m_direct-=rotx;
+	case ('6'):
+		m_direct -= rotx;
 		break;
-	case('8'):
+	case ('8'):
 		m_direct.z++;
 		break;
-	case('5'):
+	case ('5'):
 		m_direct.z--;
+		break;
+	case ('w'):
+		this->m_pos -= dir;
+		break;
+	case ('s'):
+		this->m_pos += dir;
+		break;
+	case ('a'):
+		this->m_pos += costado;
+		m_direct += costado;
+		break;
+	case ('d'):
+		this->m_pos -= costado;
+		m_direct -= costado;
 		break;
 	}
 
-	switch(nKey) {
-	case(GLUT_KEY_UP):
-		this->m_pos-=dir;
-		break;
-	case(GLUT_KEY_DOWN):
-		this->m_pos+=dir;
-		break;
-	case(GLUT_KEY_LEFT ):
-		this->m_pos+=costado;
-		m_direct+=costado;
-		break;
-	case(GLUT_KEY_RIGHT):
-		this->m_pos-=costado;
-		m_direct-=costado;
-		break;
-	}
 	this->OnRender();
-}
+};
 
 void myWindow::OnKeyUp(int nKey, char cAscii)
 {
 	if (cAscii == 'f')
 	{
-		SetFullscreen(true);
+		if(full_screen){
+			full_screen = false;
+		}else {
+			full_screen = true;
+		}
+
+		SetFullscreen(full_screen);
 	}
-	else if (cAscii == 'w')
-	{
-		SetFullscreen(false);
-	}
-}
+
+};
