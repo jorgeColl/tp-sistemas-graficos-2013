@@ -65,10 +65,10 @@ namespace cwc
       virtual void SetFullscreen(bool bFullscreen) = 0;
       
       //! Hide the window
-      virtual void Hide() = 0;;
+      virtual void Hide() = 0;
       
       //! Show the window
-      virtual void Show() = 0;;
+      virtual void Show() = 0;
      
       //! Close the window
       virtual void  Close()= 0; // Close Window

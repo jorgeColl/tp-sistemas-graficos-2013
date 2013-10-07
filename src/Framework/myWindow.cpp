@@ -202,7 +202,7 @@ void myWindow::createGrid(int size)
     this->grid_vertex_buffer[offset++] = size;
     this->grid_vertex_buffer[offset++] = 0;
 
-    for (int i=0; i< this->grid_index_buffer_size; i++)
+    for (unsigned int i=0; i< this->grid_index_buffer_size; i++)
     {
         this->grid_index_buffer[i] = i;
     }
@@ -500,7 +500,7 @@ void myWindow::OnRender(void)
     glm::mat4 model_matrix = glm::mat4 ( 1.0f );
     changeObjectColor(0.8, 0.8, 0.3);
     
-    for (int i = 0; i < figs.size(); ++i) {
+    for (unsigned int i = 0; i < figs.size(); ++i) {
    		figs[i]->renderizar(model_matrix);
    	}
 
@@ -728,7 +728,7 @@ void myWindow::OnKeyDown(int nKey, char cAscii)
 		break;
 	}
 	this->OnRender();
-};
+}
 
 void myWindow::OnKeyUp(int nKey, char cAscii)
 {
@@ -740,4 +740,4 @@ void myWindow::OnKeyUp(int nKey, char cAscii)
 	{
 		SetFullscreen(false);
 	}
-};
+}
