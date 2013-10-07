@@ -6,11 +6,11 @@
 
 #include <vector>
 class Figura;
+
 class myWindow : public cwc::glutWindow
 {
 public:
 	myWindow();
-
 	virtual void OnRender(void);
 	virtual void OnIdle();
 
@@ -23,7 +23,8 @@ public:
 	virtual void OnMouseDown(int button, int x, int y);
 	virtual void OnMouseUp(int button, int x, int y);
 	virtual void OnMouseWheel(int nWheelNumber, int nDirection, int x, int y);
-
+	 //! Called when Mouse is moved (without pressing any button)
+	virtual void OnMouseMove(int x, int y);
 	virtual void OnKeyDown(int nKey, char cAscii);
 
 	virtual void OnKeyUp(int nKey, char cAscii);
@@ -35,12 +36,15 @@ public:
 	void renderGrid(glm::mat4 model_matrix);
 	void renderCube(glm::mat4 model_matrix);
 	virtual void agregar_figura(Figura* fig);
+	void axuuu(int a, int b);
 private:
-	glm::vec3 m_pos;
-	glm::vec3 m_direct;
+	float posMouseX,posMouseY;
+	glm::vec3 m_pos, m_direct;
 	std::vector<Figura*>figs;
-    void changeObjectColor(float r, float g, float b);
+	bool full_screen;
 
+
+    void changeObjectColor(float r, float g, float b);
     void createSpiralSphere(const float radius, const unsigned int loops, const unsigned int segmentsPerLoop);
     void createGrid(int size);
     void createCube();
