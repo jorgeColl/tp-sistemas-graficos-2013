@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include "myApplication.h"
-
+void* instancia;
 #include "myWindow.h"
 #include "cangrejo.h"
 
@@ -24,7 +24,7 @@ int main(void)
 {
 	myApplication*  pApp = new myApplication;
 	myWindow* myWin = new myWindow();
-
+	instancia = (void*)myWin;
 	Cangrejo cangrejo (myWin);
 	myWin->agregar_figura(&cangrejo);
     GLenum err = glewInit();
