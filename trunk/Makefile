@@ -65,13 +65,11 @@ $(BINDIR):
 	@mkdir $(BINDIR)
 	@echo "	. La carpeta '"$@"' ha sido creada exitosamente!"
 
-directorios: $(TEMPDIR) $(OBJDIR) $(BINDIR)
+directorios: $(TEMPDIR) $(OBJDIR)
 
 # Creacion de recursos
 recursos: | directorios
 	@$(CPY) $(RESDIR)/*/*.* $(BINDIR)
-	@$(CPY) $(RESDIR)/*/*.* $(OBJDIR)
-#	@$(CPY) $(RESDIR)/*/*.* $(TMPDIR)
 	@echo "	. Los recursos han sido copiados exitosamente!"
 
 # Compilaciones
@@ -83,14 +81,17 @@ objetos: $(OBJECTS)
 
 # Ejecuciones
 exe:
-	@cd $(BINDIR); ./$(EXENAME); cd ..
+	./$(EXENAME)
+#	@cd $(BINDIR); ./$(EXENAME); cd ..
 
 vexe:
-	@cd $(BINDIR); $(VALG) ./$(EXENAME); cd ..
+	$(VALG) ./$(EXENAME)
+#	@cd $(BINDIR); $(VALG) ./$(EXENAME); cd ..
 
 # Limpieza
 .PHONY: clean
 clean:
 	@echo "\nLIMPIEZA:"
-	@$(RMDIR) $(OBJDIR) $(TEMPDIR)
+	@$(RMDIR) $(OBJDIR) $(TEMPDIR) # $(BINDIR)
+	@$(RM) *.vert *.frag $(EXENAME)
 	@echo "	. El repositorio ha sido limpiado exitosamente!"
