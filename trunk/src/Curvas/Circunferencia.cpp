@@ -1,7 +1,7 @@
 #include "Circunferencia.h"
 
 Circunferencia::Circunferencia (glm::vec3 centro, unsigned int radio)
-					: CurvaBSpline(Circunferencia::mis_puntos(centro, radio)) { }
+					: CurvaBSpline (Circunferencia::mis_puntos(centro, radio), centro, glm::vec3(0.0,0.0,1.0)) { }
 
 
 std::vector<glm::vec3> Circunferencia::mis_puntos (glm::vec3 centro, unsigned int radio) {

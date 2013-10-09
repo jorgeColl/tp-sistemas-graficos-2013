@@ -25,4 +25,4 @@ float CurvaBSplineCubica::calcular_base (int n, int i, float u) {
 	else return 0.0;
 }
 
-CurvaBSplineCubica::CurvaBSplineCubica (std::vector<glm::vec3> ptosControl): Curva (ptosControl) { }
+CurvaBSplineCubica::CurvaBSplineCubica (std::vector<glm::vec3> ptosControl, glm::vec3 centro, glm::vec3 orientacion): Curva (ptosControl, centro, orientacion) { }

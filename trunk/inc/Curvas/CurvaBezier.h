@@ -10,6 +10,6 @@ class CurvaBezier : public Curva {
 		float calcular_base (int n, int i, float u);
 	
 	public:
-		CurvaBezier (std::vector<glm::vec3> ptosControl);
+		CurvaBezier (std::vector<glm::vec3> ptosControl, glm::vec3 centro, glm::vec3 orientacion);
 		
 };

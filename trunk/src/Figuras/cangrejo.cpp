@@ -8,18 +8,18 @@
 #include "cangrejo.h"
 #include <cstdio>
 #include <iostream>
+#include "Esfera.h"
 
 using namespace std;
 
 
-PataCangrejo::PataCangrejo(myWindow* ventana) {
-	this->window = ventana;
+PataCangrejo::PataCangrejo(myWindow* ventana) : Figura (ventana) {
 }
 PataCangrejo::~PataCangrejo() {
 }
 void PataCangrejo::renderizar(glm::mat4 model_matrix) {
 	/*// primera parte del brazo
-	this->window->renderArm(model_matrix);
+	this->renderArm(model_matrix);
 
 	model_matrix = glm::translate(model_matrix, glm::vec3 (0.0f, 0.0f, 3.5f));
 
@@ -27,21 +27,22 @@ void PataCangrejo::renderizar(glm::mat4 model_matrix) {
 	model_matrix = glm::rotate(model_matrix, this->ang_braz2_Z, glm::vec3 ( 0.0f,0.0f,1.0f));
 
 	// segunda parte del brazo
-	this->window->renderArm(model_matrix);
+	this->renderArm(model_matrix);
 
 	model_matrix= glm::translate(model_matrix, glm::vec3 (0.0f, 0.0f, 3.5f));
 	model_matrix = glm::rotate(model_matrix, this->ang_dedos_X, glm::vec3 (1.0f, 0.0f,0.0f));
 	glm::mat4 rot3 = glm::rotate(glm::mat4 (1.0f), this->ang_mano, glm::vec3 (0.0f, 0.0f,1.0f));
 
 	// mano del brazo 1
-	this->window->renderArm(  model_matrix*rot3);
+	this->renderArm(  model_matrix*rot3);
 	*/
 }
 
-CabezaCangrejo::CabezaCangrejo(myWindow* ventana) {
-	this->window = ventana;
+CabezaCangrejo::CabezaCangrejo(myWindow* ventana) : Figura (ventana) {
+	this->mi_superficie = new Esfera (ventana, 1.0, 32, 32);
 }
 CabezaCangrejo::~CabezaCangrejo() {
+	delete this->mi_superficie;
 }
 void CabezaCangrejo::renderizar(glm::mat4 model_matrix) {
 	glm::vec3 translado(0, 1.2, 0);
@@ -49,11 +50,10 @@ void CabezaCangrejo::renderizar(glm::mat4 model_matrix) {
 
 	glm::vec3 escala(0.5, 0.5, 0.5);
 	model_matrix = glm::scale(model_matrix, escala);
-	this->window->renderSpiralSphere(model_matrix);
+	this->mi_superficie->render(model_matrix);
 }
 
-BrazoCangrejo::BrazoCangrejo(myWindow* ventana) {
-	this->window = ventana;
+BrazoCangrejo::BrazoCangrejo(myWindow* ventana) : Figura (ventana) {
 	ang_braz2_X=0;
 	ang_braz2_Z=0;
 
@@ -64,7 +64,7 @@ BrazoCangrejo::~BrazoCangrejo() {
 }
 void BrazoCangrejo::renderizar(glm::mat4 model_matrix) {
 	// primera parte del brazo
-	this->window->renderArm(model_matrix);
+	this->renderArm(model_matrix);
 
 	model_matrix = glm::translate(model_matrix, glm::vec3 (0.0f, 0.0f, 3.5f));
 
@@ -72,38 +72,38 @@ void BrazoCangrejo::renderizar(glm::mat4 model_matrix) {
 	model_matrix = glm::rotate(model_matrix, this->ang_braz2_Z, glm::vec3 ( 0.0f,0.0f,1.0f));
 
 	// segunda parte del brazo
-	this->window->renderArm(model_matrix);
+	this->renderArm(model_matrix);
 
 	model_matrix= glm::translate(model_matrix, glm::vec3 (0.0f, 0.0f, 3.5f));
 	model_matrix = glm::rotate(model_matrix, this->ang_dedos_X, glm::vec3 (1.0f, 0.0f,0.0f));
 	glm::mat4 rot3 = glm::rotate(glm::mat4 (1.0f), this->ang_mano, glm::vec3 (0.0f, 0.0f,1.0f));
 
 	// mano del brazo 1
-	this->window->renderArm(  model_matrix*rot3);
+	this->renderArm(  model_matrix*rot3);
 
 	glm::mat4 rot4 = glm::rotate(glm::mat4 (1.0f), -this->ang_dedos_X, glm::vec3 (1.0f, 0.0f, 0.0f));
 
 	// mano del brazo 2
-	this->window->renderArm(  model_matrix * rot4);
+	this->renderArm(  model_matrix * rot4);
 
 }
 
-TorsoCangrejo::TorsoCangrejo(myWindow* ventana) {
-	this->window = ventana;
+TorsoCangrejo::TorsoCangrejo(myWindow* ventana) : Figura (ventana) {
+	this->mi_superficie = new Esfera (ventana, 1.0, 32, 32);
 }
 TorsoCangrejo::~TorsoCangrejo() {
+	delete this->mi_superficie;
 }
 void TorsoCangrejo::renderizar(glm::mat4 model_matrix) {
 	glm::vec3 escala(1, 1.2, 0.8);
 	model_matrix = glm::scale(model_matrix, escala);
-	this->window->renderSpiralSphere(model_matrix);
+	this->mi_superficie->render(model_matrix);
 }
 
-Cangrejo::Cangrejo(myWindow* ventana) :
+Cangrejo::Cangrejo(myWindow* ventana) : Figura (ventana),
 		pata1(ventana), pata2(ventana), pata3(ventana), pata4(ventana), pata5(
 				ventana), pata6(ventana), cabeza(ventana), torso(ventana), brazo1(
 				ventana), brazo2(ventana) {
-	this->window = ventana;
 
 }
 Cangrejo::~Cangrejo() {

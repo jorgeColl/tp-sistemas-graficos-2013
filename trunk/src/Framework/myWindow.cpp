@@ -14,326 +14,14 @@
 #include <fstream>
 #include <vector>
 #include "figura.h"
-void myWindow::createCube()
+#include "Grilla.h"
+#include "Esfera.h"
+#include "Cubo.h"
+
+void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
+							 GLuint* index_buff, unsigned int index_buff_size, GLenum modo)
 {
-    if (this->cube_vertex_buffer != NULL)
-    {
-        delete this->cube_vertex_buffer;
-    }
-    this->cube_vertex_buffer_size = 3*8;
-    this->cube_vertex_buffer = new GLfloat[this->cube_vertex_buffer_size];
-
-    if (this->cube_normal_buffer != NULL)
-    {
-        delete this->cube_normal_buffer;
-    }
-    this->cube_normal_buffer_size = 3*8;
-    this->cube_normal_buffer = new GLfloat[this->cube_normal_buffer_size];
-    
-    if (this->cube_index_buffer != NULL)
-    {
-        delete this->cube_index_buffer;
-    }
-    this->cube_index_buffer_size = 4 * 6;
-    this->cube_index_buffer = new GLuint[this->cube_index_buffer_size];
-
-    this->cube_vertex_buffer[0] = 0.5f;
-    this->cube_vertex_buffer[1] = 0.5f;
-    this->cube_vertex_buffer[2] = -0.5f;
-
-    this->cube_vertex_buffer[3] = 0.5f;
-    this->cube_vertex_buffer[4] = -0.5f;
-    this->cube_vertex_buffer[5] = -0.5f;
-
-    this->cube_vertex_buffer[6] = -0.5f;
-    this->cube_vertex_buffer[7] = -0.5f;
-    this->cube_vertex_buffer[8] = -0.5f;
-
-    this->cube_vertex_buffer[9] = -0.5f;
-    this->cube_vertex_buffer[10] = 0.5f;
-    this->cube_vertex_buffer[11] = -0.5f;
-
-    this->cube_vertex_buffer[12] = 0.5f;
-    this->cube_vertex_buffer[13] = 0.5f;
-    this->cube_vertex_buffer[14] = 0.5f;
-
-    this->cube_vertex_buffer[15] = 0.5f;
-    this->cube_vertex_buffer[16] = -0.5f;
-    this->cube_vertex_buffer[17] = 0.5f;
-
-    this->cube_vertex_buffer[18] = -0.5f;
-    this->cube_vertex_buffer[19] = -0.5f;
-    this->cube_vertex_buffer[20] = 0.5f;
-
-    this->cube_vertex_buffer[21] = -0.5f;
-    this->cube_vertex_buffer[22] = 0.5f;
-    this->cube_vertex_buffer[23] = 0.5f;
-
-    this->cube_index_buffer[0] = 0;
-    this->cube_index_buffer[1] = 1;
-    this->cube_index_buffer[2] = 2;
-    this->cube_index_buffer[3] = 3;
- 
-    this->cube_index_buffer[4] = 4;
-    this->cube_index_buffer[5] = 5;
-    this->cube_index_buffer[6] = 6;
-    this->cube_index_buffer[7] = 7;
-    
-    this->cube_index_buffer[8] = 0;
-    this->cube_index_buffer[9] = 4;
-    this->cube_index_buffer[10] = 5;
-    this->cube_index_buffer[11] = 1;
-
-    this->cube_index_buffer[12] = 1;
-    this->cube_index_buffer[13] = 5;
-    this->cube_index_buffer[14] = 6;
-    this->cube_index_buffer[15] = 2;
-
-    this->cube_index_buffer[16] = 2;
-    this->cube_index_buffer[17] = 6;
-    this->cube_index_buffer[18] = 7;
-    this->cube_index_buffer[19] = 3;
-
-    this->cube_index_buffer[20] = 3;
-    this->cube_index_buffer[21] = 7;
-    this->cube_index_buffer[22] = 4;
-    this->cube_index_buffer[23] = 0;
-
-    this->cube_normal_buffer[0] = 0.5f;
-    this->cube_normal_buffer[1] = 0.5f;
-    this->cube_normal_buffer[2] = 0.0f;
-
-    this->cube_normal_buffer[3] = 0.5f;
-    this->cube_normal_buffer[4] = -0.5f;
-    this->cube_normal_buffer[5] = 0.0f;
-
-    this->cube_normal_buffer[6] = -0.5f;
-    this->cube_normal_buffer[7] = -0.5f;
-    this->cube_normal_buffer[8] = 0.0f;
-
-    this->cube_normal_buffer[9] = -0.5f;
-    this->cube_normal_buffer[10] = 0.5f;
-    this->cube_normal_buffer[11] = 0.0f;
-
-    this->cube_normal_buffer[12] = 0.5f;
-    this->cube_normal_buffer[13] = 0.5f;
-    this->cube_normal_buffer[14] = 0.0f;
-
-    this->cube_normal_buffer[15] = 0.5f;
-    this->cube_normal_buffer[16] = -0.5f;
-    this->cube_normal_buffer[17] = 0.0f;
-
-    this->cube_normal_buffer[18] = -0.5f;
-    this->cube_normal_buffer[19] = -0.5f;
-    this->cube_normal_buffer[20] = 0.0f;
-
-    this->cube_normal_buffer[21] = -0.5f;
-    this->cube_normal_buffer[22] = 0.5f;
-    this->cube_normal_buffer[23] = 0.0f;
-}
-
-void myWindow::createGrid(int size)
-{
-    if (this->grid_vertex_buffer != NULL)
-    {
-        delete this->grid_vertex_buffer;
-    }
-    this->grid_vertex_buffer_size = 12*(2*size +1);
-    this->grid_vertex_buffer = new GLfloat[this->grid_vertex_buffer_size];
-    
-    
-    if (this->grid_index_buffer != NULL)
-    {
-        delete this->grid_index_buffer;
-    }
-    this->grid_index_buffer_size = 4*(2*size +1);
-    this->grid_index_buffer = new GLuint[this->grid_index_buffer_size];
-
-    int offset;
-    for (int i=0; i<size; i++)
-    {
-        offset = 24*i;
-        this->grid_vertex_buffer[offset++] = -size;
-        this->grid_vertex_buffer[offset++] = i+1;
-        this->grid_vertex_buffer[offset++] = 0;
-
-        this->grid_vertex_buffer[offset++] = size;
-        this->grid_vertex_buffer[offset++] = i+1;
-        this->grid_vertex_buffer[offset++] = 0;
-
-        this->grid_vertex_buffer[offset++] = -size;
-        this->grid_vertex_buffer[offset++] = -(i+1);
-        this->grid_vertex_buffer[offset++] = 0;
-
-        this->grid_vertex_buffer[offset++] = size;
-        this->grid_vertex_buffer[offset++] = -(i+1);
-        this->grid_vertex_buffer[offset++] = 0;
-
-
-        this->grid_vertex_buffer[offset++] = i+1;
-        this->grid_vertex_buffer[offset++] = -size;
-        this->grid_vertex_buffer[offset++] = 0;
-
-        this->grid_vertex_buffer[offset++] = i+1;
-        this->grid_vertex_buffer[offset++] = size;
-        this->grid_vertex_buffer[offset++] = 0;
-
-        this->grid_vertex_buffer[offset++] = -(i+1);
-        this->grid_vertex_buffer[offset++] = -size;
-        this->grid_vertex_buffer[offset++] = 0;
-
-        this->grid_vertex_buffer[offset++] = -(i+1);
-        this->grid_vertex_buffer[offset++] = size;
-        this->grid_vertex_buffer[offset++] = 0;
-    }
-
-    offset = 24 * size;
-    this->grid_vertex_buffer[offset++]   = -size;
-    this->grid_vertex_buffer[offset++] = 0;
-    this->grid_vertex_buffer[offset++] = 0;
-
-    this->grid_vertex_buffer[offset++] = size;
-    this->grid_vertex_buffer[offset++] = 0;
-    this->grid_vertex_buffer[offset++] = 0;
-
-    this->grid_vertex_buffer[offset++] = 0;
-    this->grid_vertex_buffer[offset++] = -size;
-    this->grid_vertex_buffer[offset++] = 0;
-
-    this->grid_vertex_buffer[offset++] = 0;
-    this->grid_vertex_buffer[offset++] = size;
-    this->grid_vertex_buffer[offset++] = 0;
-
-    for (int i=0; i< this->grid_index_buffer_size; i++)
-    {
-        this->grid_index_buffer[i] = i;
-    }
-}
-
-void myWindow::createSpiralSphere(const float radius, const unsigned int loops, const unsigned int segmentsPerLoop)
-{
- 
-    if (this->vertex_buffer.size() >0)
-    {
-        this->vertex_buffer.clear();
-    }
-
-    if (this->index_buffer.size() >0)
-    {
-        this->index_buffer.clear();
-    }
-
-    float PI = 3.1415f;
-
-	for (unsigned int loopSegmentNumber = 0; loopSegmentNumber < segmentsPerLoop; ++loopSegmentNumber)
-	{
-		float theta = 0;
-		float phi = loopSegmentNumber * 2 * PI / segmentsPerLoop;
-		float sinTheta = std::sin(theta);
-		float sinPhi = std::sin(phi);
-		float cosTheta = std::cos(theta);
-		float cosPhi = std::cos(phi);
-
-        // 
-        this->vertex_buffer.push_back(radius * cosPhi * sinTheta); // Vx
-        this->vertex_buffer.push_back(radius * sinPhi * sinTheta); // Vy
-        this->vertex_buffer.push_back(radius * cosTheta);          // Vz
-	}
-	for (unsigned int loopNumber = 0; loopNumber <= loops; ++loopNumber)
-	{
-		for (unsigned int loopSegmentNumber = 0; loopSegmentNumber < segmentsPerLoop; ++loopSegmentNumber)
-		{
-			float theta = (loopNumber * PI / loops) + ((PI * loopSegmentNumber) / (segmentsPerLoop * loops));
-			if (loopNumber == loops)
-			{
-				theta = PI;
-			}
-			float phi = loopSegmentNumber * 2 * PI / segmentsPerLoop;
-			float sinTheta = std::sin(theta);
-			float sinPhi = std::sin(phi);
-			float cosTheta = std::cos(theta);
-			float cosPhi = std::cos(phi);
-
-            this->vertex_buffer.push_back(radius * cosPhi * sinTheta);
-            this->vertex_buffer.push_back(radius * sinPhi * sinTheta);
-            this->vertex_buffer.push_back(radius * cosTheta);
-		}
-	}
-	for (unsigned int loopSegmentNumber = 0; loopSegmentNumber < segmentsPerLoop; ++loopSegmentNumber)
-	{
-		this->index_buffer.push_back(loopSegmentNumber);
-		this->index_buffer.push_back(segmentsPerLoop + loopSegmentNumber);
-	}
-	for (unsigned int loopNumber = 0; loopNumber < loops; ++loopNumber)
-	{
-		for (unsigned int loopSegmentNumber = 0; loopSegmentNumber < segmentsPerLoop; ++loopSegmentNumber)
-		{
-			this->index_buffer.push_back(((loopNumber + 1) * segmentsPerLoop) + loopSegmentNumber);
-			this->index_buffer.push_back(((loopNumber + 2) * segmentsPerLoop) + loopSegmentNumber);
-		}
-	}
-
-    //
-    if (this->sphere_vertex_buffer != NULL)
-    {
-        delete[] this->sphere_vertex_buffer;
-    }
-    this->sphere_vertex_buffer = new float[this->vertex_buffer.size()];
-    
-    if ( this->sphere_index_buffer != NULL)
-    {
-        delete[] this->sphere_index_buffer;
-    }
-    this->sphere_index_buffer = new unsigned int[this->index_buffer.size()];
-
-    std::vector<float>::iterator vertex_it;
-    unsigned int v = 0;
-    for (vertex_it = this->vertex_buffer.begin(); vertex_it != this->vertex_buffer.end(); vertex_it++)
-    {
-        this->sphere_vertex_buffer[v] = *vertex_it;
-        v++;
-    }
-
-    std::vector<unsigned int>::iterator index_it;
-    unsigned int i = 0;
-    for (index_it = this->index_buffer.begin(); index_it != this->index_buffer.end(); index_it++)
-    {
-        this->sphere_index_buffer[i] = *index_it;
-        i++;
-    }
-}
-
-void myWindow::renderGrid(glm::mat4 model_matrix)
-{
-    // Normal Matrix
-    glm::mat3 normal_matrix = glm::mat3 ( 1.0f );
-    
-    // Bind Normal MAtrix
-    GLuint location_normal_matrix = glGetUniformLocation( this->programHandle, "NormalMatrix"); 
-    if( location_normal_matrix >= 0 ) 
-	{ 
-        glUniformMatrix3fv( location_normal_matrix, 1, GL_FALSE, &normal_matrix[0][0]); 
-	}
-
-    // Bind Model Matrix
-    GLuint location_model_matrix = glGetUniformLocation( this->programHandle, "ModelMatrix"); 
-    if( location_model_matrix >= 0 ) 
-	{ 
-		glUniformMatrix4fv( location_model_matrix, 1, GL_FALSE, &model_matrix[0][0]); 
-	}
-
-    glEnableClientState(GL_VERTEX_ARRAY);
-    
-    glVertexPointer(3, GL_FLOAT, 0, this->grid_vertex_buffer);
-    
-    glDrawElements(GL_LINES, this->grid_index_buffer_size, GL_UNSIGNED_INT, this->grid_index_buffer);
-        
-    glDisableClientState(GL_VERTEX_ARRAY);
-}
-
-void myWindow::renderSpiralSphere(glm::mat4 model_matrix)
-{
-    // Normal Matrix
+	// Normal Matrix
     glm::mat3 normal_matrix = glm::mat3 ( 1.0f );
     glm::mat4 aux = this->view_matrix * model_matrix;
     for (int i=0; i<3; i++)
@@ -357,54 +45,13 @@ void myWindow::renderSpiralSphere(glm::mat4 model_matrix)
     glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 
-	glVertexPointer(3, GL_FLOAT, 0, sphere_vertex_buffer);
-	glNormalPointer(GL_FLOAT, 0, sphere_vertex_buffer);
+	glVertexPointer(3, GL_FLOAT, 0, vertex_buff);
+	glNormalPointer(GL_FLOAT, 0, normal_buff);
 
-    glDrawElements(GL_TRIANGLE_STRIP, index_buffer.size(), GL_UNSIGNED_INT, sphere_index_buffer);
-
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-}
-
-void myWindow::renderCube(glm::mat4 model_matrix)
-{
-    // Normal Matrix
-    glm::mat3 normal_matrix = glm::mat3 ( 1.0f );
-        
-    // Bind Normal MAtrix
-    GLuint location_normal_matrix = glGetUniformLocation( this->programHandle, "NormalMatrix"); 
-    if( location_normal_matrix >= 0 ) 
-	{ 
-        glUniformMatrix3fv( location_normal_matrix, 1, GL_FALSE, &normal_matrix[0][0]); 
-	}
-
-    // Bind Model Matrix
-    GLuint location_model_matrix = glGetUniformLocation( this->programHandle, "ModelMatrix"); 
-    if( location_model_matrix >= 0 ) 
-	{ 
-		glUniformMatrix4fv( location_model_matrix, 1, GL_FALSE, &model_matrix[0][0]); 
-	}
-
-    glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-
-	glVertexPointer(3, GL_FLOAT, 0, cube_vertex_buffer);
-	glNormalPointer(GL_FLOAT, 0, cube_normal_buffer);
-
-    glDrawElements(GL_QUADS, this->cube_index_buffer_size, GL_UNSIGNED_INT, this->cube_index_buffer);
+    glDrawElements (modo, index_buff_size, GL_UNSIGNED_INT, index_buff);
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
-}
-
-void myWindow::renderArm(glm::mat4 model_matrix)
-{
-    this->renderSpiralSphere(model_matrix);
-    glm::mat4 m = glm::mat4 ( 1.0f );
-    m = glm::scale(model_matrix, glm::vec3 (0.6f, 0.6f, 3.0f) );
-    m = glm::translate(m , glm::vec3(0.0, 0.0, 0.5) );
-
-    this->renderCube(m);
 }
 
 const char* loadShaderAsString(const char* file)
@@ -454,16 +101,15 @@ extern void* instancia;
 void aux (int a, int b){
 	((myWindow*)instancia)->axuuu(a,b);
 }
+
+myWindow::~myWindow() {
+	delete this->myGrid;
+	delete this->mySphere;
+	delete this->myCube;
+}
+
 myWindow::myWindow():m_pos(8.0f, 0.0f,3.0f), m_direct(1.0f,0.0f,0.0f)
 {
-    this->sphere_vertex_buffer = NULL;
-    this->sphere_index_buffer = NULL;
-    this->grid_index_buffer = NULL;
-    this->grid_vertex_buffer = NULL;
-    this->cube_index_buffer = NULL;
-    this->cube_vertex_buffer = NULL;
-    this->cube_normal_buffer = NULL;
-
     full_screen = false;
     this->posMouseX =this->width/2;
     this->posMouseY=this->height/2;
@@ -535,11 +181,10 @@ void myWindow::OnRender(void)
     ///////////////////////////////////////////
 
 
-    // Drawwing Grid
+    // Drawing Grid
     changeObjectColor(0.5, 0.5, 0.5);
     glm::mat4 model_matrix_grid = glm::mat4 ( 1.0f );
-
-    this->renderGrid(model_matrix_grid);
+	this->myGrid->render(model_matrix_grid);
 
 
 
@@ -547,7 +192,7 @@ void myWindow::OnRender(void)
     glm::mat4 model_matrix = glm::mat4 ( 1.0f );
     changeObjectColor(0.8, 0.8, 0.3);
     
-    for (int i = 0; i < figs.size(); ++i) {
+    for (unsigned int i = 0; i < figs.size(); ++i) {
    		figs[i]->renderizar(model_matrix);
    	}
 
@@ -569,9 +214,9 @@ void  myWindow::OnIdle()
 // is already available!
 void  myWindow::OnInit()
 {
-    this->createSpiralSphere(1.0, 32, 32);
-    this->createGrid(10);
-    this->createCube();
+    this->mySphere = new Esfera (this, 1.0, 32, 32);
+    this->myGrid = new Grilla (this, 10);
+    this->myCube = new Cubo (this);
     
 	glClearColor(0.3f, 0.3f, 0.4f, 0.0f);
 	glShadeModel(GL_SMOOTH);
@@ -587,11 +232,11 @@ void  myWindow::OnInit()
     if (GLEW_ARB_shading_language_100) 
     { 
         std::cout << "GLEW_ARB_shading_language_100" << std::endl;
-        int major, minor, revision;
+//        int major, minor, revision;
         const GLubyte* sVersion = glGetString(GL_SHADING_LANGUAGE_VERSION_ARB);
         if (glGetError() == GL_INVALID_ENUM)
         {
-            major = 1; minor = 0; revision=51;
+//            major = 1; minor = 0; revision=51;
         }
         else
         {
@@ -742,9 +387,11 @@ void myWindow::OnKeyDown(int nKey, char cAscii)
 	glm::vec3 costado = glm::normalize( glm::cross(dir,glm::vec3 (0.0,0.0,1.0)) );
 	glm::vec3 ejeZ (0.0,0.0,1.0);
 	glm::vec3 rotx = glm::cross(dir,ejeZ);
-
+	
+	bool cerrada = false;
 	if (cAscii == 27) // 0x1b = ESC
 	{
+		cerrada = true;
 		this->Close(); // Close Window!
 	}
 
@@ -777,8 +424,8 @@ void myWindow::OnKeyDown(int nKey, char cAscii)
 		break;
 	}
 
-	this->OnRender();
-};
+	if (!cerrada) this->OnRender();
+}
 
 void myWindow::OnKeyUp(int nKey, char cAscii)
 {
@@ -793,4 +440,4 @@ void myWindow::OnKeyUp(int nKey, char cAscii)
 		SetFullscreen(full_screen);
 	}
 
-};
+}

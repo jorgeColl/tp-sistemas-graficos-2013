@@ -17,5 +17,26 @@ void Figura::renderizar_figuras_hijas(glm::mat4 model_matrix) {
 }
 
 
+// de aca para abajo, todo temporal, despues vuela
+#include "Esfera.h"
+#include "Cubo.h"
 
+Figura::Figura (myWindow* ventana) {
+	this->mySphere = new Esfera (ventana, 1.0, 32, 32);
+    this->myCube = new Cubo (ventana);
+}
+
+Figura::~Figura () {
+	delete this->mySphere;
+	delete this->myCube;
+}
+
+void Figura::renderArm (glm::mat4 model_matrix) {
+    this->mySphere->render(model_matrix);
+    glm::mat4 m = glm::mat4 ( 1.0f );
+    m = glm::scale(model_matrix, glm::vec3 (0.6f, 0.6f, 3.0f) );
+    m = glm::translate(m , glm::vec3(0.0, 0.0, 0.5) );
+
+    this->myCube->render(m);
+}
 

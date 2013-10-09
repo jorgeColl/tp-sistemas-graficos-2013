@@ -1,4 +1,5 @@
 #pragma once
+#include <GL/glew.h>
 #include <GL/gl.h>
 #include "glutWindow.h"
 #include <glm/glm.hpp> 
@@ -7,10 +8,13 @@
 #include <vector>
 class Figura;
 
+#include "Superficie.h"
+
 class myWindow : public cwc::glutWindow
 {
 public:
 	myWindow();
+	~myWindow();
 	virtual void OnRender(void);
 	virtual void OnIdle();
 
@@ -29,14 +33,16 @@ public:
 
 	virtual void OnKeyUp(int nKey, char cAscii);
 
-    	// Scene functions
-    	void renderArm(glm::mat4 model_matrix);
-
-	void renderSpiralSphere(glm::mat4 model_matrix);
-	void renderGrid(glm::mat4 model_matrix);
-	void renderCube(glm::mat4 model_matrix);
+    // Scene functions
+    void renderArm(glm::mat4 model_matrix);
+	
+	void renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
+					   GLuint* index_buff, unsigned int index_buff_size, GLenum modo);
+	
+	
 	virtual void agregar_figura(Figura* fig);
 	void axuuu(int a, int b);
+	
 private:
 	float posMouseX,posMouseY;
 	glm::vec3 m_pos, m_direct;
@@ -45,33 +51,14 @@ private:
 
 
     void changeObjectColor(float r, float g, float b);
-    void createSpiralSphere(const float radius, const unsigned int loops, const unsigned int segmentsPerLoop);
-    void createGrid(int size);
-    void createCube();
-
 
 
     glm::mat4 view_matrix;
 
-    // Sphere
-    GLfloat* sphere_vertex_buffer;
-    GLuint* sphere_index_buffer;
-    std::vector<float> vertex_buffer;
-    std::vector<unsigned int> index_buffer;
-    
-    // Cube
-    GLfloat* cube_vertex_buffer;
-    GLfloat* cube_normal_buffer;
-    GLuint* cube_index_buffer;
-    unsigned int cube_vertex_buffer_size;
-    unsigned int cube_normal_buffer_size;
-    unsigned int cube_index_buffer_size;
-    
     // Grid 
-    GLfloat* grid_vertex_buffer;
-    unsigned int grid_vertex_buffer_size;
-    GLuint* grid_index_buffer;
-    unsigned int grid_index_buffer_size;
+    Superficie* myGrid;
+    Superficie* mySphere;
+    Superficie* myCube;
 
     GLuint programHandle;
     GLuint vertShader;

@@ -11,13 +11,22 @@
 #include "myWindow.h"
 #include <vector>
 #include <glm/glm.hpp>
+#include "Superficie.h"
+
 class Figura {
 protected:
-	myWindow* window;
+	Superficie* mi_superficie;
 	std::vector <Figura*> figuras_hijas;
+	
+	// temporal
+	Superficie* mySphere;
+	Superficie* myCube;
+	void renderArm (glm::mat4 model_matrix);
+	
 public:
+	Figura (myWindow* ventana);
+	virtual ~Figura();
 	virtual void renderizar(glm::mat4 model_matrix) = 0;
-	virtual ~Figura() {};
 	void agregar_figura_hija(Figura& fig);
 	void renderizar_figuras_hijas(glm::mat4 model_matrix);
 
