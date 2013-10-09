@@ -9,10 +9,9 @@
 #include <cstdio>
 #include <iostream>
 
-
-
-
 using namespace std;
+
+
 PataCangrejo::PataCangrejo(myWindow* ventana) {
 	this->window = ventana;
 }
@@ -113,29 +112,28 @@ void Cangrejo::renderizar(glm::mat4 model_matrix) {
 	this->torso.renderizar(model_matrix);
 	this->cabeza.renderizar(model_matrix);
 
-	float ang_braz1_X = -70;
-	float ang_braz1_Z = 0;
-	float ang_braz1_Y=45;
+	float ang_braz1_X = -90;
+	float ang_braz1_Y = 0;
+	float ang_braz1_Z = -45;
 	glm::mat4 m_brazo1  = glm::scale(model_matrix, glm::vec3 (0.3f,0.3f,0.3f));
 	m_brazo1  = glm::translate(m_brazo1 , glm::vec3 (2.0f, 3.0f, 0.0f));
+	m_brazo1  = glm::rotate(m_brazo1 , ang_braz1_Z, glm::vec3(0.0f, 0.0f, 1.0f));
 	m_brazo1  = glm::rotate(m_brazo1 , ang_braz1_X, glm::vec3(1.0f, 0.0f, 0.0f));
 	m_brazo1  = glm::rotate(m_brazo1 , ang_braz1_Y, glm::vec3(0.0f, 1.0f, 0.0f));
-	m_brazo1  = glm::rotate(m_brazo1 , ang_braz1_Z, glm::vec3(0.0f, 0.0f, 1.0f));
 
 	this->brazo1.renderizar(m_brazo1);
 
-	float ang_braz2_X = -70;
-	float ang_braz2_Z = 0;
-	float ang_braz2_Y = 45;
-	glm::mat4 m_brazo2 = glm::scale(model_matrix, glm::vec3(0.3f, 0.3f, 0.3f));
-	m_brazo2 = glm::translate(m_brazo2, glm::vec3(-2.0f, 3.0f, 0.0f));
-	m_brazo2 = glm::rotate(m_brazo2, ang_braz2_X, glm::vec3(1.0f, 0.0f, 0.0f));
-	m_brazo2 = glm::rotate(m_brazo2, ang_braz2_Y, glm::vec3(0.0f, 1.0f, 0.0f));
+	float ang_braz2_X = -90;
+	float ang_braz2_Y = 0;
+	float ang_braz2_Z = 45;
+	glm::mat4 m_brazo2  = glm::scale(model_matrix, glm::vec3 (0.3f,0.3f,0.3f));
+	m_brazo2  = glm::translate(m_brazo2 , glm::vec3 (-2.0f, 3.0f, 0.0f));
 	m_brazo2  = glm::rotate(m_brazo2 , ang_braz2_Z, glm::vec3(0.0f, 0.0f, 1.0f));
-
+	m_brazo2  = glm::rotate(m_brazo2 , ang_braz2_X, glm::vec3(1.0f, 0.0f, 0.0f));
+	m_brazo2  = glm::rotate(m_brazo2 , ang_braz2_Y, glm::vec3(0.0f, 1.0f, 0.0f));
 	this->brazo2.renderizar(m_brazo2);
 
-	this->pata1.renderizar(model_matrix);
+	//this->pata1.renderizar(model_matrix);
 	/*
 	this->pata2.renderizar(model_matrix);
 	this->pata3.renderizar(model_matrix);

@@ -9,6 +9,7 @@
 void* instancia;
 #include "myWindow.h"
 #include "cangrejo.h"
+#include "piedra.h"
 
 
 //-----------------------------------------------------------------------------
@@ -26,7 +27,10 @@ int main(void)
 	myWindow* myWin = new myWindow();
 	instancia = (void*)myWin;
 	Cangrejo cangrejo (myWin);
+	Piedra piedra1 (myWin);
+
 	myWin->agregar_figura(&cangrejo);
+	myWin->agregar_figura(&piedra1);
     GLenum err = glewInit();
     if (GLEW_OK != err)
     {
