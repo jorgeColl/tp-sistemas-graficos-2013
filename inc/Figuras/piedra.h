@@ -13,7 +13,7 @@
 
 class Piedra: public Figura {
 public:
-	Piedra(myWindow* window);
+	Piedra(myWindow* ventana);
 	virtual ~Piedra();
 	virtual void renderizar(glm::mat4 model_matrix);
 };

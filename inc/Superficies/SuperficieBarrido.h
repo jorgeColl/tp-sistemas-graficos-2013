@@ -1,15 +1,16 @@
 #pragma once
 
+#include <GL/glew.h>
+//#include <GL/freeglut.h>
+#include <glm/glm.hpp>
+//#include <glm/gtc/matrix_transform.hpp> 
+
 #include "Curva.h"
 #include "CurvaBezier.h"
 #include "CurvaBSpline.h"
 #include "Superficie.h"
 #include "Funcion.h"
 
-#include <GL/glew.h>
-//#include <GL/freeglut.h>
-#include <glm/glm.hpp>
-//#include <glm/gtc/matrix_transform.hpp> 
 
 class SuperficieBarrido : public Superficie {
 	
@@ -27,9 +28,9 @@ class SuperficieBarrido : public Superficie {
 		
 		
 	public:
-		SuperficieBarrido (std::vector<glm::vec3> controlTrayectoria, std::vector<glm::vec3> controlSeccion,
-						   unsigned int pasosTray, unsigned int pasosSec, glm::mat4 transformacionRecibida,
-						   Funcion funcionRecibida);
+		SuperficieBarrido (Curva* trayectoriaRecibida, Curva* seccionRecibida, unsigned int pasosTray,
+						   unsigned int pasosSec, glm::mat4 transformacionRecibida, Funcion funcionRecibida,
+						   myWindow* passed_window);
 		
 		void set_pasos_trayectoria (unsigned int pasos);
 		void set_pasos_seccion (unsigned int pasos);
