@@ -13,7 +13,6 @@
 
 class PataCangrejo: public Figura {
 	float ang_braz2_X;
-	float ang_braz2_Z;
 	float ang_mano;
 public:
 	PataCangrejo(myWindow* ventana);
@@ -31,8 +30,6 @@ public:
 class BrazoCangrejo : public Figura {
 protected:
 	// para manejo de brazo
-
-
 	float ang_braz2_X;
 	float ang_braz2_Z;
 
