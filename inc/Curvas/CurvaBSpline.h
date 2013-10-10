@@ -21,6 +21,9 @@ class CurvaBSpline : public Curva {
 		// transforma solo los puntos de control, no el centro ni la orientacion de la curva
 		virtual void transformar (glm::mat4 matriz);
 		
+		// vuelve la curva al estado en el que fue creada
+		virtual void reset ();
+		
 		~CurvaBSpline ();
 		
 };

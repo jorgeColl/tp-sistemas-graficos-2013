@@ -39,6 +39,13 @@ void CurvaBSpline::transformar (glm::mat4 matriz) {
 	}
 }
 
+void CurvaBSpline::reset () {
+	Curva::reset();
+	for (int i = 0 ; i < this->cantidad_tramos() ; i++) {
+		this->tramos->at(i)->reset();
+	}
+}
+
 CurvaBSpline::~CurvaBSpline () {
 	Helper::destruir_elementos <std::vector<CurvaBSplineCubica*>, CurvaBSplineCubica> (this->tramos);
 	delete (this->tramos);

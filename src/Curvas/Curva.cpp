@@ -7,6 +7,10 @@ void Curva::init (glm::vec3 centro, glm::vec3 orientacion) {
 	this->puntosControl = new std::vector<glm::vec3>();
 	this->miCentro = glm::vec3 (centro);
 	this->miOrientacion = glm::vec3 (orientacion);
+	
+	this->puntosControlOriginal = new std::vector<glm::vec3>();
+	this->miCentroOriginal = glm::vec3 (centro);
+	this->miOrientacionOriginal = glm::vec3 (orientacion);
 }
 
 Curva::Curva (glm::vec3 centro, glm::vec3 orientacion) {
@@ -19,6 +23,7 @@ Curva::Curva (std::vector<glm::vec3> ptosControl, glm::vec3 centro, glm::vec3 or
 	for (std::vector<glm::vec3>::iterator it = ptosControl.begin(); it != ptosControl.end() ; ++it) {
 		glm::vec3 miPunto( (*it) );
 		this->puntosControl->push_back(miPunto);
+		this->puntosControlOriginal->push_back(miPunto);
 	}
 }
 
@@ -51,6 +56,15 @@ glm::vec3 Curva::dameTangente (float u, float paso) {
 	resultado *= coeficiente;
 	return resultado;
 }
+
+glm::vec3 Curva::dameCentro () {
+	return (this->miCentro);
+}
+
+glm::vec3 Curva::dameOrientacion () {
+	return (this->miOrientacion);
+}
+
 
 glm::vec3 Curva::transformar_punto (glm::vec3 punto, glm::mat4 matriz) {
 	glm::vec4 puntoTemp (punto.x, punto.y, punto.z, 1.0);
@@ -89,6 +103,15 @@ void Curva::alinear (glm::vec3 vector) {
 	this->centrar (centroActual);
 }
 
+void Curva::reset () {
+	delete (this->puntosControl);
+	this->puntosControl = new std::vector<glm::vec3> (*(this->puntosControlOriginal));
+	
+	this->miCentro = glm::vec3 (this->miCentroOriginal);
+	this->miOrientacion = glm::vec3 (this->miOrientacionOriginal);
+}
+
 Curva::~Curva () {
 	delete (this->puntosControl);
+	delete (this->puntosControlOriginal);
 }
