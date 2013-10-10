@@ -23,7 +23,7 @@ class SuperficieBarrido : public Superficie {
 		Curva* seccion;
 		unsigned int pasos_trayectoria;
 		unsigned int pasos_seccion;
-		glm::mat4 transformacion;
+		std::vector<glm::mat4> transformaciones;
 		Funcion funcion;
 		
 		// metodos auxiliares
@@ -39,15 +39,15 @@ class SuperficieBarrido : public Superficie {
 		
 	public:
 		SuperficieBarrido (Curva* trayectoriaRecibida, Curva* seccionRecibida, unsigned int pasosTray,
-						   unsigned int pasosSec, glm::mat4 transformacionRecibida, Funcion funcionRecibida,
-						   myWindow* passed_window);
+						   unsigned int pasosSec, std::vector<glm::mat4> transformacionesRecibidas, myWindow* passed_window);
 		
 		void set_pasos_trayectoria (unsigned int pasos);
 		void set_pasos_seccion (unsigned int pasos);
-		void set_transformacion (glm::mat4 transformacionRecibida);
+		void set_transformaciones (std::vector<glm::mat4> transformacionesRecibidas);
 		void set_funcion (Funcion funcionRecibida);
 		
 		// render heredado de Superficie
+		virtual void render (glm::mat4 view_model_matrix);
 		
 		~SuperficieBarrido ();
 		
