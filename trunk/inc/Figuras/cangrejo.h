@@ -9,6 +9,7 @@
 #define CANGREJO_H_
 
 #include "figura.h"
+#include <vector>
 
 class PataCangrejo: public Figura {
 	float ang_braz2_X;
@@ -58,6 +59,7 @@ protected:
 	PataCangrejo pata4;
 	PataCangrejo pata5;
 	PataCangrejo pata6;
+	std::vector<PataCangrejo*> patas;
 	CabezaCangrejo cabeza;
 	TorsoCangrejo torso;
 	BrazoCangrejo brazo1;

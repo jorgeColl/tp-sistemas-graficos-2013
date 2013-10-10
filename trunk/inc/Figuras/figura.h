@@ -12,6 +12,13 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include "Superficie.h"
+#include "Esfera.h"
+#include "SuperficieBarrido.h"
+#include "CurvaBezier.h"
+#include "CurvaBSpline.h"
+#include "Circunferencia.h"
+#include "Parabola.h"
+#include "Funcion.h"
 
 class Figura {
 protected:
