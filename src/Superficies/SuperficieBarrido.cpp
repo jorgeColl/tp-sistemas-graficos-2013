@@ -1,19 +1,20 @@
 #include "SuperficieBarrido.h"
 
 #include "PlanoAlgebraico.h"
+#include <iostream>
 
 SuperficieBarrido::SuperficieBarrido (Curva* trayectoriaRecibida, Curva* seccionRecibida, unsigned int pasosTray,
-									  unsigned int pasosSec, glm::mat4 transformacionRecibida, Funcion funcionRecibida,
+									  unsigned int pasosSec, std::vector<glm::mat4> transformacionesRecibidas,
 									  myWindow* passed_window) : Superficie (passed_window) {
 	
 	this->trayectoria = trayectoriaRecibida;
 	this->seccion = seccionRecibida;
 	this->set_pasos_trayectoria (pasosTray);
 	this->set_pasos_seccion (pasosSec);
-	this->set_transformacion (transformacionRecibida);
-	this->set_funcion (funcionRecibida);
+	this->set_transformaciones (transformacionesRecibidas);
 	
 	this->crear_puntos();
+	this->modo = GL_TRIANGLE_STRIP;
 }
 
 void SuperficieBarrido::set_pasos_trayectoria (unsigned int pasos) {
@@ -24,12 +25,8 @@ void SuperficieBarrido::set_pasos_seccion (unsigned int pasos) {
 	this->pasos_seccion = pasos;
 }
 
-void SuperficieBarrido::set_transformacion (glm::mat4 transformacionRecibida) {
-	this->transformacion = transformacionRecibida;
-}
-
-void SuperficieBarrido::set_funcion (Funcion funcionRecibida) {
-	this->funcion = funcionRecibida;
+void SuperficieBarrido::set_transformaciones (std::vector<glm::mat4> transformacionesRecibidas) {
+	this->transformaciones = std::vector<glm::mat4>(transformacionesRecibidas);
 }
 
 SuperficieBarrido::~SuperficieBarrido () {
@@ -53,7 +50,10 @@ void SuperficieBarrido::crear_puntos () {
 		this->preparar_seccion (i);
 		
 		for (unsigned int j = 0; j <= this->pasos_seccion ; j++) {
-			float u = ((i*1.0) / (this->pasos_seccion*1.0)) * this->seccion->cantidad_tramos();
+			float u = ((j*1.0) / (this->pasos_seccion*1.0)) * this->seccion->cantidad_tramos();
+			
+//			std::cout << "Us : " << u << std::endl;
+			
 			glm::vec3 puntoSeccion = this->seccion->damePunto (u);
 			
 			vertices.push_back (puntoSeccion);
@@ -68,13 +68,17 @@ void SuperficieBarrido::crear_puntos () {
 void SuperficieBarrido::preparar_seccion (unsigned int i) {
 	float ui = ((i*1.0) / (this->pasos_trayectoria*1.0));
 	float u = ui * this->trayectoria->cantidad_tramos();
-	float pasoTangente = ((1.0) / (this->pasos_trayectoria*1.0)) * this->trayectoria->cantidad_tramos();
-	
 	glm::vec3 puntoTrayectoria = this->trayectoria->damePunto (u);
-	glm::mat4 matrizAux = this->funcion.evaluar_en(ui) * this->transformacion;
-	this->seccion->transformar(matrizAux);
+	
+	float pasoTangente = ((1.0) / (this->pasos_trayectoria*1.0)) * this->trayectoria->cantidad_tramos();
+	glm::mat4 transformacion = glm::mat4 (1.0f);
+	if (i < this->transformaciones.size()) transformacion = this->transformaciones.at(i);
+	
+	this->seccion->transformar(transformacion);
 	this->seccion->alinear (this->trayectoria->dameTangente(u, pasoTangente));
 	this->seccion->centrar (puntoTrayectoria);
+	
+//	std::cout << "Ut : " << u << std::endl;
 }
 
 glm::vec3 SuperficieBarrido::calcular_normal (glm::vec3 punto) {
@@ -133,4 +137,18 @@ void SuperficieBarrido::copiar_puntos (std::vector<glm::vec3>* puntosOrigen, GLf
         puntosDestino[i+2] = ((*it).z);
         i += 3;
     }
+}
+
+void SuperficieBarrido::render (glm::mat4 view_model_matrix) {
+/*	for (unsigned int i = 0 ; i < (this->vertex_buffer_size - 2) ; i = i + 3) {
+		std::cout << "vertex: ( " << this->vertex_buffer[i] << " , " << this->vertex_buffer[i+1] << " , " << this->vertex_buffer[i+2] << " )" << std::endl;
+		std::cout << "normal: ( " << this->normal_buffer[i] << " , " << this->normal_buffer[i+1] << " , " << this->normal_buffer[i+2] << " )" << std::endl;
+	}
+	std::cout << "index: ";
+	for (unsigned int j = 0 ; j < (this->index_buffer_size) ; j++) {
+		std::cout << this->index_buffer[j];
+		if (j < (this->index_buffer_size - 1)) std::cout << " , ";
+			else std::cout << std::endl;
+	}
+*/	Superficie::render (view_model_matrix);
 }

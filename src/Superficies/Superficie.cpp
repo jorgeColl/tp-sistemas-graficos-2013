@@ -19,9 +19,10 @@ Superficie::Superficie (myWindow* passed_window) {
 }
 
 void Superficie::render (glm::mat4 view_model_matrix) {
-	if (this->window != NULL)
+	if (this->window != NULL) {
 		this->window->renderObject (view_model_matrix, this->vertex_buffer, this->normal_buffer,
 									this->index_buffer, this->index_buffer_size, this->modo);
+	}
 }
 
 Superficie::~Superficie () {
