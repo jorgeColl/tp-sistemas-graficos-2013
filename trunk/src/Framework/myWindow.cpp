@@ -14,7 +14,6 @@
 #include <fstream>
 #include <vector>
 #include "figura.h"
-#include "Grilla.h"
 #include "Esfera.h"
 #include "Cubo.h"
 
@@ -103,13 +102,14 @@ void aux (int a, int b){
 }
 
 myWindow::~myWindow() {
-	delete this->myGrid;
 	delete this->mySphere;
 	delete this->myCube;
 }
 
 myWindow::myWindow():m_pos(8.0f, 0.0f,3.0f), m_direct(1.0f,0.0f,0.0f)
 {
+	myCube=NULL;
+	mySphere=NULL;
     full_screen = false;
     this->posMouseX =this->width/2;
     this->posMouseY=this->height/2;
@@ -182,10 +182,10 @@ void myWindow::OnRender(void)
 
 
     // Drawing Grid
-    changeObjectColor(0.5, 0.5, 0.5);
+    /*changeObjectColor(0.5, 0.5, 0.5);
     glm::mat4 model_matrix_grid = glm::mat4 ( 1.0f );
 	this->myGrid->render(model_matrix_grid);
-
+	*/
 
 
     // ARM
@@ -215,7 +215,6 @@ void  myWindow::OnIdle()
 void  myWindow::OnInit()
 {
     this->mySphere = new Esfera (this, 1.0, 32, 32);
-    this->myGrid = new Grilla (this, 10);
     this->myCube = new Cubo (this);
     
 	glClearColor(0.3f, 0.3f, 0.4f, 0.0f);

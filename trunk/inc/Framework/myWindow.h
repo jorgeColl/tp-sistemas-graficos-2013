@@ -55,8 +55,6 @@ private:
 
     glm::mat4 view_matrix;
 
-    // Grid 
-    Superficie* myGrid;
     Superficie* mySphere;
     Superficie* myCube;
 
