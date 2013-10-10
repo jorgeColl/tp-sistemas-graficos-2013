@@ -6,13 +6,6 @@
  */
 
 #include "piedra.h"
-#include "Esfera.h"
-#include "SuperficieBarrido.h"
-#include "CurvaBezier.h"
-#include "CurvaBSpline.h"
-#include "Circunferencia.h"
-#include "Parabola.h"
-#include "Funcion.h"
 #include <vector>
 
 Piedra::Piedra(myWindow* ventana) : Figura (ventana) {
@@ -39,7 +32,7 @@ Piedra::~Piedra() {
 
 void Piedra::renderizar(glm::mat4 model_matrix) {
 	// temporalmente aca
-	model_matrix = glm::translate(model_matrix,glm::vec3(5,5,0.4));
+	model_matrix = glm::translate(model_matrix,glm::vec3(5,5,0));
 
 	model_matrix = glm::scale(model_matrix,glm::vec3(0.3,0.3,0.3));
 	this->mi_superficie->render(model_matrix);
