@@ -111,10 +111,10 @@ Cangrejo::Cangrejo(myWindow* ventana) : Figura (ventana),
 	this->window=NULL;
 
 	ang_pata_X[0]=-95;
-	ang_pata_X[1]=-95;
+	ang_pata_X[1]=-45;
 	ang_pata_X[2]=-95;
 	ang_pata_X[3]=-95;
-	ang_pata_X[4]=-95;
+	ang_pata_X[4]=-45;
 	ang_pata_X[5]=-95;
 
 	ang_pata_Z[0]=90;
@@ -123,6 +123,13 @@ Cangrejo::Cangrejo(myWindow* ventana) : Figura (ventana),
 	ang_pata_Z[3]=-90;
 	ang_pata_Z[4]=-90;
 	ang_pata_Z[5]=-90;
+
+	patas_elevacion[0]=false;
+	patas_elevacion[1]=false;
+	patas_elevacion[2]=false;
+	patas_elevacion[3]=false;
+	patas_elevacion[4]=false;
+	patas_elevacion[5]=false;
 }
 Cangrejo::~Cangrejo() {
 }
@@ -165,5 +172,19 @@ void Cangrejo::renderizar(glm::mat4 model_matrix) {
 }
 void Cangrejo::animar() {
 	std::cout<<"me estan animando"<<std::endl;
-	ang_pata_X[0]+=10;
+	for (unsigned int i=0;i<6;++i) {
+		if ( patas_elevacion[i] == true ) {
+			ang_pata_X[i]+=1;
+			if ( ang_pata_X[i]>=-45 ) {
+				patas_elevacion[i]=false;
+			}
+		}
+
+		if ( patas_elevacion[i] == false ) {
+			ang_pata_X[i]-=1;
+			if ( ang_pata_X[i]<=-95 ){
+				patas_elevacion[i]=true;
+			}
+		}
+	}
 }

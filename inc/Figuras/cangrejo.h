@@ -62,8 +62,10 @@ protected:
 	BrazoCangrejo brazo1;
 	BrazoCangrejo brazo2;
 	myWindow* window;
+
 	float ang_pata_X[6];
 	float ang_pata_Z[6];
+	bool patas_elevacion[6];
 public:
 	Cangrejo(myWindow* ventana);
 	~Cangrejo();

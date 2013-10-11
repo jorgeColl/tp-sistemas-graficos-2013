@@ -21,6 +21,8 @@ protected:
 	Planta planta1;
 	Piso piso;
 	std::vector<Figura*> figuras;
+	glm::vec3 pos_cangrejo;
+	bool vuelta_cangrejo;
 public:
 	Escenario(myWindow* ventana);
 	virtual ~Escenario();
