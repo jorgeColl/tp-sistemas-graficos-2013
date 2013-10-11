@@ -62,10 +62,13 @@ protected:
 	BrazoCangrejo brazo1;
 	BrazoCangrejo brazo2;
 	myWindow* window;
+	float ang_pata_X[6];
+	float ang_pata_Z[6];
 public:
 	Cangrejo(myWindow* ventana);
 	~Cangrejo();
 	virtual void renderizar(glm::mat4 model_matrix);
+	virtual void animar();
 };
 
 #endif /* CANGREJO_H_ */

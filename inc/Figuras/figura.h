@@ -36,6 +36,7 @@ public:
 	virtual ~Figura();
 	virtual void renderizar(glm::mat4 model_matrix) = 0;
 	void agregar_figura_hija(Figura& fig);
+	virtual void animar();
 protected:
 	void renderizar_figuras_hijas(glm::mat4 model_matrix);
 

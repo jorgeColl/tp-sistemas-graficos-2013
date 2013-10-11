@@ -20,10 +20,12 @@ protected:
 	Piedra piedra1;
 	Planta planta1;
 	Piso piso;
+	std::vector<Figura*> figuras;
 public:
 	Escenario(myWindow* ventana);
 	virtual ~Escenario();
 	virtual void renderizar(glm::mat4 model_matrix);
+	virtual void animar();
 };
 
 #endif /* ESCENARIO_H_ */

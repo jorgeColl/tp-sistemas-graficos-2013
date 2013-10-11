@@ -380,7 +380,7 @@ std::cout<<"se movio en y: "<<y<<std::endl;
 }
 
 void myWindow::OnKeyDown(int nKey, char cAscii)
-{       
+{
 	glm::vec3 dir = (m_pos-m_direct);
 	dir = glm::normalize(dir);
 	glm::vec3 costado = glm::normalize( glm::cross(dir,glm::vec3 (0.0,0.0,1.0)) );
@@ -420,6 +420,11 @@ void myWindow::OnKeyDown(int nKey, char cAscii)
 	case ('d'):
 		this->m_pos -= costado;
 		m_direct -= costado;
+		break;
+	case ('h'):
+			for(unsigned int i=0;i<this->figs.size();++i) {
+				figs[i]->animar();
+			}
 		break;
 	}
 
