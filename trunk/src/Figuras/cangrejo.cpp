@@ -100,14 +100,29 @@ Cangrejo::Cangrejo(myWindow* ventana) : Figura (ventana),
 		pata1(ventana), pata2(ventana), pata3(ventana), pata4(ventana), pata5(
 				ventana), pata6(ventana), cabeza(ventana), torso(ventana), brazo1(
 				ventana), brazo2(ventana) {
+
 	this->patas.push_back(&pata1);
 	this->patas.push_back(&pata2);
 	this->patas.push_back(&pata3);
 	this->patas.push_back(&pata4);
 	this->patas.push_back(&pata5);
 	this->patas.push_back(&pata6);
+
 	this->window=NULL;
 
+	ang_pata_X[0]=-95;
+	ang_pata_X[1]=-95;
+	ang_pata_X[2]=-95;
+	ang_pata_X[3]=-95;
+	ang_pata_X[4]=-95;
+	ang_pata_X[5]=-95;
+
+	ang_pata_Z[0]=90;
+	ang_pata_Z[1]=90;
+	ang_pata_Z[2]=90;
+	ang_pata_Z[3]=-90;
+	ang_pata_Z[4]=-90;
+	ang_pata_Z[5]=-90;
 }
 Cangrejo::~Cangrejo() {
 }
@@ -132,24 +147,10 @@ void Cangrejo::renderizar(glm::mat4 model_matrix) {
 	m_brazo2  = glm::rotate(m_brazo2 , ang_braz2_X, glm::vec3(1.0f, 0.0f, 0.0f));
 	this->brazo2.renderizar(m_brazo2);
 
-	//achico un poco para q las patas sean mas chicas que los brazos
+	// Achico un poco para q las patas sean mas chicas que los brazos
 	model_matrix = glm::scale(model_matrix, glm::vec3 (0.8f,0.8f,0.8f));
 
-	float ang_pata_X[6];
-	ang_pata_X[0]=-95;
-	ang_pata_X[1]=-95;
-	ang_pata_X[2]=-95;
-	ang_pata_X[3]=-95;
-	ang_pata_X[4]=-95;
-	ang_pata_X[5]=-95;
-	float ang_pata_Z[6];
-	ang_pata_Z[0]=90;
-	ang_pata_Z[1]=90;
-	ang_pata_Z[2]=90;
-	ang_pata_Z[3]=-90;
-	ang_pata_Z[4]=-90;
-	ang_pata_Z[5]=-90;
-
+	// Dibujo las patas
 	glm::mat4 m_pata;
 	for (int i=0;i<6;++i) {
 		if(i<3){
@@ -161,5 +162,8 @@ void Cangrejo::renderizar(glm::mat4 model_matrix) {
 		m_pata  = glm::rotate(m_pata , ang_pata_X[i], glm::vec3(1.0f, 0.0f, 0.0f));
 		this->patas[i]->renderizar(m_pata);
 	}
-
+}
+void Cangrejo::animar() {
+	std::cout<<"me estan animando"<<std::endl;
+	ang_pata_X[0]+=10;
 }

@@ -8,7 +8,10 @@
 #include "Escenario.h"
 
 Escenario::Escenario(myWindow* ventana):Figura(ventana),cangrejo1 (ventana), piedra1 (ventana),planta1(ventana),piso(ventana) {
-
+	figuras.push_back(&cangrejo1);
+	figuras.push_back(&piedra1);
+	figuras.push_back(&planta1);
+	figuras.push_back(&piso);
 }
 
 Escenario::~Escenario() { }
@@ -24,4 +27,9 @@ void Escenario::renderizar(glm::mat4 model_matrix) {
 
 	glm::mat4 model_matrix_piedra1 = glm::translate(model_matrix,glm::vec3(5,5,0));
 	this->piedra1.renderizar(model_matrix_piedra1);
+}
+void Escenario::animar(){
+	for (unsigned int i = 0; i<figuras.size(); ++i) {
+		figuras[i]->animar();
+	}
 }
