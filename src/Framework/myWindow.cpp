@@ -422,9 +422,17 @@ void myWindow::OnKeyDown(int nKey, char cAscii)
 		m_direct -= costado;
 		break;
 	case ('h'):
-			for(unsigned int i=0;i<this->figs.size();++i) {
-				figs[i]->animar();
-			}
+		for(unsigned int i=0;i<this->figs.size();++i) {
+			figs[i]->animar();
+		}
+		break;
+	case ('i'):
+		this->m_pos.z++;
+		this->m_direct.z++;
+		break;
+	case ('k'):
+		this->m_pos.z--;
+		this->m_direct.z--;
 		break;
 	}
 
