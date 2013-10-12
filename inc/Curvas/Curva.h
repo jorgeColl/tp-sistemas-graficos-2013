@@ -15,6 +15,7 @@ class Curva {
 		glm::vec3 miOrientacionOriginal;
 		
 		void init (glm::vec3 centro, glm::vec3 orientacion);
+		void redondear_valor (float& valor);
 		
 	protected:
 		virtual float calcular_base (int n, int i, float u);

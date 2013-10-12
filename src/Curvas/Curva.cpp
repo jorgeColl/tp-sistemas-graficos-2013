@@ -65,10 +65,18 @@ glm::vec3 Curva::dameOrientacion () {
 	return (this->miOrientacion);
 }
 
+void Curva::redondear_valor (float& valor) {
+	float min_value = 0.00001; // redondeo para reducir errores numericos
+	if ((valor < min_value) && (valor > 0)) valor = 0;
+	if ((((-1) * valor) < min_value) && (valor < 0)) valor = 0;
+}
 
 glm::vec3 Curva::transformar_punto (glm::vec3 punto, glm::mat4 matriz) {
 	glm::vec4 puntoTemp (punto.x, punto.y, punto.z, 1.0);
 	puntoTemp = matriz * puntoTemp;
+	this->redondear_valor (puntoTemp.x);
+	this->redondear_valor (puntoTemp.y);
+	this->redondear_valor (puntoTemp.z);
 	return ( glm::vec3 (puntoTemp.x, puntoTemp.y, puntoTemp.z) );
 }
 
@@ -89,15 +97,15 @@ void Curva::alinear (glm::vec3 vector) {
 	glm::vec3 v1 = glm::normalize (this->miOrientacion);
 	glm::vec3 v2 = glm::normalize (vector);
 	float coseno = glm::dot (v1, v2);
-	float angulo = acos (coseno);
+	float PI = 3.1415927f;
+	float angulo = (acos (coseno) * 180.0 / PI);
 	
-	// roto alrededor del origen
+	// centro en el origen => roto => vuelvo a centrar en donde estaba
 	glm::vec3 centroActual = this->miCentro;
 	this->centrar (glm::vec3 (0.0, 0.0, 0.0));
 	
 	glm::vec3 normal = glm::cross (v1, v2);
-	glm::mat4 matriz = glm::mat4 (1.0f);
-	matriz = glm::rotate (matriz, angulo, normal);
+	glm::mat4 matriz = glm::rotate (glm::mat4 (1.0f), angulo, normal);
 	this->transformar (matriz);
 	
 	this->centrar (centroActual);
