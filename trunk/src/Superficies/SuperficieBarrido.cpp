@@ -51,11 +51,7 @@ void SuperficieBarrido::crear_puntos () {
 		
 		for (unsigned int j = 0; j <= this->pasos_seccion ; j++) {
 			float u = ((j*1.0) / (this->pasos_seccion*1.0)) * this->seccion->cantidad_tramos();
-			
-//			std::cout << "Us : " << u << std::endl;
-			
 			glm::vec3 puntoSeccion = this->seccion->damePunto (u);
-			
 			vertices.push_back (puntoSeccion);
 			normales.push_back (this->calcular_normal (puntoSeccion));
 			this->cargar_indices (i, j, &indices_seccion, &indices);
@@ -77,8 +73,6 @@ void SuperficieBarrido::preparar_seccion (unsigned int i) {
 	this->seccion->transformar(transformacion);
 	this->seccion->alinear (this->trayectoria->dameTangente(u, pasoTangente));
 	this->seccion->centrar (puntoTrayectoria);
-	
-//	std::cout << "Ut : " << u << std::endl;
 }
 
 glm::vec3 SuperficieBarrido::calcular_normal (glm::vec3 punto) {
