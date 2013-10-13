@@ -7,7 +7,8 @@
 
 #include "Escenario.h"
 
-Escenario::Escenario(myWindow* ventana):Figura(ventana),cangrejo1 (ventana), piedra1 (ventana),planta1(ventana),piso(ventana),pos_cangrejo(0,0,1.3f) {
+Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 (ventana), piedra1 (ventana),planta1(ventana),piso(ventana),pos_cangrejo(0,0,1.3f) {
+	figuras.push_back(&cangrejo1);
 	figuras.push_back(&cangrejo1);
 	figuras.push_back(&piedra1);
 	figuras.push_back(&planta1);
@@ -19,6 +20,8 @@ Escenario::~Escenario() { }
 
 void Escenario::renderizar(glm::mat4 model_matrix) {
 	this->piso.renderizar(model_matrix);
+
+	this->pez1.renderizar(model_matrix);
 
 	glm::mat4 model_matrix_cangrejo1 = glm::translate(model_matrix, pos_cangrejo);
 	this->cangrejo1.renderizar(model_matrix_cangrejo1);
