@@ -48,8 +48,8 @@ private:
 	glm::vec3 m_pos, m_direct;
 	std::vector<Figura*>figs;
 	bool full_screen;
-
-
+	bool subio_antes;
+	int cont;
     void changeObjectColor(float r, float g, float b);
 
 

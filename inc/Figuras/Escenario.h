@@ -13,9 +13,11 @@
 #include "piedra.h"
 #include "Planta.h"
 #include "Piso.h"
+#include "Pez.h"
 
 class Escenario: public Figura {
 protected:
+	Pez pez1;
 	Cangrejo cangrejo1;
 	Piedra piedra1;
 	Planta planta1;
