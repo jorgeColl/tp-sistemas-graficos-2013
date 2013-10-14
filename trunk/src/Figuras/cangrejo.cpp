@@ -11,91 +11,345 @@
 
 using namespace std;
 
-PataCangrejo::PataCangrejo(myWindow* ventana) : Figura (ventana) {
+
+// **************************** PATA ENTERA ****************************
+PataCangrejo::PataCangrejo(myWindow* ventana) : Figura (ventana),
+						muslo(ventana), gemelo(ventana), pie(ventana) {
 	this->ang_braz2_X=-45;
 	this->ang_mano=-45;
+	this->mi_superficie = this->crear_superficie (ventana);
 }
-PataCangrejo::~PataCangrejo() {
-}
+PataCangrejo::~PataCangrejo() { }
+
 void PataCangrejo::renderizar(glm::mat4 model_matrix) {
-		// primera parte del brazo
-		this->renderArm(model_matrix);
+		// primera parte de la pata
+		this->muslo.renderizar(model_matrix);
 
 		model_matrix = glm::translate(model_matrix, glm::vec3 (0.0f, 0.0f, 3.5f));
 		model_matrix = glm::rotate(model_matrix, this->ang_braz2_X, glm::vec3 ( 1.0f,0.0f,0.0f));
 
-		// segunda parte del brazo
-		this->renderArm(model_matrix);
+		// segunda parte de la pata
+		this->gemelo.renderizar(model_matrix);
 
 		model_matrix= glm::translate(model_matrix, glm::vec3 (0.0f, 0.0f, 3.5f));
 		model_matrix = glm::rotate(model_matrix, this->ang_mano, glm::vec3 (1.0f,0.0f,0.0f));
 
-		// mano del brazo 1
-		this->renderArm(model_matrix);
-
-
+		// pie de la pata
+		this->pie.renderizar(model_matrix);
 }
 
+// ***************************** PATA MUSLO ****************************
+// ********************** PRIMERA PARTE DE LA PATA *********************
+PataMusloCangrejo::PataMusloCangrejo (myWindow* ventana) : Figura (ventana) {
+	this->mi_superficie = this->crear_superficie (ventana);
+}
+PataMusloCangrejo::~PataMusloCangrejo() { }
+
+// PARA HACER !!!
+Curva* PataMusloCangrejo::crear_curva_trayectoria () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+Curva* PataMusloCangrejo::crear_curva_seccion () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+int PataMusloCangrejo::obtener_pasos_trayectoria () {
+	return 500;
+}
+int PataMusloCangrejo::obtener_pasos_seccion () {
+	return 500;
+}
+std::vector<glm::mat4> PataMusloCangrejo::crear_transformaciones () {
+	return (std::vector<glm::mat4>());
+}
+
+// TEMPORAL !!
+void PataMusloCangrejo::renderizar(glm::mat4 model_matrix) {
+	this->renderArm(model_matrix);
+}
+
+// **************************** PATA GEMELO ****************************
+// ********************** SEGUNDA PARTE DE LA PATA *********************
+PataGemeloCangrejo::PataGemeloCangrejo (myWindow* ventana) : Figura (ventana) {
+	this->mi_superficie = this->crear_superficie (ventana);
+}
+PataGemeloCangrejo::~PataGemeloCangrejo() { }
+
+// PARA HACER !!!
+Curva* PataGemeloCangrejo::crear_curva_trayectoria () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+Curva* PataGemeloCangrejo::crear_curva_seccion () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+int PataGemeloCangrejo::obtener_pasos_trayectoria () {
+	return 500;
+}
+int PataGemeloCangrejo::obtener_pasos_seccion () {
+	return 500;
+}
+std::vector<glm::mat4> PataGemeloCangrejo::crear_transformaciones () {
+	return (std::vector<glm::mat4>());
+}
+
+// TEMPORAL !!
+void PataGemeloCangrejo::renderizar(glm::mat4 model_matrix) {
+	this->renderArm(model_matrix);
+}
+
+// ****************************** PATA PIE *****************************
+// ********************** TERCERA PARTE DE LA PATA *********************
+PataPieCangrejo::PataPieCangrejo (myWindow* ventana) : Figura (ventana) {
+	this->mi_superficie = this->crear_superficie (ventana);
+}
+PataPieCangrejo::~PataPieCangrejo() { }
+
+// PARA HACER !!!
+Curva* PataPieCangrejo::crear_curva_trayectoria () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+Curva* PataPieCangrejo::crear_curva_seccion () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+int PataPieCangrejo::obtener_pasos_trayectoria () {
+	return 500;
+}
+int PataPieCangrejo::obtener_pasos_seccion () {
+	return 500;
+}
+std::vector<glm::mat4> PataPieCangrejo::crear_transformaciones () {
+	return (std::vector<glm::mat4>());
+}
+
+// TEMPORAL !!
+void PataPieCangrejo::renderizar(glm::mat4 model_matrix) {
+	this->renderArm(model_matrix);
+}
+
+// ****************************** CABEZA *******************************
 CabezaCangrejo::CabezaCangrejo(myWindow* ventana) : Figura (ventana) {
-	this->mi_superficie = new Esfera (ventana, 1.0, 32, 32);
+	this->mi_superficie = this->crear_superficie (ventana);
 }
-CabezaCangrejo::~CabezaCangrejo() {
-	delete this->mi_superficie;
-}
+CabezaCangrejo::~CabezaCangrejo() { }
+
 void CabezaCangrejo::renderizar(glm::mat4 model_matrix) {
 	glm::vec3 translado(0, 1.2, 0);
 	model_matrix = glm::translate(model_matrix, translado);
 
 	glm::vec3 escala(0.5, 0.5, 0.5);
 	model_matrix = glm::scale(model_matrix, escala);
-	this->mi_superficie->render(model_matrix);
+	Figura::renderizar(model_matrix);
 }
 
-BrazoCangrejo::BrazoCangrejo(myWindow* ventana) : Figura (ventana) {
+// PARA HACER !!!
+Curva* CabezaCangrejo::crear_curva_trayectoria () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+Curva* CabezaCangrejo::crear_curva_seccion () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+int CabezaCangrejo::obtener_pasos_trayectoria () {
+	return 500;
+}
+int CabezaCangrejo::obtener_pasos_seccion () {
+	return 500;
+}
+std::vector<glm::mat4> CabezaCangrejo::crear_transformaciones () {
+	return (std::vector<glm::mat4>());
+}
+
+// TEMPORAL!!!
+Superficie* CabezaCangrejo::crear_superficie (myWindow* ventana) {
+	return (new Esfera (ventana, 1.0, 32, 32));
+}
+
+// *************************** BRAZO ENTERO ****************************
+BrazoCangrejo::BrazoCangrejo(myWindow* ventana) : Figura (ventana),
+								antebrazo(ventana), brazoMedio(ventana),
+								tenazaSuperior(ventana), tenazaInferior(ventana) {
 	ang_braz2_X=0;
 	ang_braz2_Z=0;
 
 	ang_mano=0;
 	ang_dedos_X=20;
+	
+	this->mi_superficie = this->crear_superficie (ventana);
 }
-BrazoCangrejo::~BrazoCangrejo() {
-}
+BrazoCangrejo::~BrazoCangrejo() { }
+
 void BrazoCangrejo::renderizar(glm::mat4 model_matrix) {
 	// primera parte del brazo
-	this->renderArm(model_matrix);
+	this->antebrazo.renderizar(model_matrix);
 
 	model_matrix = glm::translate(model_matrix, glm::vec3 (0.0f, 0.0f, 3.5f));
 	model_matrix = glm::rotate(model_matrix, this->ang_braz2_X, glm::vec3 (1.0f,0.0f,0.0f));
 	model_matrix = glm::rotate(model_matrix, this->ang_braz2_Z, glm::vec3 ( 0.0f,0.0f,1.0f));
 
 	// segunda parte del brazo
-	this->renderArm(model_matrix);
+	this->brazoMedio.renderizar(model_matrix);
 
 	model_matrix= glm::translate(model_matrix, glm::vec3 (0.0f, 0.0f, 3.5f));
 	model_matrix = glm::rotate(model_matrix, this->ang_dedos_X, glm::vec3 (1.0f, 0.0f,0.0f));
 
 	// pinza1
 	glm::mat4 rot3 = glm::rotate(glm::mat4 (1.0f), this->ang_mano, glm::vec3 (0.0f, 0.0f,1.0f));
-	this->renderArm( model_matrix * rot3 );
+	this->tenazaSuperior.renderizar( model_matrix * rot3 );
 
 	// pinza2
 	glm::mat4 rot4 = glm::rotate(glm::mat4 (1.0f), -this->ang_dedos_X, glm::vec3 (1.0f, 0.0f, 0.0f));
-	this->renderArm( model_matrix * rot4 );
-
+	this->tenazaInferior.renderizar( model_matrix * rot4 );
 }
 
+// ****************************** ANTEBRAZO ****************************
+// *********************** PRIMERA PARTE DEL BRAZO *********************
+AntebrazoCangrejo::AntebrazoCangrejo (myWindow* ventana) : Figura (ventana) {
+	this->mi_superficie = this->crear_superficie (ventana);
+}
+AntebrazoCangrejo::~AntebrazoCangrejo() { }
+
+// PARA HACER !!!
+Curva* AntebrazoCangrejo::crear_curva_trayectoria () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+Curva* AntebrazoCangrejo::crear_curva_seccion () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+int AntebrazoCangrejo::obtener_pasos_trayectoria () {
+	return 500;
+}
+int AntebrazoCangrejo::obtener_pasos_seccion () {
+	return 500;
+}
+std::vector<glm::mat4> AntebrazoCangrejo::crear_transformaciones () {
+	return (std::vector<glm::mat4>());
+}
+
+// TEMPORAL !!
+void AntebrazoCangrejo::renderizar(glm::mat4 model_matrix) {
+	this->renderArm(model_matrix);
+}
+
+// **************************** BRAZO MEDIO ****************************
+// *********************** SEGUNDA PARTE DEL BRAZO *********************
+BrazoMedioCangrejo::BrazoMedioCangrejo (myWindow* ventana) : Figura (ventana) {
+	this->mi_superficie = this->crear_superficie (ventana);
+}
+BrazoMedioCangrejo::~BrazoMedioCangrejo() { }
+
+// PARA HACER !!!
+Curva* BrazoMedioCangrejo::crear_curva_trayectoria () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+Curva* BrazoMedioCangrejo::crear_curva_seccion () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+int BrazoMedioCangrejo::obtener_pasos_trayectoria () {
+	return 500;
+}
+int BrazoMedioCangrejo::obtener_pasos_seccion () {
+	return 500;
+}
+std::vector<glm::mat4> BrazoMedioCangrejo::crear_transformaciones () {
+	return (std::vector<glm::mat4>());
+}
+
+// TEMPORAL !!
+void BrazoMedioCangrejo::renderizar(glm::mat4 model_matrix) {
+	this->renderArm(model_matrix);
+}
+
+// ************************** TENAZA SUPERIOR **************************
+// ****************** TERCERA PARTE SUPERIOR DEL BRAZO *****************
+TenazaSuperiorCangrejo::TenazaSuperiorCangrejo (myWindow* ventana) : Figura (ventana) {
+	this->mi_superficie = this->crear_superficie (ventana);
+}
+TenazaSuperiorCangrejo::~TenazaSuperiorCangrejo() { }
+
+// PARA HACER !!!
+Curva* TenazaSuperiorCangrejo::crear_curva_trayectoria () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+Curva* TenazaSuperiorCangrejo::crear_curva_seccion () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+int TenazaSuperiorCangrejo::obtener_pasos_trayectoria () {
+	return 500;
+}
+int TenazaSuperiorCangrejo::obtener_pasos_seccion () {
+	return 500;
+}
+std::vector<glm::mat4> TenazaSuperiorCangrejo::crear_transformaciones () {
+	return (std::vector<glm::mat4>());
+}
+
+// TEMPORAL !!
+void TenazaSuperiorCangrejo::renderizar(glm::mat4 model_matrix) {
+	this->renderArm(model_matrix);
+}
+
+// ************************** TENAZA INFERIOR **************************
+// ****************** TERCERA PARTE INFERIOR DEL BRAZO *****************
+TenazaInferiorCangrejo::TenazaInferiorCangrejo (myWindow* ventana) : Figura (ventana) {
+	this->mi_superficie = this->crear_superficie (ventana);
+}
+TenazaInferiorCangrejo::~TenazaInferiorCangrejo() { }
+
+// PARA HACER !!!
+Curva* TenazaInferiorCangrejo::crear_curva_trayectoria () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+Curva* TenazaInferiorCangrejo::crear_curva_seccion () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+int TenazaInferiorCangrejo::obtener_pasos_trayectoria () {
+	return 500;
+}
+int TenazaInferiorCangrejo::obtener_pasos_seccion () {
+	return 500;
+}
+std::vector<glm::mat4> TenazaInferiorCangrejo::crear_transformaciones () {
+	return (std::vector<glm::mat4>());
+}
+
+// TEMPORAL !!
+void TenazaInferiorCangrejo::renderizar(glm::mat4 model_matrix) {
+	this->renderArm(model_matrix);
+}
+
+// ******************************* TORSO *******************************
 TorsoCangrejo::TorsoCangrejo(myWindow* ventana) : Figura (ventana) {
-	this->mi_superficie = new Esfera (ventana, 1.0, 32, 32);
+	this->mi_superficie = this->crear_superficie (ventana);
 }
-TorsoCangrejo::~TorsoCangrejo() {
-	delete this->mi_superficie;
-}
+TorsoCangrejo::~TorsoCangrejo() { }
+
 void TorsoCangrejo::renderizar(glm::mat4 model_matrix) {
 	glm::vec3 escala(1, 1.1, 0.8);
 	model_matrix = glm::scale(model_matrix, escala);
-	this->mi_superficie->render(model_matrix);
+	Figura::renderizar(model_matrix);
 }
 
+// PARA HACER !!!
+Curva* TorsoCangrejo::crear_curva_trayectoria () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+Curva* TorsoCangrejo::crear_curva_seccion () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+int TorsoCangrejo::obtener_pasos_trayectoria () {
+	return 500;
+}
+int TorsoCangrejo::obtener_pasos_seccion () {
+	return 500;
+}
+std::vector<glm::mat4> TorsoCangrejo::crear_transformaciones () {
+	return (std::vector<glm::mat4>());
+}
+
+// TEMPORAL!!!
+Superficie* TorsoCangrejo::crear_superficie (myWindow* ventana) {
+	return (new Esfera (ventana, 1.0, 32, 32));
+}
+
+// ***************************** CANGREJO ******************************
 Cangrejo::Cangrejo(myWindow* ventana) : Figura (ventana),
 		pata1(ventana), pata2(ventana), pata3(ventana), pata4(ventana), pata5(
 				ventana), pata6(ventana), cabeza(ventana), torso(ventana), brazo1(
@@ -130,6 +384,8 @@ Cangrejo::Cangrejo(myWindow* ventana) : Figura (ventana),
 	patas_elevacion[3]=false;
 	patas_elevacion[4]=false;
 	patas_elevacion[5]=false;
+	
+	this->mi_superficie = this->crear_superficie (ventana);
 }
 Cangrejo::~Cangrejo() {
 }

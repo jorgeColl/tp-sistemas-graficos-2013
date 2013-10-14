@@ -14,6 +14,7 @@ Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 
 	figuras.push_back(&planta1);
 	figuras.push_back(&piso);
 	vuelta_cangrejo = false;
+	this->mi_superficie = this->crear_superficie (ventana);
 }
 
 Escenario::~Escenario() { }

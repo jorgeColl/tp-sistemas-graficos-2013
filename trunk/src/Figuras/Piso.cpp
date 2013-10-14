@@ -8,15 +8,28 @@
 #include "Piso.h"
 
 Piso::Piso(myWindow* ventana):Figura(ventana) {
-	// TODO Auto-generated constructor stub
-	this->myGrid = new Grilla (ventana, 10);
+	this->mi_superficie = this->crear_superficie (ventana);
+}
+Piso::~Piso() { }
+
+// PARA HACER !!!
+Curva* Piso::crear_curva_trayectoria () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+Curva* Piso::crear_curva_seccion () {
+	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+}
+int Piso::obtener_pasos_trayectoria () {
+	return 500;
+}
+int Piso::obtener_pasos_seccion () {
+	return 500;
+}
+std::vector<glm::mat4> Piso::crear_transformaciones () {
+	return (std::vector<glm::mat4>());
 }
 
-Piso::~Piso() {
-	delete this->myGrid;
+// TEMPORAL!!!
+Superficie* Piso::crear_superficie (myWindow* ventana) {
+	return (new Grilla (ventana, 10));
 }
-
-void Piso::renderizar(glm::mat4 model_matrix){
-	this->myGrid->render(model_matrix);
-}
-
