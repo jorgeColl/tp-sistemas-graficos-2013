@@ -60,38 +60,54 @@ const char* loadShaderAsString(const char* file)
     return str.c_str();
 }
 
-#define SENSIBILIDAD 15
+/* funcion auxiliar utilizada por OnKeyDown y axuuuu para escalar los vectores*/
+void escalar_aux(glm::vec3& vector,float sensibilidad){
+	vector.x = (vector.x /sensibilidad);
+	vector.y = (vector.y /sensibilidad);
+	vector.z = (vector.z /sensibilidad);
+}
 void myWindow::axuuu(int a, int b){
-	std::cout<<"x:"<<a<<" y:"<<b<<std::endl;
-	std::cout<<"centroX: "<<width/2<<" centroY: "<<height/2<<std::endl;
+	//std::cout<<"x:"<<a<<" y:"<<b<<std::endl;
+	//std::cout<<"centroX: "<<width/2<<" centroY: "<<height/2<<std::endl;
+
 	int centroX = (width/2);
 	int centroY = (height/2);
 	float difx = ( centroX - a);
 	float difY = ( centroY -b);
-	std::cout<<"difereciaX: "<<difx<<" diferenciaY: "<<difY<<std::endl;
+	//std::cout<<"difereciaX: "<<difx<<" diferenciaY: "<<difY<<std::endl;
 
-	glm::vec3 dir = (m_pos-m_direct);
+	glm::vec3 ejeZ(0.0f, 0.0f, 1.0f);
+	glm::vec3 dir = (m_pos - m_direct);
+	glm::vec3 rotx = glm::normalize(glm::cross(dir, ejeZ));
+	glm::vec3 roty = glm::normalize(glm::cross(rotx, dir));
+
 	dir = glm::normalize(dir);
-	//glm::vec3 costado = glm::normalize( glm::cross(dir,glm::vec3 (0.0,0.0,1.0)) );
-	//costado = (costado * difx);
-	glm::vec3 ejeZ (0.0,0.0,1.0);
-	glm::vec3 rotx = glm::cross(dir,ejeZ);
-	rotx=glm::normalize(rotx);
 
-	if(difx < 0){
-		m_direct-=rotx;
-		glutWarpPointer(width/2,height/2);
-	}else if(difx>0){
-		m_direct+=rotx;
-		glutWarpPointer(width/2,height/2);
+	float sensibilidad = 30.0f;
+	escalar_aux(rotx, sensibilidad);
+	escalar_aux(roty, sensibilidad);
+
+	if (difx < 0) {
+		m_direct = m_pos - dir - rotx;
+		glutWarpPointer(width / 2, height / 2);
+	} else if (difx > 0) {
+		m_direct = m_pos - dir + rotx;
+		glutWarpPointer(width / 2, height / 2);
 	}
-	if(difY>0){
-		m_direct.z+=0.5;
+	if (difY > 0) {
+		if (roty.z > 0.005f || subio_antes == false) {
+			m_direct = m_pos - dir + roty;
+		}
+		subio_antes = true;
 		glutWarpPointer(width/2,height/2);
 	}else if (difY<0){
-		m_direct.z-=0.5;
+		if (roty.z > 0.005f || subio_antes == true) {
+			m_direct = m_pos - dir - roty;
+		}
+		subio_antes = false;
 		glutWarpPointer(width/2,height/2);
 	}
+	std::cout<<"ROTY: "<<roty.x<<" , "<<roty.y<<" , "<<roty.z<<std::endl;
 
 	this->Repaint();
 
@@ -111,8 +127,7 @@ myWindow::myWindow():m_pos(8.0f, 0.0f,3.0f), m_direct(1.0f,0.0f,0.0f)
 	myCube=NULL;
 	mySphere=NULL;
     full_screen = false;
-    this->posMouseX =this->width/2;
-    this->posMouseY=this->height/2;
+    subio_antes = false;
     glutPassiveMotionFunc(aux);
 }
 
@@ -375,51 +390,72 @@ void myWindow::OnMouseWheel(int nWheelNumber, int nDirection, int x, int y)
 }
 //! Called when Mouse is moved (without pressing any button)
 void myWindow::OnMouseMove(int x, int y){
-std::cout<<"se movio en x: "<<x<<std::endl;
-std::cout<<"se movio en y: "<<y<<std::endl;
+//std::cout<<"se movio en x: "<<x<<std::endl;
+//std::cout<<"se movio en y: "<<y<<std::endl;
 }
 
 void myWindow::OnKeyDown(int nKey, char cAscii)
 {
+	glm::vec3 ejeZ (0.0f,0.0f,1.0f);
+	glm::vec3 ejeY (0.0f,1.0f,0.0f);
 	glm::vec3 dir = (m_pos-m_direct);
+	glm::vec3 rotx = glm::normalize( glm::cross(dir, ejeZ) );
+	glm::vec3 roty = glm::normalize( glm::cross(rotx,dir) );
+
 	dir = glm::normalize(dir);
-	glm::vec3 costado = glm::normalize( glm::cross(dir,glm::vec3 (0.0,0.0,1.0)) );
-	glm::vec3 ejeZ (0.0,0.0,1.0);
-	glm::vec3 rotx = glm::cross(dir,ejeZ);
-	
+
+	float sensibilidad = 5.0f;
+	escalar_aux(dir,sensibilidad);
+	escalar_aux(rotx,sensibilidad);
+	escalar_aux(roty,sensibilidad);
+
 	bool cerrada = false;
 	if (cAscii == 27) // 0x1b = ESC
 	{
 		cerrada = true;
 		this->Close(); // Close Window!
 	}
-
+	sensibilidad=sensibilidad*2;
 	switch(cAscii) {
 	case ('4'):
-		m_direct += rotx;
+		escalar_aux(rotx,sensibilidad);
+		m_direct = m_pos-dir+rotx;
 		break;
 	case ('6'):
-		m_direct -= rotx;
+		escalar_aux(rotx,sensibilidad);
+		m_direct = m_pos-dir-rotx;
 		break;
 	case ('8'):
-		m_direct.z++;
+		escalar_aux(roty,sensibilidad);
+		if(roty.z>0.002 || subio_antes==false){
+		m_direct = m_pos-dir+roty;
+		}
+		subio_antes=true;
+		//std::cout<<"ROTY: "<<roty.x<<" , "<<roty.y<<" , "<<roty.z<<std::endl;
 		break;
 	case ('5'):
-		m_direct.z--;
+		escalar_aux(roty,sensibilidad);
+		if(roty.z>0.002 || subio_antes==true){
+			m_direct = m_pos-dir-roty;
+		}
+		subio_antes=false;
+		//std::cout<<"ROTY: "<<roty.x<<" , "<<roty.y<<" , "<<roty.z<<std::endl;
 		break;
 	case ('w'):
 		this->m_pos -= dir;
+		this->m_direct = m_pos - dir;
 		break;
 	case ('s'):
 		this->m_pos += dir;
+		this->m_direct = m_pos - dir;
 		break;
 	case ('a'):
-		this->m_pos += costado;
-		m_direct += costado;
+		this->m_pos += rotx;
+		m_direct = m_pos - dir;
 		break;
 	case ('d'):
-		this->m_pos -= costado;
-		m_direct -= costado;
+		this->m_pos -= rotx;
+		m_direct = m_pos - dir;
 		break;
 	case ('h'):
 		for(unsigned int i=0;i<this->figs.size();++i) {
@@ -435,7 +471,7 @@ void myWindow::OnKeyDown(int nKey, char cAscii)
 		this->m_direct.z--;
 		break;
 	}
-
+	//std::cout<<"at: "<<m_direct.x<<","<<m_direct.y<<","<<m_direct.z<<"from: "<<m_pos.x<<","<<m_pos.y<<","<<m_pos.z<<std::endl;
 	if (!cerrada) this->OnRender();
 }
 
