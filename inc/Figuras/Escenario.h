@@ -30,6 +30,8 @@ public:
 	virtual ~Escenario();
 	virtual void renderizar(glm::mat4 model_matrix);
 	virtual void animar();
+protected:
+	virtual Superficie* crear_superficie (myWindow* ventana) { return (new Superficie(ventana)); };
 };
 
 #endif /* ESCENARIO_H_ */

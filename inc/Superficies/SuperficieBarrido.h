@@ -24,9 +24,10 @@ class SuperficieBarrido : public Superficie {
 		unsigned int pasos_trayectoria;
 		unsigned int pasos_seccion;
 		std::vector<glm::mat4> transformaciones;
-		Funcion funcion;
 		
 		// metodos auxiliares
+		bool atributosValidos();
+		void inicializarNulo();
 		void crear_puntos();
 		void preparar_seccion (unsigned int i);
 		glm::vec3 calcular_normal (glm::vec3 punto);
@@ -44,7 +45,6 @@ class SuperficieBarrido : public Superficie {
 		void set_pasos_trayectoria (unsigned int pasos);
 		void set_pasos_seccion (unsigned int pasos);
 		void set_transformaciones (std::vector<glm::mat4> transformacionesRecibidas);
-		void set_funcion (Funcion funcionRecibida);
 		
 		// render heredado de Superficie
 		virtual void render (glm::mat4 view_model_matrix);

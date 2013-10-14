@@ -18,10 +18,12 @@ int main(void)
 	myApplication*  pApp = new myApplication;
 	myWindow* myWin = new myWindow();
 	instancia = (void*)myWin;
-
+	
+	std::cout << "Cargando Escenario.." << std::endl;
 	Escenario escenario (myWin);
 	myWin->agregar_figura(&escenario);
-
+	 std::cout << "Escenario Cargado!\n" << std::endl;
+	 
     GLenum err = glewInit();
     if (GLEW_OK != err)
     {

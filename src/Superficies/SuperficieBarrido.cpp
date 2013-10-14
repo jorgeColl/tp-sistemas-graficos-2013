@@ -13,7 +13,9 @@ SuperficieBarrido::SuperficieBarrido (Curva* trayectoriaRecibida, Curva* seccion
 	this->set_pasos_seccion (pasosSec);
 	this->set_transformaciones (transformacionesRecibidas);
 	
-	this->crear_puntos();
+	if (this->atributosValidos()) this->crear_puntos();
+	else this->inicializarNulo();
+	
 	this->modo = GL_TRIANGLE_STRIP;
 }
 
@@ -39,6 +41,21 @@ SuperficieBarrido::~SuperficieBarrido () {
 }
 
 // metodos auxiliares
+bool SuperficieBarrido::atributosValidos () {
+	if (this->pasos_trayectoria <= 0) return false;
+	if (this->pasos_seccion <= 0) return false;
+	return true;
+}
+
+void SuperficieBarrido::inicializarNulo () {
+	this->vertex_buffer_size = 0;
+	this->normal_buffer_size = 0;
+	this->index_buffer_size  = 0;
+	
+	this->vertex_buffer = new GLfloat[this->vertex_buffer_size];
+	this->normal_buffer = new GLfloat[this->normal_buffer_size];
+	this->index_buffer = new GLuint[this->index_buffer_size];
+}
 
 void SuperficieBarrido::crear_puntos () {
 	std::vector<glm::vec3> vertices;
