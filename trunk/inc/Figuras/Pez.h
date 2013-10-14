@@ -7,7 +7,7 @@
 
 #ifndef PEZ_H_
 #define PEZ_H_
-
+#include "CurvaBSpline.h"
 #include "figura.h"
 
 // ******************************* ALETA *******************************
@@ -68,12 +68,18 @@ protected:
 	AletaPez aleta2;
 	ColaPez cola;
 	TorsoPez torso;
+	CurvaBSpline* trayecto;
+	float cont;
+	glm::vec3 m_pos;
+	float angX,angZ;
 public:
 	Pez(myWindow* ventana);
 	virtual ~Pez();
 	virtual void renderizar(glm::mat4 model_matrix);
+	virtual void set_trayecto (std::vector<glm::vec3> puntos);
+	virtual void animar();
 protected:
-	virtual Superficie* crear_superficie (myWindow* ventana) { return (new Superficie(ventana)); };
+virtual Superficie* crear_superficie (myWindow* ventana) { return (new Superficie(ventana)); };
 };
 
 #endif /* PEZ_H_ */
