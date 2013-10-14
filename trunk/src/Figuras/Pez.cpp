@@ -16,7 +16,7 @@ AletaPez::AletaPez(myWindow* ventana) :Figura(ventana) {
 AletaPez::~AletaPez() { }
 void AletaPez::renderizar(glm::mat4 model_matrix) {
 	model_matrix = glm::scale(model_matrix,glm::vec3(0.5,0.5,1.5));
-	Figura::renderizar(model_matrix);
+	//Figura::renderizar(model_matrix);
 }
 // PARA HACER !!!
 Curva* AletaPez::crear_curva_trayectoria () {
