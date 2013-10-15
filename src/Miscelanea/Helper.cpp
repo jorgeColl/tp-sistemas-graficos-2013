@@ -18,3 +18,8 @@ float Helper::coef_binomial (int n, int i) {
 	int denominador = ( factorial(i) * factorial(n-i) );
 	return ( (numerador*1.0) / (denominador*1.0) );
 }
+
+float Helper::num_aleatorio (float lim_inf, float lim_sup) {
+	if ( lim_inf > lim_sup ) return 0.0;
+	return ( lim_inf + ((float)rand()/(float)RAND_MAX) * (lim_sup-lim_inf) );
+}

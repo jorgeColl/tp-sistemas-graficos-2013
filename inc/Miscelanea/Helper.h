@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <cstdlib>
 
 class  Helper {
 	
@@ -22,5 +23,5 @@ class  Helper {
 		static int factorial (int n);
 		static float potencia (float x, int p);
 		static float coef_binomial (int n, int i);
-		
+		static float num_aleatorio (float lim_inf, float lim_sup);
 };
