@@ -6,7 +6,7 @@
 class Curva {
 	
 	private:
-		std::vector<glm::vec3>*  puntosControl;
+		std::vector<glm::vec3>* puntosControl;
 		glm::vec3 miCentro;
 		glm::vec3 miOrientacion;
 		
