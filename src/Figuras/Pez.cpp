@@ -81,7 +81,7 @@ void TorsoPez::renderizar(glm::mat4 model_matrix) {
 	//model_matrix = glm::rotate(model_matrix, 90.0f, glm::vec3(1.0,0.0,0.0));
 
 	model_matrix = glm::scale(model_matrix,glm::vec3(1.5,0.5,0.5));
-	this->myCube->render(model_matrix);
+	Figura::renderizar(model_matrix);
 }
 // PARA HACER !!!
 Curva* TorsoPez::crear_curva_trayectoria () {
@@ -105,6 +105,7 @@ Superficie* TorsoPez::crear_superficie (myWindow* ventana) {
 	return (new Cubo (ventana));
 }
 
+// ******************************** PEZ ********************************
 Pez::Pez(myWindow* ventana) :
 		Figura(ventana), aleta1(ventana), aleta2(ventana), cola(ventana), torso(ventana), m_pos(0,0,0) {
 	trayecto=NULL;
@@ -136,7 +137,8 @@ void Pez::animar() {
 	}
 	std::cout << "Cantidad de tramos: " << trayecto->cantidad_tramos() << " "<< std::endl;
 	glm::vec3 a = trayecto->dameTangente(cont, 0.001f);
-
+	a = glm::normalize (a);
+	
 	// cont es el u , y avanzo al siguiente paso
 	cont += 0.01;
 	if (cont > trayecto->cantidad_tramos()) {
@@ -144,7 +146,8 @@ void Pez::animar() {
 		angZ = 0;
 	}
 	glm::vec3 b = trayecto->dameTangente(cont, 0.001f);
-
+	b = glm::normalize (b);
+	
 	// asigno siguiente posicion al pez
 	glm::vec3 nueva_pos = trayecto->damePunto(cont);
 	m_pos = nueva_pos;
