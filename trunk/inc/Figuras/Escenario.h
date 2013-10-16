@@ -14,9 +14,13 @@
 #include "Planta.h"
 #include "Piso.h"
 #include "Pez.h"
+#include "Grilla.h"
 
 class Escenario: public Figura {
+	static const bool DEBUG;
 protected:
+	Superficie* grilla_debug;
+	
 	Pez pez1;
 	Cangrejo cangrejo1;
 	Piedra piedra1;

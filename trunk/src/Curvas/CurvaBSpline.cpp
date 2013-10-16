@@ -5,7 +5,7 @@
 
 const unsigned int CurvaBSpline::ORDEN = 3;
 
-CurvaBSpline::CurvaBSpline (std::vector<glm::vec3> ptosControl, glm::vec3 centro, glm::vec3 orientacion): Curva(centro, orientacion) {
+void CurvaBSpline::init (std::vector<glm::vec3> ptosControl, glm::vec3 centro, glm::vec3 orientacion) {
 	this->tramos = new std::vector<CurvaBSplineCubica*>();
 	
 	if (ptosControl.size() > CurvaBSpline::ORDEN) {
@@ -18,6 +18,10 @@ CurvaBSpline::CurvaBSpline (std::vector<glm::vec3> ptosControl, glm::vec3 centro
 			this->tramos->push_back ( new CurvaBSplineCubica(ptosTemp, centro, orientacion) );
 		}
 	}
+}
+
+CurvaBSpline::CurvaBSpline (std::vector<glm::vec3> ptosControl, glm::vec3 centro, glm::vec3 orientacion): Curva(centro, orientacion) {
+	this->init (ptosControl, centro, orientacion);
 }
 
 int CurvaBSpline::cantidad_tramos () {
@@ -46,7 +50,11 @@ void CurvaBSpline::reset () {
 	}
 }
 
-CurvaBSpline::~CurvaBSpline () {
+void CurvaBSpline::destruir_tramos () {
 	Helper::destruir_elementos <std::vector<CurvaBSplineCubica*>, CurvaBSplineCubica> (this->tramos);
 	delete (this->tramos);
+}
+
+CurvaBSpline::~CurvaBSpline () {
+	this->destruir_tramos();
 }

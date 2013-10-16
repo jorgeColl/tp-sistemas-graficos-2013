@@ -10,6 +10,10 @@ class CurvaBSpline : public Curva {
 	private:
 		std::vector<CurvaBSplineCubica*>* tramos;
 	
+	protected:
+		void init (std::vector<glm::vec3> ptosControl, glm::vec3 centro, glm::vec3 orientacion);
+		void destruir_tramos ();
+		
 	public:
 		static const unsigned int ORDEN;
 		
