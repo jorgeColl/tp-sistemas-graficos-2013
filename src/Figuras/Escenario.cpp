@@ -16,13 +16,21 @@ Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 
 	vuelta_cangrejo = false;
 
 	std::vector<glm::vec3> puntos;
-	puntos.push_back(glm::vec3(1,0,1));
-	puntos.push_back(glm::vec3(1,0,1));
-	puntos.push_back(glm::vec3(0,1,1));
-	puntos.push_back(glm::vec3(-1,0,1));
-	puntos.push_back(glm::vec3(0,-1,1));
-	//puntos.push_back(glm::vec3(3,1,1));
-	//puntos.push_back(glm::vec3(3.5,1,1));
+
+	puntos.push_back(glm::vec3(0, 0, 0));
+	puntos.push_back(glm::vec3(0, 0, 0));
+	puntos.push_back(glm::vec3(1, 0, 0));
+	puntos.push_back(glm::vec3(2, 0, 0));
+	puntos.push_back(glm::vec3(3, 1, 0));
+	puntos.push_back(glm::vec3(4, 2, 0));
+	puntos.push_back(glm::vec3(5, 3, 0));
+	puntos.push_back(glm::vec3(6, 4, 0));
+	puntos.push_back(glm::vec3(7, 3, 0));
+	puntos.push_back(glm::vec3(8, 2, 0));
+	puntos.push_back(glm::vec3(9, 1, 0));
+	puntos.push_back(glm::vec3(10, 0, 0));
+	puntos.push_back(glm::vec3(11, -1, 0));
+	puntos.push_back(glm::vec3(12, -2, 0));
 	pez1.set_trayecto(puntos);
 	this->mi_superficie = this->crear_superficie (ventana);
 }

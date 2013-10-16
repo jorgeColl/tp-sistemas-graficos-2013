@@ -71,7 +71,7 @@ protected:
 	CurvaBSpline* trayecto;
 	float cont;
 	glm::vec3 m_pos;
-	float angX,angZ;
+	float angX,angZ,angY,angXViejo,angZViejo,angYViejo;
 public:
 	Pez(myWindow* ventana);
 	virtual ~Pez();
