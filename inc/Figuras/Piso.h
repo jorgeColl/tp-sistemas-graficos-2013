@@ -11,8 +11,11 @@
 #include "figura.h"
 
 class Piso: public Figura {
-protected:
-	 Superficie* myGrid;
+	static const float LARGO;
+	static const float ANCHO;
+	static const float SEPARACION;
+	static const float PERTURBACION;
+	
 public:
 	Piso(myWindow* ventana);
 	virtual ~Piso();
@@ -22,9 +25,6 @@ protected:
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
 	virtual std::vector<glm::mat4> crear_transformaciones ();
-	
-	// temporal
-	virtual Superficie* crear_superficie (myWindow* ventana);
 };
 
 #endif /* PISO_H_ */

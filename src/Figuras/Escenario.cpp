@@ -32,13 +32,19 @@ Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 
 	puntos.push_back(glm::vec3(11, -1, 0));
 	puntos.push_back(glm::vec3(12, -2, 0));
 	pez1.set_trayecto(puntos);
+	
+	this->grilla_debug = new Grilla (ventana, 10);
 	this->mi_superficie = this->crear_superficie (ventana);
 }
 
-Escenario::~Escenario() { }
+Escenario::~Escenario() { delete (this->grilla_debug); }
+
+// true para ver la grilla, false para ver el piso
+const bool Escenario::DEBUG = true;
 
 void Escenario::renderizar(glm::mat4 model_matrix) {
-	this->piso.renderizar(model_matrix);
+	if (Escenario::DEBUG) this->grilla_debug->render(model_matrix);
+		else this->piso.renderizar(model_matrix);
 
 	this->pez1.renderizar(model_matrix);
 
