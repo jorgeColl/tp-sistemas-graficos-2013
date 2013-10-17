@@ -7,7 +7,10 @@
 
 #include "Escenario.h"
 
-Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 (ventana), piedra1 (ventana),planta1(ventana),piso(ventana),pos_cangrejo(0,0,1.3f) {
+Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 (ventana), piedra1 (ventana),planta1(ventana),piso(ventana) {
+	pos_cangrejo1=glm::vec3 (0,0,1.3f);
+	pos_pez1 = glm::vec3 (-3,0,0.4f);
+
 	figuras.push_back(&cangrejo1);
 	figuras.push_back(&pez1);
 	figuras.push_back(&piedra1);
@@ -46,9 +49,11 @@ void Escenario::renderizar(glm::mat4 model_matrix) {
 	if (Escenario::DEBUG) this->grilla_debug->render(model_matrix);
 		else this->piso.renderizar(model_matrix);
 
-	this->pez1.renderizar(model_matrix);
+	glm::mat4 model_matrix_pez1=model_matrix;
+	//model_matrix_pez1 = glm::translate(model_matrix, pos_pez1);
+	this->pez1.renderizar(model_matrix_pez1);
 
-	glm::mat4 model_matrix_cangrejo1 = glm::translate(model_matrix, pos_cangrejo);
+	glm::mat4 model_matrix_cangrejo1 = glm::translate(model_matrix, pos_cangrejo1);
 	//this->cangrejo1.renderizar(model_matrix_cangrejo1);
 
 	glm::mat4 model_matrix_planta1 = glm::translate(model_matrix, glm::vec3 (-5.0f,5.0f,0.9f));
@@ -60,20 +65,17 @@ void Escenario::renderizar(glm::mat4 model_matrix) {
 void Escenario::animar() {
 
 	// INICIO de cosa sucia para mover el cangrejo
-	//std::cout<<"pos x cangrejo"<<pos_cangrejo.x<<std::endl;
-
 	if (vuelta_cangrejo == true) {
-		pos_cangrejo.x-=0.2f;
-		if( pos_cangrejo.x<=-10.0f ) {
+		pos_cangrejo1.x-=0.2f;
+		if( pos_cangrejo1.x<=-10.0f ) {
 			vuelta_cangrejo = false;
 		}
 	} else {
-		pos_cangrejo.x+=0.2f;
-		if( pos_cangrejo.x>=10.0f ) {
+		pos_cangrejo1.x+=0.2f;
+		if( pos_cangrejo1.x>=10.0f ) {
 			vuelta_cangrejo = true;
 		}
 	}
-	//std::cout<<"pos x cangrejo"<<pos_cangrejo.x<<std::endl;
 	// FIN de cosa sucia
 
 	for (unsigned int i = 0; i<figuras.size(); ++i) {
