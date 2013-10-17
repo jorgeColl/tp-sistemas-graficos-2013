@@ -10,7 +10,7 @@
 #include "CurvaBSpline.h"
 #include "figura.h"
 // parametros que definen como se muestra al pez
-#define MODELO_SIMPLE true
+#define MODELO_SIMPLE false
 #define MOSTRAR_RECORRIDOS true
 
 // ******************************* ALETA *******************************

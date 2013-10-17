@@ -431,9 +431,9 @@ void Cangrejo::renderizar(glm::mat4 model_matrix) {
 	glm::mat4 m_pata;
 	for (int i=0;i<6;++i) {
 		if(i<3){
-			m_pata = glm::translate(model_matrix , glm::vec3 (-3.5f , 1.0f - (2*i), 0.0f));
+			m_pata = glm::translate(model_matrix , glm::vec3 (-3.2f+(0.8*i) , 0.8f - (2*i), 0.0f));
 		}else{
-			m_pata = glm::translate(model_matrix , glm::vec3 (3.5f , 1.0f - (2*(i-3)), 0.0f));
+			m_pata = glm::translate(model_matrix , glm::vec3 (3.2f-0.8*(i-3), 0.8f - (2*(i-3)), 0.0f));
 		}
 		m_pata  = glm::rotate(m_pata , ang_pata_Z[i], glm::vec3(0.0f, 0.0f, 1.0f));
 		m_pata  = glm::rotate(m_pata , ang_pata_X[i], glm::vec3(1.0f, 0.0f, 0.0f));

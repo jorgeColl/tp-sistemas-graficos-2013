@@ -463,12 +463,12 @@ void myWindow::OnKeyDown(int nKey, char cAscii)
 		}
 		break;
 	case ('i'):
-		this->m_pos.z++;
-		this->m_direct.z++;
+		this->m_pos.z+=0.5f;
+		this->m_direct.z+=0.5f;
 		break;
 	case ('k'):
-		this->m_pos.z--;
-		this->m_direct.z--;
+		this->m_pos.z-=0.5f;
+		this->m_direct.z-=0.5f;
 		break;
 	}
 	//std::cout<<"at: "<<m_direct.x<<","<<m_direct.y<<","<<m_direct.z<<"from: "<<m_pos.x<<","<<m_pos.y<<","<<m_pos.z<<std::endl;
