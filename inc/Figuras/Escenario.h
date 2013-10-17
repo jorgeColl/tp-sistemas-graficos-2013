@@ -23,8 +23,19 @@ protected:
 	
 	Pez pez1;
 	Cangrejo cangrejo1;
+
 	Piedra piedra1;
+	Piedra piedra2;
+	Piedra piedra3;
+	Piedra piedra4;
+	Piedra piedra5;
+
 	Planta planta1;
+	Planta planta2;
+	Planta planta3;
+	Planta planta4;
+	Planta planta5;
+
 	Piso piso;
 	std::vector<Figura*> figuras;
 	glm::vec3 pos_cangrejo1,pos_pez1;
