@@ -23,7 +23,9 @@
 #include "CurvaBSpline.h"
 #include "Circunferencia.h"
 #include "Parabola.h"
+#include "FuncionCurvaBezier.h"
 #include "Funcion.h"
+#include "Helper.h"
 
 class Figura {
 protected:
@@ -50,6 +52,12 @@ protected:
 	virtual int obtener_pasos_trayectoria () { return 0; };
 	virtual int obtener_pasos_seccion () { return 0; };
 	virtual std::vector<glm::mat4> crear_transformaciones ();
+	virtual std::vector<glm::mat4> transformacion_parabolica ();
+	
+	virtual FuncionCurvaBezier crear_funcion ();
+	virtual float obtener_coef_expansion();
+	virtual float obtener_valor_inicial_funcion();
+	virtual float obtener_valor_final_funcion();
 };
 
 #endif /* FIGURA_H_ */

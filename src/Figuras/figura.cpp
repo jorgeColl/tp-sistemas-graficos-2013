@@ -39,8 +39,57 @@ Curva* Figura::crear_curva_seccion () {
 	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
 }
 
+float Figura::obtener_coef_expansion() {
+	return 1.0;
+}
+
+float Figura::obtener_valor_inicial_funcion() {
+	return 0.0;
+}
+
+float Figura::obtener_valor_final_funcion() {
+	return 0.0;
+}
+
+FuncionCurvaBezier Figura::crear_funcion () {
+	std::vector<glm::vec3> puntos;
+	puntos.push_back ( glm::vec3 (0.0, this->obtener_valor_inicial_funcion(), 0.0) );
+	puntos.push_back ( glm::vec3 (0.03 * this->obtener_pasos_trayectoria(), 0.97 * this->obtener_coef_expansion(), 0.0) );
+	puntos.push_back ( glm::vec3 (0.5 * this->obtener_pasos_trayectoria(), 1.0 * this->obtener_coef_expansion(), 0.0) );
+	puntos.push_back ( glm::vec3 (0.97 * this->obtener_pasos_trayectoria(), 0.97 * this->obtener_coef_expansion(), 0.0) );
+	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), this->obtener_valor_final_funcion(), 0.0) );
+	return (FuncionCurvaBezier(puntos));
+}
+
 std::vector<glm::mat4> Figura::crear_transformaciones () {
-	return (std::vector<glm::mat4>());
+	std::vector<glm::mat4> transformaciones;
+	
+	int pasosTrayectoria = this->obtener_pasos_trayectoria();
+	FuncionCurvaBezier funcion = this->crear_funcion();
+	
+	for (int i = 0 ; i <= pasosTrayectoria ; i++) {
+		float coef = 0.0;
+		coef = funcion.evaluar_en (i * 1.0);
+		if (coef < 0.0) coef *= (-1);
+		glm::mat4 matriz = glm::scale ( glm::mat4 (1.0f) , glm::vec3 (coef, coef, coef));
+		transformaciones.push_back(matriz);
+	}
+	return transformaciones;
+}
+
+std::vector<glm::mat4> Figura::transformacion_parabolica () {
+	std::vector<glm::mat4> transformaciones;
+	
+	int pasosTrayectoria = this->obtener_pasos_trayectoria();
+	float a2 = (-4.0) / Helper::potencia (pasosTrayectoria, 2);
+	Parabola funcion = Parabola (0.0, pasosTrayectoria, a2 , true);
+	
+	for (int i = 0 ; i <= pasosTrayectoria ; i++) {
+		float coef = funcion.evaluar_en (i * 1.0);
+		glm::mat4 matriz = glm::scale ( glm::mat4 (1.0f) , glm::vec3 (coef, coef, coef));
+		transformaciones.push_back(matriz);
+	}
+	return transformaciones;
 }
 
 Figura::~Figura () {
@@ -50,7 +99,6 @@ Figura::~Figura () {
 	delete this->mySphere;
 	delete this->myCube;
 }
-
 
 // de aca para abajo, todo temporal, despues vuela
 Figura::Figura (myWindow* ventana) {
