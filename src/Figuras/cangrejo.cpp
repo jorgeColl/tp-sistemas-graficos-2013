@@ -427,7 +427,6 @@ void Cangrejo::renderizar(glm::mat4 model_matrix) {
 	}
 }
 void Cangrejo::animar() {
-	std::cout<<"me estan animando"<<std::endl;
 	for (unsigned int i=0;i<6;++i) {
 		if ( patas_elevacion[i] == true ) {
 			ang_pata_X[i]+=1;
