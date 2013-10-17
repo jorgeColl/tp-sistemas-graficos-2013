@@ -66,12 +66,12 @@ void Escenario::animar() {
 
 	// INICIO de cosa sucia para mover el cangrejo
 	if (vuelta_cangrejo == true) {
-		pos_cangrejo1.x-=0.2f;
+		pos_cangrejo1.x-=0.1f;
 		if( pos_cangrejo1.x<=-10.0f ) {
 			vuelta_cangrejo = false;
 		}
 	} else {
-		pos_cangrejo1.x+=0.2f;
+		pos_cangrejo1.x+=0.1f;
 		if( pos_cangrejo1.x>=10.0f ) {
 			vuelta_cangrejo = true;
 		}

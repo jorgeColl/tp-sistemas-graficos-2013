@@ -45,26 +45,31 @@ PataMusloCangrejo::PataMusloCangrejo (myWindow* ventana) : Figura (ventana) {
 }
 PataMusloCangrejo::~PataMusloCangrejo() { }
 
-// PARA HACER !!!
 Curva* PataMusloCangrejo::crear_curva_trayectoria () {
-	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+	std::vector<glm::vec3> control_trayectoria;
+	
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.0, 0.0) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, -0.85, 1.75) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.1, 3.52) );
+	return (new CurvaBezier (control_trayectoria, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
 }
 Curva* PataMusloCangrejo::crear_curva_seccion () {
-	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+	return (new Circunferencia(glm::vec3(0.0,0.0,0.0),1.0));
 }
 int PataMusloCangrejo::obtener_pasos_trayectoria () {
-	return 500;
+	return 50;
 }
 int PataMusloCangrejo::obtener_pasos_seccion () {
-	return 500;
+	return 100;
 }
-std::vector<glm::mat4> PataMusloCangrejo::crear_transformaciones () {
-	return (std::vector<glm::mat4>());
-}
-
-// TEMPORAL !!
-void PataMusloCangrejo::renderizar(glm::mat4 model_matrix) {
-	this->renderArm(model_matrix);
+FuncionCurvaBezier PataMusloCangrejo::crear_funcion () {
+	std::vector<glm::vec3> puntos;
+	puntos.push_back ( glm::vec3 (0.0, 0.65, 0.0) );
+	puntos.push_back ( glm::vec3 (0.03 * this->obtener_pasos_trayectoria(), 1.7 * 1.0, 0.0) );
+	puntos.push_back ( glm::vec3 (0.5 * this->obtener_pasos_trayectoria(), 1.0 * 1.0, 0.0) );
+	puntos.push_back ( glm::vec3 (0.97 * this->obtener_pasos_trayectoria(), 1.7 * 1.0, 0.0) );
+	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.7, 0.0) );
+	return (FuncionCurvaBezier(puntos));
 }
 
 // **************************** PATA GEMELO ****************************
@@ -74,26 +79,31 @@ PataGemeloCangrejo::PataGemeloCangrejo (myWindow* ventana) : Figura (ventana) {
 }
 PataGemeloCangrejo::~PataGemeloCangrejo() { }
 
-// PARA HACER !!!
 Curva* PataGemeloCangrejo::crear_curva_trayectoria () {
-	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+	std::vector<glm::vec3> control_trayectoria;
+	
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.0, 0.0) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, -0.45, 1.75) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.0, 3.58) );
+	return (new CurvaBezier (control_trayectoria, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
 }
 Curva* PataGemeloCangrejo::crear_curva_seccion () {
-	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+	return (new Circunferencia(glm::vec3(0.0,0.0,0.0),0.70));
 }
 int PataGemeloCangrejo::obtener_pasos_trayectoria () {
-	return 500;
+	return 50;
 }
 int PataGemeloCangrejo::obtener_pasos_seccion () {
-	return 500;
+	return 100;
 }
-std::vector<glm::mat4> PataGemeloCangrejo::crear_transformaciones () {
-	return (std::vector<glm::mat4>());
-}
-
-// TEMPORAL !!
-void PataGemeloCangrejo::renderizar(glm::mat4 model_matrix) {
-	this->renderArm(model_matrix);
+FuncionCurvaBezier PataGemeloCangrejo::crear_funcion () {
+	std::vector<glm::vec3> puntos;
+	puntos.push_back ( glm::vec3 (0.0, 0.97, 0.0) );
+	puntos.push_back ( glm::vec3 (0.03 * this->obtener_pasos_trayectoria(), 2.0 * 1.0, 0.0) );
+	puntos.push_back ( glm::vec3 (0.5 * this->obtener_pasos_trayectoria(), 1.0 * 1.0, 0.0) );
+	puntos.push_back ( glm::vec3 (0.97 * this->obtener_pasos_trayectoria(), 2.0 * 1.0, 0.0) );
+	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.5, 0.0) );
+	return (FuncionCurvaBezier(puntos));
 }
 
 // ****************************** PATA PIE *****************************
@@ -103,26 +113,31 @@ PataPieCangrejo::PataPieCangrejo (myWindow* ventana) : Figura (ventana) {
 }
 PataPieCangrejo::~PataPieCangrejo() { }
 
-// PARA HACER !!!
 Curva* PataPieCangrejo::crear_curva_trayectoria () {
-	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+	std::vector<glm::vec3> control_trayectoria;
+	
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.1, -0.1) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, -0.3, 1.75) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.0, 3.5) );
+	return (new CurvaBezier (control_trayectoria, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
 }
 Curva* PataPieCangrejo::crear_curva_seccion () {
-	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+	return (new Circunferencia(glm::vec3(0.0,0.0,0.0),0.40));
 }
 int PataPieCangrejo::obtener_pasos_trayectoria () {
-	return 500;
+	return 50;
 }
 int PataPieCangrejo::obtener_pasos_seccion () {
-	return 500;
+	return 100;
 }
-std::vector<glm::mat4> PataPieCangrejo::crear_transformaciones () {
-	return (std::vector<glm::mat4>());
-}
-
-// TEMPORAL !!
-void PataPieCangrejo::renderizar(glm::mat4 model_matrix) {
-	this->renderArm(model_matrix);
+FuncionCurvaBezier PataPieCangrejo::crear_funcion () {
+	std::vector<glm::vec3> puntos;
+	puntos.push_back ( glm::vec3 (0.0, 0.98, 0.0) );
+	puntos.push_back ( glm::vec3 (0.03 * this->obtener_pasos_trayectoria(), 3.0, 0.0) );
+	puntos.push_back ( glm::vec3 (0.5 * this->obtener_pasos_trayectoria(), 1.0, 0.0) );
+	puntos.push_back ( glm::vec3 (0.97 * this->obtener_pasos_trayectoria(), 0.55, 0.0) );
+	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.0, 0.0) );
+	return (FuncionCurvaBezier(puntos));
 }
 
 // ****************************** CABEZA *******************************
@@ -321,32 +336,31 @@ TorsoCangrejo::TorsoCangrejo(myWindow* ventana) : Figura (ventana) {
 }
 TorsoCangrejo::~TorsoCangrejo() { }
 
-void TorsoCangrejo::renderizar(glm::mat4 model_matrix) {
-	glm::vec3 escala(1, 1.1, 0.8);
-	model_matrix = glm::scale(model_matrix, escala);
-	Figura::renderizar(model_matrix);
-}
-
-// PARA HACER !!!
 Curva* TorsoCangrejo::crear_curva_trayectoria () {
-	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+	std::vector<glm::vec3> control_trayectoria;
+	
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, -1.2, 0.0) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, 1.15, 0.0) );
+	return (new CurvaBezier (control_trayectoria, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
 }
 Curva* TorsoCangrejo::crear_curva_seccion () {
-	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
-}
-int TorsoCangrejo::obtener_pasos_trayectoria () {
-	return 500;
-}
-int TorsoCangrejo::obtener_pasos_seccion () {
-	return 500;
-}
-std::vector<glm::mat4> TorsoCangrejo::crear_transformaciones () {
-	return (std::vector<glm::mat4>());
+	return (new Circunferencia(glm::vec3(0.0,0.0,0.0),0.5));
 }
 
-// TEMPORAL!!!
-Superficie* TorsoCangrejo::crear_superficie (myWindow* ventana) {
-	return (new Esfera (ventana, 1.0, 32, 32));
+int TorsoCangrejo::obtener_pasos_trayectoria () {
+	return 85;
+}
+int TorsoCangrejo::obtener_pasos_seccion () {
+	return 100;
+}
+FuncionCurvaBezier TorsoCangrejo::crear_funcion () {
+	std::vector<glm::vec3> puntos;
+	puntos.push_back ( glm::vec3 (0.0, 0.0, 0.0) );
+	puntos.push_back ( glm::vec3 (0.01 * this->obtener_pasos_trayectoria(), 4.0, 0.0) );
+	puntos.push_back ( glm::vec3 (0.50 * this->obtener_pasos_trayectoria(), 0.85, 0.0) );
+	puntos.push_back ( glm::vec3 (0.99 * this->obtener_pasos_trayectoria(), 4.75, 0.0) );
+	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.0, 0.0) );
+	return (FuncionCurvaBezier(puntos));
 }
 
 // ***************************** CANGREJO ******************************
@@ -437,7 +451,7 @@ void Cangrejo::animar() {
 
 		if ( patas_elevacion[i] == false ) {
 			ang_pata_X[i]-=1;
-			if ( ang_pata_X[i]<=-95 ){
+			if ( ang_pata_X[i]<=-90 ){
 				patas_elevacion[i]=true;
 			}
 		}

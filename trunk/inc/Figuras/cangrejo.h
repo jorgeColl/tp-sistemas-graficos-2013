@@ -18,13 +18,12 @@ class PataMusloCangrejo: public Figura {
 public:
 	PataMusloCangrejo(myWindow* ventana);
 	~PataMusloCangrejo();
-	virtual void renderizar(glm::mat4 model_matrix); // TEMPORAL!!
 protected:
 	virtual Curva* crear_curva_trayectoria ();
 	virtual Curva* crear_curva_seccion ();
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
-	virtual std::vector<glm::mat4> crear_transformaciones ();
+	virtual FuncionCurvaBezier crear_funcion ();
 };
 
 // **************************** PATA GEMELO ****************************
@@ -33,13 +32,12 @@ class PataGemeloCangrejo: public Figura {
 public:
 	PataGemeloCangrejo(myWindow* ventana);
 	~PataGemeloCangrejo();
-	virtual void renderizar(glm::mat4 model_matrix); // TEMPORAL!!
 protected:
 	virtual Curva* crear_curva_trayectoria ();
 	virtual Curva* crear_curva_seccion ();
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
-	virtual std::vector<glm::mat4> crear_transformaciones ();
+	virtual FuncionCurvaBezier crear_funcion ();
 };
 
 // ****************************** PATA PIE *****************************
@@ -48,13 +46,12 @@ class PataPieCangrejo: public Figura {
 public:
 	PataPieCangrejo(myWindow* ventana);
 	~PataPieCangrejo();
-	virtual void renderizar(glm::mat4 model_matrix); // TEMPORAL!!
 protected:
 	virtual Curva* crear_curva_trayectoria ();
 	virtual Curva* crear_curva_seccion ();
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
-	virtual std::vector<glm::mat4> crear_transformaciones ();
+	virtual FuncionCurvaBezier crear_funcion ();
 };
 
 // **************************** PATA ENTERA ****************************
@@ -177,16 +174,12 @@ class TorsoCangrejo : public Figura {
 public:
 	TorsoCangrejo (myWindow* ventana);
 	~TorsoCangrejo();
-	virtual void renderizar(glm::mat4 model_matrix);
 protected:
 	virtual Curva* crear_curva_trayectoria ();
 	virtual Curva* crear_curva_seccion ();
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
-	virtual std::vector<glm::mat4> crear_transformaciones ();
-	
-	// temporal
-	virtual Superficie* crear_superficie (myWindow* ventana);
+	virtual FuncionCurvaBezier crear_funcion ();
 };
 
 // ***************************** CANGREJO ******************************

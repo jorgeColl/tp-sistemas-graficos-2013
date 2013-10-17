@@ -9,7 +9,6 @@
 #define PIEDRA_H_
 
 #include "figura.h"
-#include "FuncionCurvaBezier.h"
 
 class Piedra: public Figura {
 public:
@@ -22,8 +21,6 @@ protected:
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
 	virtual std::vector<glm::mat4> crear_transformaciones ();
-private:
-	FuncionCurvaBezier crear_funcion ();
 };
 
 #endif /* PIEDRA_H_ */

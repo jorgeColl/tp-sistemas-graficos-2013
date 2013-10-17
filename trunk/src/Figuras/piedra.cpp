@@ -64,16 +64,16 @@ int Piedra::obtener_pasos_seccion () {
 	return 100;
 }
 
-FuncionCurvaBezier Piedra::crear_funcion () {
-	std::vector<glm::vec3> puntos;
-	puntos.push_back ( glm::vec3 (0.0, 0.0, 0.0) );
-	puntos.push_back ( glm::vec3 (0.03 * this->obtener_pasos_trayectoria(), 0.97, 0.0) );
-	puntos.push_back ( glm::vec3 (0.5 * this->obtener_pasos_trayectoria(), 1.0, 0.0) );
-	puntos.push_back ( glm::vec3 (0.97 * this->obtener_pasos_trayectoria(), 0.97, 0.0) );
-	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.0, 0.0) );
-	
-	return (FuncionCurvaBezier(puntos));
-}
+//~ FuncionCurvaBezier Piedra::crear_funcion () {
+	//~ std::vector<glm::vec3> puntos;
+	//~ puntos.push_back ( glm::vec3 (0.0, 0.0, 0.0) );
+	//~ puntos.push_back ( glm::vec3 (0.03 * this->obtener_pasos_trayectoria(), 0.97, 0.0) );
+	//~ puntos.push_back ( glm::vec3 (0.5 * this->obtener_pasos_trayectoria(), 1.0, 0.0) );
+	//~ puntos.push_back ( glm::vec3 (0.97 * this->obtener_pasos_trayectoria(), 0.97, 0.0) );
+	//~ puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.0, 0.0) );
+	//~ 
+	//~ return (FuncionCurvaBezier(puntos));
+//~ }
 
 std::vector<glm::mat4> Piedra::crear_transformaciones () {
 	std::vector<glm::mat4> transformaciones;
@@ -81,12 +81,11 @@ std::vector<glm::mat4> Piedra::crear_transformaciones () {
 	FuncionCurvaBezier funcion = this->crear_funcion();
 	int pasosTrayectoria = this->obtener_pasos_trayectoria();
 	for (int i = 0 ; i <= pasosTrayectoria ; i++) {
-		glm::mat4 matriz = glm::mat4 (1.0f);
 		float num = Helper::num_aleatorio(0.0, 360.0);
 		float coef = 0.0;
 		if ((i > 0) && (i < pasosTrayectoria)) coef = (funcion.evaluar_en (i * 1.0) + (0.02) * sin(num * 3.1415927f / 180.0));
 		if (coef < 0.0) coef *= (-1);
-		matriz = glm::scale ( glm::mat4 (1.0f) , glm::vec3 (coef, coef, coef));
+		glm::mat4 matriz = glm::scale ( glm::mat4 (1.0f) , glm::vec3 (coef, coef, coef));
 		transformaciones.push_back(matriz);
 	}
 	return transformaciones;
