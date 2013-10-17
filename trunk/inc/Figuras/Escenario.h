@@ -28,7 +28,7 @@ protected:
 	Piso piso;
 	std::vector<Figura*> figuras;
 	glm::vec3 pos_cangrejo1,pos_pez1;
-	bool vuelta_cangrejo;
+
 public:
 	Escenario(myWindow* ventana);
 	virtual ~Escenario();

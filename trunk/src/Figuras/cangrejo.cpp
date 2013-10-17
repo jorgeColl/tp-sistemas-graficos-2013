@@ -385,25 +385,30 @@ Cangrejo::Cangrejo(myWindow* ventana) : Figura (ventana),
 	ang_pata_X[4]=-45;
 	ang_pata_X[5]=-95;
 
-	ang_pata_Z[0]=90;
-	ang_pata_Z[1]=90;
-	ang_pata_Z[2]=90;
-	ang_pata_Z[3]=-90;
-	ang_pata_Z[4]=-90;
-	ang_pata_Z[5]=-90;
+	ang_pata_Z[0] = 90;
+	ang_pata_Z[1] = 90;
+	ang_pata_Z[2] = 90;
+	ang_pata_Z[3] = -90;
+	ang_pata_Z[4] = -90;
+	ang_pata_Z[5] = -90;
 
-	patas_elevacion[0]=false;
-	patas_elevacion[1]=false;
-	patas_elevacion[2]=false;
-	patas_elevacion[3]=false;
-	patas_elevacion[4]=false;
-	patas_elevacion[5]=false;
-	
-	this->mi_superficie = this->crear_superficie (ventana);
+	patas_elevacion[0] = false;
+	patas_elevacion[1] = false;
+	patas_elevacion[2] = false;
+	patas_elevacion[3] = false;
+	patas_elevacion[4] = false;
+	patas_elevacion[5] = false;
+
+	vuelta_cangrejo = false;
+	m_pos = glm::vec3(0, 0, 0);
+
+	this->mi_superficie = this->crear_superficie(ventana);
 }
 Cangrejo::~Cangrejo() {
 }
 void Cangrejo::renderizar(glm::mat4 model_matrix) {
+	model_matrix = glm::translate(model_matrix,m_pos);
+
 	this->torso.renderizar(model_matrix);
 	this->cabeza.renderizar(model_matrix);
 
@@ -454,6 +459,18 @@ void Cangrejo::animar() {
 			if ( ang_pata_X[i]<=-90 ){
 				patas_elevacion[i]=true;
 			}
+		}
+	}
+	// translacion de cangrejo
+	if (vuelta_cangrejo == true) {
+		m_pos.x -= 0.1f;
+		if (m_pos.x <= -10.0f) {
+			vuelta_cangrejo = false;
+		}
+	} else {
+		m_pos.x += 0.1f;
+		if (m_pos.x >= 10.0f) {
+			vuelta_cangrejo = true;
 		}
 	}
 }
