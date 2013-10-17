@@ -16,7 +16,7 @@ Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 
 	figuras.push_back(&piedra1);
 	figuras.push_back(&planta1);
 	figuras.push_back(&piso);
-	vuelta_cangrejo = false;
+
 
 	std::vector<glm::vec3> puntos;
 
@@ -63,21 +63,6 @@ void Escenario::renderizar(glm::mat4 model_matrix) {
 	//this->piedra1.renderizar(model_matrix_piedra1);
 }
 void Escenario::animar() {
-
-	// INICIO de cosa sucia para mover el cangrejo
-	if (vuelta_cangrejo == true) {
-		pos_cangrejo1.x-=0.1f;
-		if( pos_cangrejo1.x<=-10.0f ) {
-			vuelta_cangrejo = false;
-		}
-	} else {
-		pos_cangrejo1.x+=0.1f;
-		if( pos_cangrejo1.x>=10.0f ) {
-			vuelta_cangrejo = true;
-		}
-	}
-	// FIN de cosa sucia
-
 	for (unsigned int i = 0; i<figuras.size(); ++i) {
 		figuras[i]->animar();
 	}

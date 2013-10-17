@@ -197,7 +197,8 @@ protected:
 	BrazoCangrejo brazo1;
 	BrazoCangrejo brazo2;
 	myWindow* window;
-
+	bool vuelta_cangrejo;
+	glm::vec3 m_pos;
 	float ang_pata_X[6];
 	float ang_pata_Z[6];
 	bool patas_elevacion[6];

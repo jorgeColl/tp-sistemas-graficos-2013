@@ -10,10 +10,11 @@
 
 #include "figura.h"
 
-class Planta: public Figura {
+// ############# HOJAS DE PLANTA ##################################
+class HojaPlanta: public Figura {
 public:
-	Planta(myWindow* ventana);
-	virtual ~Planta();
+	HojaPlanta(myWindow* ventana);
+	virtual ~HojaPlanta();
 	virtual void renderizar(glm::mat4 model_matrix);
 protected:
 	virtual Curva* crear_curva_trayectoria ();
@@ -21,9 +22,33 @@ protected:
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
 	virtual std::vector<glm::mat4> crear_transformaciones ();
-	
+
 	// temporal
 	virtual Superficie* crear_superficie (myWindow* ventana);
 };
+
+
+// ################# PLANTA ######################################
+class Planta: public Figura {
+public:
+	Planta(myWindow* ventana);
+	virtual ~Planta();
+	virtual void renderizar(glm::mat4 model_matrix);
+protected:
+	HojaPlanta hoja1;
+	HojaPlanta hoja2;
+	HojaPlanta hoja3;
+	virtual Curva* crear_curva_trayectoria ();
+	virtual Curva* crear_curva_seccion ();
+	virtual int obtener_pasos_trayectoria ();
+	virtual int obtener_pasos_seccion ();
+	virtual std::vector<glm::mat4> crear_transformaciones ();
+
+	// temporal
+	virtual Superficie* crear_superficie (myWindow* ventana);
+};
+
+
+
 
 #endif /* PLANTA_H_ */
