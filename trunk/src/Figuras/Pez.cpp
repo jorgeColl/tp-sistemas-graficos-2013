@@ -148,6 +148,7 @@ Pez::Pez(myWindow* ventana) :
 Pez::~Pez() {}
 void Pez::renderizar(glm::mat4 model_matrix) {
 	glm::mat4 model_temp;
+	glm::mat4 model_original = model_matrix;
 
 	model_matrix = glm::translate(model_matrix,m_pos);
     // ################################ PARTE COMPLICADA #############################
@@ -193,7 +194,7 @@ void Pez::renderizar(glm::mat4 model_matrix) {
 	if (MOSTRAR_RECORRIDOS){
 		float cant_tramos = trayecto->cantidad_tramos();
 		for (float i = 0; i < cant_tramos; i += 0.1f) {
-			glm::mat4 model_aux(1.0f);
+			glm::mat4 model_aux = model_original;
 			model_aux = glm::translate(model_aux, trayecto->damePunto(i));
 			model_aux = glm::scale(model_aux, glm::vec3(0.1f, 0.1f, 0.1f));
 			this->mySphere->render(model_aux);
@@ -261,9 +262,11 @@ void Pez::animar() {
 
 
 	float radianesX = acos(glm::dot(ProyAX, ProyBX));
-	if(radianesX<0 || radianesX>0){
+	if( radianesX<0 || radianesX>0  ){
 		float angXNuevo = (radianesX * 360) / (2 * 3.141592654f);
-		angX+=angXNuevo;
+		if(angXNuevo<170 && angXNuevo>-170){
+			angX+=angXNuevo;
+		}
 		//std::cout << "angulo de NUEVOX: " << angXNuevo << std::endl;
 	}
 	std::cout << "angulo de giroX: " << angX << std::endl;

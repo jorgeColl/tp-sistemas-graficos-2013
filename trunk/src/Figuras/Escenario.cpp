@@ -12,7 +12,7 @@ Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 
 				planta1(ventana), planta2(ventana), planta3(ventana), planta4(ventana), planta5(ventana),
 				piso(ventana) {
 	pos_cangrejo1=glm::vec3 (0,0,1.3f);
-	pos_pez1 = glm::vec3 (-3,0,0.4f);
+	pos_pez1 = glm::vec3 (0,0,4.0f);
 
 	figuras.push_back(&cangrejo1);
 	figuras.push_back(&pez1);
@@ -29,7 +29,7 @@ Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 
 	figuras.push_back(&piso);
 
 	std::vector<glm::vec3> puntos;
-	puntos.push_back(glm::vec3(0, 0, 0));
+	/*puntos.push_back(glm::vec3(0, 0, 0));
 	puntos.push_back(glm::vec3(0, 0, 0));
 	puntos.push_back(glm::vec3(1, 0, 0));
 	puntos.push_back(glm::vec3(2, 0, 0));
@@ -43,6 +43,24 @@ Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 
 	puntos.push_back(glm::vec3(10, 0, 0));
 	puntos.push_back(glm::vec3(11, -1, 0));
 	puntos.push_back(glm::vec3(12, -2, 0));
+	*/
+	puntos.push_back(glm::vec3(0, 0, 0));
+	puntos.push_back(glm::vec3(0, 0, 0));
+	puntos.push_back(glm::vec3(0, 0, 0));
+	puntos.push_back(glm::vec3(7, 0, 0));
+	puntos.push_back(glm::vec3(7, 3, 0));
+	puntos.push_back(glm::vec3(6, 4.5, 0));
+	puntos.push_back(glm::vec3(5, 4, 0));
+	puntos.push_back(glm::vec3(6, 2, 0));
+	puntos.push_back(glm::vec3(7, 3, 0));
+	puntos.push_back(glm::vec3(7, 5, 0));
+	puntos.push_back(glm::vec3(7, 7, 0));
+	puntos.push_back(glm::vec3(0, 7, 0));
+	puntos.push_back(glm::vec3(-5, 7, 0));
+	puntos.push_back(glm::vec3(-2, 1, 0));
+	puntos.push_back(glm::vec3(0, 0, 0));
+	puntos.push_back(glm::vec3(0, 0, 0));
+	puntos.push_back(glm::vec3(0, 0, 0));
 	pez1.set_trayecto(puntos);
 	
 	this->grilla_debug = new Grilla (ventana, 10);
@@ -59,7 +77,9 @@ void Escenario::renderizar(glm::mat4 model_matrix) {
 		else this->piso.renderizar(model_matrix);
 
 	glm::mat4 model_matrix_pez1=model_matrix;
-	//model_matrix_pez1 = glm::translate(model_matrix, pos_pez1);
+	model_matrix_pez1 = glm::translate(model_matrix, pos_pez1);
+	model_matrix_pez1 = glm::rotate(model_matrix_pez1,45.0f, glm::vec3(1,1,0));
+
 	this->pez1.renderizar(model_matrix_pez1);
 
 	glm::mat4 model_matrix_cangrejo1 = glm::translate(model_matrix, pos_cangrejo1);
