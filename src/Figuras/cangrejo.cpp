@@ -144,16 +144,13 @@ FuncionCurvaBezier PataPieCangrejo::crear_funcion () {
 CabezaCangrejo::CabezaCangrejo(myWindow* ventana) : Figura (ventana),
 						antenaIzquierda(ventana), antenaDerecha(ventana) {
 	
-	this->mi_superficie = this->crear_superficie (ventana);
+	//this->mi_superficie = this->crear_superficie (ventana);
 }
 CabezaCangrejo::~CabezaCangrejo() { }
 
 void CabezaCangrejo::renderizar(glm::mat4 model_matrix) {
-	glm::vec3 translado(0, 1.2, 0);
-	model_matrix = glm::translate(model_matrix, translado);
-	
-	glm::mat4 antDer = glm::translate(model_matrix, glm::vec3 (-0.5, 0.0, 0.0));
-	glm::mat4 antIzq = glm::translate(model_matrix, glm::vec3 ( 0.5, 0.0, 0.0));
+	glm::mat4 antDer = glm::translate(model_matrix, glm::vec3 (-0.4f, 0.8, 0.25));
+	glm::mat4 antIzq = glm::translate(model_matrix, glm::vec3 ( 0.4f, 0.8, 0.25));
 	this->antenaDerecha.renderizar(antDer);
 	this->antenaIzquierda.renderizar(antIzq);
 }
@@ -222,9 +219,8 @@ BrazoCangrejo::BrazoCangrejo(myWindow* ventana) : Figura (ventana),
 								tenazaSuperior(ventana), tenazaInferior(ventana) {
 	ang_braz2_X=0;
 	ang_braz2_Z=0;
-
 	ang_mano=0;
-	ang_dedos_X=20;
+	ang_dedos_X=0;
 	
 	this->mi_superficie = this->crear_superficie (ventana);
 }
@@ -242,17 +238,22 @@ void BrazoCangrejo::renderizar(glm::mat4 model_matrix) {
 	this->brazoMedio.renderizar(model_matrix);
 
 	model_matrix= glm::translate(model_matrix, glm::vec3 (0.0f, 0.0f, 3.5f));
-	model_matrix = glm::rotate(model_matrix, this->ang_dedos_X, glm::vec3 (1.0f, 0.0f,0.0f));
+	model_matrix = glm::rotate(model_matrix, this->ang_mano, glm::vec3 (0.0f, 0.0f,1.0f));
 
 	// pinza1
-	glm::mat4 rot3 = glm::rotate(glm::mat4 (1.0f), this->ang_mano, glm::vec3 (0.0f, 0.0f,1.0f));
+	glm::mat4 rot3 = glm::rotate(glm::mat4 (1.0f),this->ang_dedos_X , glm::vec3 (1.0f, 0.0f,0.0f));
 	this->tenazaSuperior.renderizar( model_matrix * rot3 );
 
 	// pinza2
 	glm::mat4 rot4 = glm::rotate(glm::mat4 (1.0f), -this->ang_dedos_X, glm::vec3 (1.0f, 0.0f, 0.0f));
 	this->tenazaInferior.renderizar( model_matrix * rot4 );
 }
-
+void BrazoCangrejo::set_angulos ( float ang_braz2_X, float ang_braz2_Z, float ang_mano, float ang_dedos_X ) {
+	this->ang_braz2_X = ang_braz2_X;
+	this->ang_braz2_Z = ang_braz2_Z;
+	this->ang_mano = ang_mano;
+	this->ang_dedos_X = ang_dedos_X;
+}
 // ****************************** ANTEBRAZO ****************************
 // *********************** PRIMERA PARTE DEL BRAZO *********************
 AntebrazoCangrejo::AntebrazoCangrejo (myWindow* ventana) : Figura (ventana) {
@@ -486,6 +487,9 @@ Cangrejo::Cangrejo(myWindow* ventana) : Figura (ventana),
 	patas_elevacion[4] = false;
 	patas_elevacion[5] = false;
 
+	brazo1.set_angulos(70,45,130,0);
+	brazo2.set_angulos(70,-45,-130,0);
+
 	vuelta_cangrejo = false;
 	m_pos = glm::vec3(0, 0, 0);
 
@@ -494,24 +498,24 @@ Cangrejo::Cangrejo(myWindow* ventana) : Figura (ventana),
 Cangrejo::~Cangrejo() {
 }
 void Cangrejo::renderizar(glm::mat4 model_matrix) {
-	model_matrix = glm::translate(model_matrix,m_pos);
+	model_matrix = glm::translate(model_matrix, m_pos);
 
 	this->torso.renderizar(model_matrix);
 	this->cabeza.renderizar(model_matrix);
 
 	model_matrix = glm::scale(model_matrix, glm::vec3 (0.3f,0.3f,0.3f));
 
-	float ang_braz1_X = -90;
-	float ang_braz1_Z = -45;
-	glm::mat4 m_brazo1  = glm::translate(model_matrix , glm::vec3 (2.0f, 3.0f, 0.0f));
+	float ang_braz1_X = -100;
+	float ang_braz1_Z = -70;
+	glm::mat4 m_brazo1  = glm::translate(model_matrix , glm::vec3 (2.0f, 2.5f, 0.2f));
 	m_brazo1  = glm::rotate(m_brazo1 , ang_braz1_Z, glm::vec3(0.0f, 0.0f, 1.0f));
 	m_brazo1  = glm::rotate(m_brazo1 , ang_braz1_X, glm::vec3(1.0f, 0.0f, 0.0f));
 
 	this->brazo1.renderizar(m_brazo1);
 
-	float ang_braz2_X = -90;
-	float ang_braz2_Z = 45;
-	glm::mat4 m_brazo2  = glm::translate(model_matrix , glm::vec3 (-2.0f, 3.0f, 0.0f));
+	float ang_braz2_X = -100;
+	float ang_braz2_Z = 70;
+	glm::mat4 m_brazo2  = glm::translate(model_matrix , glm::vec3 (-2.0f, 2.5f, 0.2f));
 	m_brazo2  = glm::rotate(m_brazo2 , ang_braz2_Z, glm::vec3(0.0f, 0.0f, 1.0f));
 	m_brazo2  = glm::rotate(m_brazo2 , ang_braz2_X, glm::vec3(1.0f, 0.0f, 0.0f));
 	this->brazo2.renderizar(m_brazo2);

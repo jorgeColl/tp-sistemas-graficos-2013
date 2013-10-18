@@ -174,6 +174,7 @@ public:
 	BrazoCangrejo(myWindow* ventana);
 	~BrazoCangrejo();
 	virtual void renderizar(glm::mat4 model_matrix);
+	void set_angulos ( float ang_braz2_X, float ang_braz2_Z, float ang_dedos_X, float ang_mano );
 protected:
 	virtual Superficie* crear_superficie (myWindow* ventana) { return (new Superficie(ventana)); };
 };
