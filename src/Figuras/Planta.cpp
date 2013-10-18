@@ -7,6 +7,7 @@
 
 #include "Planta.h"
 
+// ****************************** PLANTA *******************************
 Planta::Planta(myWindow* ventana):Figura(ventana),hoja1(ventana),hoja2(ventana),hoja3(ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 }
@@ -29,57 +30,36 @@ void Planta::renderizar(glm::mat4 model_matrix) {
 	hoja3.renderizar(model_temp);
 }
 
-// PARA HACER !!!
-Curva* Planta::crear_curva_trayectoria () {
-	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
-}
-Curva* Planta::crear_curva_seccion () {
-	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
-}
-int Planta::obtener_pasos_trayectoria () {
-	return 500;
-}
-int Planta::obtener_pasos_seccion () {
-	return 500;
-}
-std::vector<glm::mat4> Planta::crear_transformaciones () {
-	return (std::vector<glm::mat4>());
-}
-
-// TEMPORAL!!!
-Superficie* Planta::crear_superficie (myWindow* ventana) {
-	return (new Esfera (ventana, 1.0, 32, 32));
-}
-// ############# HOJAS DE PLANTA ##################################
-
-HojaPlanta::HojaPlanta(myWindow* ventana):Figura(ventana) {
+// ************************** HOJAS DE PLANTA **************************
+HojaPlanta::HojaPlanta(myWindow* ventana): Figura(ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 }
 HojaPlanta::~HojaPlanta() { }
 
 void HojaPlanta::renderizar(glm::mat4 model_matrix) {
-	model_matrix = glm::scale(model_matrix, glm::vec3 (0.2,0.2,1.2));
+	model_matrix = glm::scale(model_matrix, glm::vec3 (1.0,0.02,1.0));
 	Figura::renderizar(model_matrix);
 }
 
-// PARA HACER !!!
 Curva* HojaPlanta::crear_curva_trayectoria () {
-	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+	std::vector<glm::vec3> control_trayectoria;
+	
+	float altura = Helper::num_aleatorio (1.8, 2.7);
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.0, 0.0) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, -0.01, altura / 2) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.0, altura) );
+	return (new CurvaBezier (control_trayectoria, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
 }
 Curva* HojaPlanta::crear_curva_seccion () {
-	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
+	float radio = Helper::num_aleatorio (0.2, 0.4);
+	return (new Circunferencia(glm::vec3(0.0,0.0,0.0),radio));
 }
 int HojaPlanta::obtener_pasos_trayectoria () {
-	return 500;
+	return 50;
 }
 int HojaPlanta::obtener_pasos_seccion () {
-	return 500;
+	return 100;
 }
 std::vector<glm::mat4> HojaPlanta::crear_transformaciones () {
-	return (std::vector<glm::mat4>());
-}
-
-// TEMPORAL!!!
-Superficie* HojaPlanta::crear_superficie (myWindow* ventana) {
-	return (new Esfera (ventana, 1.0, 32, 32));
+	return (this->transformacion_parabolica());
 }

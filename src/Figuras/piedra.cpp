@@ -64,17 +64,6 @@ int Piedra::obtener_pasos_seccion () {
 	return 100;
 }
 
-//~ FuncionCurvaBezier Piedra::crear_funcion () {
-	//~ std::vector<glm::vec3> puntos;
-	//~ puntos.push_back ( glm::vec3 (0.0, 0.0, 0.0) );
-	//~ puntos.push_back ( glm::vec3 (0.03 * this->obtener_pasos_trayectoria(), 0.97, 0.0) );
-	//~ puntos.push_back ( glm::vec3 (0.5 * this->obtener_pasos_trayectoria(), 1.0, 0.0) );
-	//~ puntos.push_back ( glm::vec3 (0.97 * this->obtener_pasos_trayectoria(), 0.97, 0.0) );
-	//~ puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.0, 0.0) );
-	//~ 
-	//~ return (FuncionCurvaBezier(puntos));
-//~ }
-
 std::vector<glm::mat4> Piedra::crear_transformaciones () {
 	std::vector<glm::mat4> transformaciones;
 	
