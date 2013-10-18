@@ -10,7 +10,7 @@
 
 #include "figura.h"
 
-// ############# HOJAS DE PLANTA ##################################
+// ************************** HOJAS DE PLANTA **************************
 class HojaPlanta: public Figura {
 public:
 	HojaPlanta(myWindow* ventana);
@@ -22,13 +22,9 @@ protected:
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
 	virtual std::vector<glm::mat4> crear_transformaciones ();
-
-	// temporal
-	virtual Superficie* crear_superficie (myWindow* ventana);
 };
 
-
-// ################# PLANTA ######################################
+// ****************************** PLANTA *******************************
 class Planta: public Figura {
 public:
 	Planta(myWindow* ventana);
@@ -38,17 +34,8 @@ protected:
 	HojaPlanta hoja1;
 	HojaPlanta hoja2;
 	HojaPlanta hoja3;
-	virtual Curva* crear_curva_trayectoria ();
-	virtual Curva* crear_curva_seccion ();
-	virtual int obtener_pasos_trayectoria ();
-	virtual int obtener_pasos_seccion ();
-	virtual std::vector<glm::mat4> crear_transformaciones ();
-
-	// temporal
-	virtual Superficie* crear_superficie (myWindow* ventana);
+	virtual Superficie* crear_superficie (myWindow* ventana) { return (new Superficie(ventana)); };
 };
-
-
 
 
 #endif /* PLANTA_H_ */

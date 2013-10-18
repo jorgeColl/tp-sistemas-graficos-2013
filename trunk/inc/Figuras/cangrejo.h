@@ -70,21 +70,32 @@ protected:
 	virtual Superficie* crear_superficie (myWindow* ventana) { return (new Superficie(ventana)); };
 };
 
-// ****************************** CABEZA *******************************
-class CabezaCangrejo: public Figura {
+// ****************************** ANTENA *******************************
+// ************************ PARTE DE LA CABEZA *************************
+class AntenaCangrejo: public Figura {
 public:
-	CabezaCangrejo(myWindow* ventana);
-	~CabezaCangrejo();
+	AntenaCangrejo(myWindow* ventana);
+	~AntenaCangrejo();
 	virtual void renderizar(glm::mat4 model_matrix);
 protected:
 	virtual Curva* crear_curva_trayectoria ();
 	virtual Curva* crear_curva_seccion ();
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
+	virtual FuncionCurvaBezier crear_funcion ();
 	virtual std::vector<glm::mat4> crear_transformaciones ();
-	
-	// temporal
-	virtual Superficie* crear_superficie (myWindow* ventana);
+};
+
+// ****************************** CABEZA *******************************
+class CabezaCangrejo: public Figura {
+	AntenaCangrejo antenaIzquierda;
+	AntenaCangrejo antenaDerecha;
+public:
+	CabezaCangrejo(myWindow* ventana);
+	~CabezaCangrejo();
+	virtual void renderizar(glm::mat4 model_matrix);
+protected:
+	virtual Superficie* crear_superficie (myWindow* ventana) { return (new Superficie(ventana)); };
 };
 
 // ****************************** ANTEBRAZO ****************************
@@ -93,13 +104,12 @@ class AntebrazoCangrejo: public Figura {
 public:
 	AntebrazoCangrejo(myWindow* ventana);
 	~AntebrazoCangrejo();
-	virtual void renderizar(glm::mat4 model_matrix); // TEMPORAL!!
 protected:
 	virtual Curva* crear_curva_trayectoria ();
 	virtual Curva* crear_curva_seccion ();
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
-	virtual std::vector<glm::mat4> crear_transformaciones ();
+	virtual FuncionCurvaBezier crear_funcion ();
 };
 
 // **************************** BRAZO MEDIO ****************************
@@ -108,13 +118,13 @@ class BrazoMedioCangrejo: public Figura {
 public:
 	BrazoMedioCangrejo(myWindow* ventana);
 	~BrazoMedioCangrejo();
-	virtual void renderizar(glm::mat4 model_matrix); // TEMPORAL!!
 protected:
 	virtual Curva* crear_curva_trayectoria ();
 	virtual Curva* crear_curva_seccion ();
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
-	virtual std::vector<glm::mat4> crear_transformaciones ();
+	virtual float obtener_valor_inicial_funcion();
+	virtual float obtener_valor_final_funcion();
 };
 
 // ************************** TENAZA SUPERIOR **************************
@@ -123,13 +133,13 @@ class TenazaSuperiorCangrejo: public Figura {
 public:
 	TenazaSuperiorCangrejo(myWindow* ventana);
 	~TenazaSuperiorCangrejo();
-	virtual void renderizar(glm::mat4 model_matrix); // TEMPORAL!!
+	virtual void renderizar(glm::mat4 model_matrix);
 protected:
 	virtual Curva* crear_curva_trayectoria ();
 	virtual Curva* crear_curva_seccion ();
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
-	virtual std::vector<glm::mat4> crear_transformaciones ();
+	virtual FuncionCurvaBezier crear_funcion ();
 };
 
 // ************************** TENAZA INFERIOR **************************
@@ -138,13 +148,12 @@ class TenazaInferiorCangrejo: public Figura {
 public:
 	TenazaInferiorCangrejo(myWindow* ventana);
 	~TenazaInferiorCangrejo();
-	virtual void renderizar(glm::mat4 model_matrix); // TEMPORAL!!
 protected:
 	virtual Curva* crear_curva_trayectoria ();
 	virtual Curva* crear_curva_seccion ();
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
-	virtual std::vector<glm::mat4> crear_transformaciones ();
+	virtual FuncionCurvaBezier crear_funcion ();
 };
 
 // *************************** BRAZO ENTERO ****************************
