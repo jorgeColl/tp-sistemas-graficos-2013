@@ -85,24 +85,7 @@ void TorsoPez::renderizar(glm::mat4 model_matrix) {
 	}
 	Figura::renderizar(model_matrix);
 }
-// PARA HACER !!!
-Curva* TorsoPez::crear_curva_trayectoria () {
-	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0f)));
-}
-Curva* TorsoPez::crear_curva_seccion () {
-	return (new Curva(glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0)));
-}
-int TorsoPez::obtener_pasos_trayectoria () {
-	return 500;
-}
-int TorsoPez::obtener_pasos_seccion () {
-	return 500;
-}
-std::vector<glm::mat4> TorsoPez::crear_transformaciones () {
-	return (std::vector<glm::mat4>());
-}
 
-// TEMPORAL!!!
 Superficie* TorsoPez::crear_superficie (myWindow* ventana) {
 	if (MODELO_SIMPLE) {
 		return (new Cubo(ventana));
@@ -113,12 +96,53 @@ Superficie* TorsoPez::crear_superficie (myWindow* ventana) {
 }
 // **************************** AletaDorsal ****************************
 
-AletaDorsal::AletaDorsal(myWindow* ventana): Figura(ventana) { }
+AletaDorsal::AletaDorsal(myWindow* ventana): Figura(ventana) {
+	this->mi_superficie = this->crear_superficie (ventana);
+}
 AletaDorsal::~AletaDorsal(){ }
 void AletaDorsal::renderizar(glm::mat4 model_matrix) {
-	model_matrix = glm::scale(model_matrix,glm::vec3 (0.1f,0.2f,1.5f));
-	this->myCube->render(model_matrix);
+	model_matrix = glm::scale(model_matrix,glm::vec3 (0.3f,1.0f,1.0f));
+	Figura::renderizar(model_matrix);
 }
+
+Curva* AletaDorsal::crear_curva_trayectoria () {
+	std::vector<glm::vec3> control_trayectoria;
+	
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, -0.1, -0.8) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0,  0.05, 0.0) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, -0.2,  1.0) );
+	return (new CurvaBezier (control_trayectoria, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
+}
+Curva* AletaDorsal::crear_curva_seccion () {
+	std::vector<glm::vec3> puntosAux;
+	puntosAux.push_back ( glm::vec3 ( -0.1, 0.0, 0.0) );
+	puntosAux.push_back ( glm::vec3 (  0.0, 0.3, 0.0) );
+	puntosAux.push_back ( glm::vec3 (  0.1, 0.0, 0.0) );
+	
+	std::vector<glm::vec3> control_seccion;
+	for (unsigned int i = 0 ; i < puntosAux.size() ; i++) {
+		for (unsigned int j = 0 ; j < CurvaBSpline::ORDEN ; j++) {
+			control_seccion.push_back (puntosAux.at(i));
+		}
+	}
+	return (new CurvaBSpline (control_seccion, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
+}
+int AletaDorsal::obtener_pasos_trayectoria () {
+	return 50;
+}
+int AletaDorsal::obtener_pasos_seccion () {
+	return 100;
+}
+FuncionCurvaBezier AletaDorsal::crear_funcion () {
+	std::vector<glm::vec3> puntos;
+	puntos.push_back ( glm::vec3 (0.0, 0.0, 0.0) );
+	puntos.push_back ( glm::vec3 (0.35 * this->obtener_pasos_trayectoria(), 0.2, 0.0) );
+	puntos.push_back ( glm::vec3 (0.90 * this->obtener_pasos_trayectoria(), 0.3, 0.0) );
+	puntos.push_back ( glm::vec3 (0.95 * this->obtener_pasos_trayectoria(), 2.5, 0.0) );
+	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.0, 0.0) );
+	return (FuncionCurvaBezier(puntos));
+}
+
 // ******************************** Ojo********************************
 Ojo::Ojo(myWindow* ventana):Figura(ventana) { }
 Ojo::~Ojo() { }

@@ -13,7 +13,7 @@
 #define MODELO_SIMPLE false
 #define MOSTRAR_RECORRIDOS true
 
-// ******************************* ALETA *******************************
+// *************************** ALETA LATERAL ***************************
 class AletaPez: public Figura {
 public:
 	AletaPez(myWindow* ventana);
@@ -54,30 +54,24 @@ public:
 	~TorsoPez();
 	virtual void renderizar(glm::mat4 model_matrix);
 protected:
-	virtual Curva* crear_curva_trayectoria ();
-	virtual Curva* crear_curva_seccion ();
-	virtual int obtener_pasos_trayectoria ();
-	virtual int obtener_pasos_seccion ();
-	virtual std::vector<glm::mat4> crear_transformaciones ();
-	
-	// temporal
 	virtual Superficie* crear_superficie (myWindow* ventana);
 };
+
+// *************************** ALETA DORSAL ****************************
 class AletaDorsal: public Figura {
 public:
 	AletaDorsal(myWindow* ventana);
 	~AletaDorsal();
 	virtual void renderizar(glm::mat4 model_matrix);
 protected:
-	//virtual Curva* crear_curva_trayectoria ();
-	//virtual Curva* crear_curva_seccion ();
-	//virtual int obtener_pasos_trayectoria ();
-	//virtual int obtener_pasos_seccion ();
-	//virtual std::vector<glm::mat4> crear_transformaciones ();
-
-	// temporal
-	//virtual Superficie* crear_superficie (myWindow* ventana);
+	virtual Curva* crear_curva_trayectoria ();
+	virtual Curva* crear_curva_seccion ();
+	virtual int obtener_pasos_trayectoria ();
+	virtual int obtener_pasos_seccion ();
+	virtual FuncionCurvaBezier crear_funcion ();
 };
+
+// ******************************** OJO ********************************
 class Ojo: public Figura {
 public:
 	Ojo(myWindow* ventana);
