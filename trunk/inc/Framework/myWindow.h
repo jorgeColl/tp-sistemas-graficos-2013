@@ -45,11 +45,10 @@ public:
 	
 private:
 	glm::vec3 m_pos, m_direct;
-	std::vector<Figura*>figs;
-	bool full_screen;
-	bool subio_antes;
-    void changeObjectColor(float r, float g, float b);
+	std::vector<Figura*> figs;
+	bool full_screen, Cmode, subio_antes;
 
+    void changeObjectColor(float r, float g, float b);
 
     glm::mat4 view_matrix;
 

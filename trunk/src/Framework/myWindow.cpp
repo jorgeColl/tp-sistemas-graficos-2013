@@ -128,6 +128,7 @@ myWindow::myWindow():m_pos(8.0f, 0.0f,3.0f), m_direct(1.0f,0.0f,0.0f)
 	mySphere=NULL;
     full_screen = false;
     subio_antes = false;
+    Cmode = false;
     glutPassiveMotionFunc(aux);
 }
 
@@ -450,12 +451,30 @@ void myWindow::OnKeyDown(int nKey, char cAscii)
 		this->m_direct = m_pos - dir;
 		break;
 	case ('a'):
-		this->m_pos += rotx;
-		m_direct = m_pos - dir;
+		if(!Cmode) {
+			this->m_pos += rotx;
+			m_direct = m_pos - dir;
+		} else {
+			if( m_direct.z<-0.1f || m_direct.z>0.1f ) {
+				m_direct.x = ( ( m_direct.z/(m_pos.z-m_direct.z) ) * (  m_direct.x - m_pos.x ) ) + m_direct.x;
+				m_direct.y = ( ( m_direct.z/(m_pos.z-m_direct.z) ) * ( m_direct.y - m_pos.y ) ) + m_pos.y;
+				m_direct.z=0;
+			}
+			this->m_pos += rotx;
+		}
 		break;
 	case ('d'):
-		this->m_pos -= rotx;
-		m_direct = m_pos - dir;
+		if(!Cmode){
+			this->m_pos -= rotx;
+			m_direct = m_pos - dir;
+		} else {
+			if( m_direct.z<-0.1f || m_direct.z>0.1f ){
+				m_direct.x = ( ( m_direct.z/(m_pos.z-m_direct.z) ) * ( m_direct.x - m_pos.x ) ) + m_pos.x;
+				m_direct.y = ( ( m_direct.z/(m_pos.z-m_direct.z) ) * ( m_direct.y - m_pos.y ) ) + m_pos.y;
+				m_direct.z=0;
+			}
+			this->m_pos -= rotx;
+		}
 		break;
 	case ('h'):
 		for(unsigned int i=0;i<this->figs.size();++i) {
@@ -470,6 +489,8 @@ void myWindow::OnKeyDown(int nKey, char cAscii)
 		this->m_pos.z-=0.5f;
 		this->m_direct.z-=0.5f;
 		break;
+	case ('c'):
+		Cmode=!Cmode;
 	}
 	//std::cout<<"at: "<<m_direct.x<<","<<m_direct.y<<","<<m_direct.z<<"from: "<<m_pos.x<<","<<m_pos.y<<","<<m_pos.z<<std::endl;
 	if (!cerrada) this->OnRender();
@@ -477,15 +498,8 @@ void myWindow::OnKeyDown(int nKey, char cAscii)
 
 void myWindow::OnKeyUp(int nKey, char cAscii)
 {
-	if (cAscii == 'f')
-	{
-		if(full_screen){
-			full_screen = false;
-		}else {
-			full_screen = true;
-		}
-
+	if (cAscii == 'f') {
+		full_screen=!full_screen;
 		SetFullscreen(full_screen);
 	}
-
 }
