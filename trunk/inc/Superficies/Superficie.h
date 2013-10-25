@@ -6,6 +6,8 @@
 #include <glm/glm.hpp>
 //#include <glm/gtc/matrix_transform.hpp> 
 
+#include "Animacion.h"
+
 class myWindow;
 
 class Superficie {
@@ -25,11 +27,19 @@ class Superficie {
 		unsigned int index_buffer_size;
 		GLenum modo;
 		
+		Animacion* mi_animacion;
+		
+		virtual int cant_puntos_por_salto () { return 1; };
+		
 	public:
 		Superficie ();
 		Superficie (myWindow* passed_window);
 		
 		virtual void render (glm::mat4 view_model_matrix);
+		
+		virtual void set_animacion (Animacion* ani);
+		
+		virtual void animar();
 		
 		virtual ~Superficie ();
 		

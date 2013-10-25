@@ -14,5 +14,9 @@ class  FuncionCurvaBezier : public Funcion {
 		
 		virtual float evaluar_en (float x);
 		
+		virtual float get_x_min ();
+
+		virtual float get_x_max ();
+		
 		virtual ~FuncionCurvaBezier ();
 };
