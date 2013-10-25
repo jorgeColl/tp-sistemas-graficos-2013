@@ -11,7 +11,7 @@ Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 
 				piedra1(ventana), piedra2(ventana), piedra3(ventana), piedra4(ventana), piedra5(ventana),
 				planta1(ventana), planta2(ventana), planta3(ventana), planta4(ventana), planta5(ventana),
 				piso(ventana) {
-	pos_cangrejo1=glm::vec3 (0,0,1.3f);
+	pos_cangrejo1=glm::vec3 (0,-12,1.3f);
 	pos_pez1 = glm::vec3 (0,0,4.0f);
 
 	figuras.push_back(&cangrejo1);
@@ -47,6 +47,7 @@ Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 
 	puntos.push_back(glm::vec3(0, 0, 0));
 	puntos.push_back(glm::vec3(0, 0, 0));
 	puntos.push_back(glm::vec3(0, 0, 0));
+	puntos.push_back(glm::vec3(1, 0, 0));
 	puntos.push_back(glm::vec3(7, 0, 0));
 	puntos.push_back(glm::vec3(7, 3, 0));
 	puntos.push_back(glm::vec3(6, 4.5, 0));
@@ -55,9 +56,10 @@ Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 
 	puntos.push_back(glm::vec3(7, 3, 0));
 	puntos.push_back(glm::vec3(7, 5, 0));
 	puntos.push_back(glm::vec3(7, 7, 0));
-	puntos.push_back(glm::vec3(0, 7, 0));
+	puntos.push_back(glm::vec3(0, 12, 0));
 	puntos.push_back(glm::vec3(-5, 7, 0));
 	puntos.push_back(glm::vec3(-2, 1, 0));
+	puntos.push_back(glm::vec3(-1, 0, 0));
 	puntos.push_back(glm::vec3(0, 0, 0));
 	puntos.push_back(glm::vec3(0, 0, 0));
 	puntos.push_back(glm::vec3(0, 0, 0));
@@ -83,7 +85,7 @@ void Escenario::renderizar(glm::mat4 model_matrix) {
 	this->pez1.renderizar(model_matrix_pez1);
 
 	glm::mat4 model_matrix_cangrejo1 = glm::translate(model_matrix, pos_cangrejo1);
-	//this->cangrejo1.renderizar(model_matrix_cangrejo1);
+	this->cangrejo1.renderizar(model_matrix_cangrejo1);
 
 	bool RENDERIZAR_PLANTAS = true;
 	if(RENDERIZAR_PLANTAS) {
@@ -98,7 +100,7 @@ void Escenario::renderizar(glm::mat4 model_matrix) {
 		glm::mat4 model_matrix_planta5 = glm::translate(model_matrix,glm::vec3(13.0f, 13.0f, 0.9f));
 		this->planta5.renderizar(model_matrix_planta5);
 	}
-	bool RENDERIZAR_PIEDRAS = false;
+	bool RENDERIZAR_PIEDRAS = true;
 	if(RENDERIZAR_PIEDRAS) {
 		glm::mat4 model_matrix_piedra1 = glm::translate(model_matrix,glm::vec3(5,5,0));
 		this->piedra1.renderizar(model_matrix_piedra1);

@@ -193,7 +193,7 @@ void Pez::renderizar(glm::mat4 model_matrix) {
 	model_matrix = glm::translate(model_matrix,m_pos);
     // ################################ PARTE COMPLICADA #############################
 	// OJO: hay dos rotaciones desavilitadas !!!
-	//model_matrix = glm::rotate(model_matrix,angZ,glm::vec3(1,0,0));
+	//model_matrix = glm::rotate(model_matrix,angZ,glm::vec3(0,1,0));
 	model_matrix = glm::rotate(model_matrix,angX,glm::vec3(0,0,1));
 	//model_matrix = glm::rotate(model_matrix,angY,glm::vec3(0,1,0));
 	// ############################ FIN DE PARTE COMPLICADA ##########################
@@ -257,8 +257,8 @@ void Pez::animar() {
 	std::cout << "Cantidad de tramos: " << trayecto->cantidad_tramos() << " "<< std::endl;
 	glm::vec3 a = trayecto->dameTangente(u, 0.001f);
 	glm::vec3 aN = glm::normalize (a);
-	glm::vec3 ProyAZ = glm::normalize( glm::dot(aN, glm::vec3(0, 0, 1))* a );
-	glm::vec3 ProyAY = glm::normalize( glm::dot(aN, glm::vec3(0, 1, 0))* a );
+
+
 	glm::vec3 ProyAX = glm::normalize( glm::dot(aN, glm::vec3(1, 0, 0))* a );
 	
 	// cont es el u , y avanzo al siguiente paso
@@ -277,30 +277,11 @@ void Pez::animar() {
 	glm::vec3 ProyBY = glm::normalize( glm::dot(bN, glm::vec3(0, 1, 0))* b);
 	glm::vec3 ProyBX = glm::normalize( glm::dot(bN, glm::vec3(1, 0, 0))* b);
 
-	std::cout<<"vector a: "<<a.x<<" , "<<a.y<<" , "<<a.z<<std::endl;
-	std::cout<<"vector b: "<<b.x<<" , "<<b.y<<" , "<<b.z<<std::endl;
-
-	//std::cout<<"vector PaZ: "<<ProyAZ.x<<" , "<<ProyAZ.y<<" , "<<ProyAZ.z<<std::endl;
-	//std::cout<<"vector PbZ: "<<ProyBZ.x<<" , "<<ProyBZ.y<<" , "<<ProyBZ.z<<std::endl;
-
-	std::cout<<"vector PaX: "<<ProyAX.x<<" , "<<ProyAX.y<<" , "<<ProyAX.z<<std::endl;
-	std::cout<<"vector PbX: "<<ProyBX.x<<" , "<<ProyBX.y<<" , "<<ProyBX.z<<std::endl;
-
 	// asigno siguiente posicion al pez
 	glm::vec3 nueva_pos = trayecto->damePunto(u);
-	m_pos = nueva_pos;
-	std::cout << "trayecto:" << nueva_pos.x << " , " << nueva_pos.y << " , "<< nueva_pos.z << std::endl;
 
 	// calculo del angulo a sumar
-
-	//OJO este eje FALLUTA , mirar lo que hace renderizar ignorando el angZ
-	float radianesZ = acos(glm::dot(ProyAZ, ProyBZ));
-	if(radianesZ<0 || radianesZ >0){
-		angZ += (radianesZ * 360) / (2 * 3.141592654f);
-	}
-	std::cout << "angulo de giroZ: " << angZ << std::endl;
-
-
+	// Para rotacio a los costados
 	float radianesX = acos(glm::dot(ProyAX, ProyBX));
 	if( radianesX<0 || radianesX>0  ){
 		float angXNuevo = (radianesX * 360) / (2 * 3.141592654f);
@@ -311,13 +292,13 @@ void Pez::animar() {
 	}
 	std::cout << "angulo de giroX: " << angX << std::endl;
 
-	//OJO este eje FALLUTA , mirar lo que hace renderizar ignorando el angY
-	float radianesY = acos(glm::dot(ProyAY, ProyBY));
-	if (radianesY < 0 || radianesY > 0) {
-		angY += (radianesY * 360) / (2 * 3.141592654f);
-	}
-	std::cout << "angulo de giroY: " << angY << std::endl;
+	// Para rotacion hacia arriba o abajo
+	glm::vec3 dist =(nueva_pos-m_pos);
+	angZ-=atan((nueva_pos.z-m_pos.z)/sqrt(glm::dot(dist,dist)));
+	std::cout << "angulo de giroZ: " << angZ << std::endl;
 
+	m_pos = nueva_pos;
+	std::cout << "trayecto:" << nueva_pos.x << " , " << nueva_pos.y << " , "<< nueva_pos.z << std::endl;
 	// #########################FIN DE  PARTE COMPLICADA #############################
 
 	// modifico angulo de giro de la COLA
