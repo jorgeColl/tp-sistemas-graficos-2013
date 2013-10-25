@@ -15,7 +15,7 @@ Piedra::Piedra(myWindow* ventana) : Figura (ventana) {
 Piedra::~Piedra() { }
 
 void Piedra::renderizar(glm::mat4 model_matrix) {
-	model_matrix = glm::scale(model_matrix,glm::vec3(0.3,0.3,0.3));
+	model_matrix = glm::scale(model_matrix,glm::vec3(0.8,0.8,0.8));
 	Figura::renderizar(model_matrix);
 }
 
