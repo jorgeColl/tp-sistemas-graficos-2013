@@ -24,10 +24,7 @@ protected:
 	virtual Curva* crear_curva_seccion ();
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
-	virtual std::vector<glm::mat4> crear_transformaciones ();
-	
-	// temporal
-	virtual Superficie* crear_superficie (myWindow* ventana);
+	virtual FuncionCurvaBezier crear_funcion ();
 };
 
 // ******************************* COLA ********************************
@@ -41,10 +38,7 @@ protected:
 	virtual Curva* crear_curva_seccion ();
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
-	virtual std::vector<glm::mat4> crear_transformaciones ();
-	
-	// temporal
-	virtual Superficie* crear_superficie (myWindow* ventana);
+	virtual FuncionCurvaBezier crear_funcion ();
 };
 
 // ******************************* TORSO *******************************

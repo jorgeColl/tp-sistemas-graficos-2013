@@ -22,6 +22,7 @@
 #include "CurvaBezier.h"
 #include "CurvaBSpline.h"
 #include "Circunferencia.h"
+#include "Elipse.h"
 #include "Parabola.h"
 #include "FuncionCurvaBezier.h"
 #include "Funcion.h"

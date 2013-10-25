@@ -3,7 +3,6 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include "CurvaBSpline.h"
-#include "Circunferencia.h"
 
 class Circunferencia : public CurvaBSpline {
 	
