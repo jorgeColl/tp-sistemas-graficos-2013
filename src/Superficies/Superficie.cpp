@@ -4,6 +4,7 @@
 
 Superficie::Superficie () {
 	this->window = NULL;
+	this->mi_animacion = new Animacion (SINvar);
 }
 
 Superficie::Superficie (myWindow* passed_window) {
@@ -16,6 +17,7 @@ Superficie::Superficie (myWindow* passed_window) {
 	this->window = passed_window;
 	
 	this->modo = GL_TRIANGLE_STRIP;
+	this->mi_animacion = new Animacion (SINvar);
 }
 
 void Superficie::render (glm::mat4 view_model_matrix) {
@@ -25,5 +27,16 @@ void Superficie::render (glm::mat4 view_model_matrix) {
 	}
 }
 
+void Superficie::set_animacion (Animacion* ani) {
+	if (this->mi_animacion) delete (this->mi_animacion);
+	this->mi_animacion = ani;
+}
+
+void Superficie::animar () {
+	if (this->mi_animacion->tiene_variable())
+		this->mi_animacion->dar_paso (this->vertex_buffer, this->vertex_buffer_size, this->cant_puntos_por_salto());
+}
+
 Superficie::~Superficie () {
+	delete (this->mi_animacion);
 }

@@ -85,7 +85,7 @@ void Escenario::renderizar(glm::mat4 model_matrix) {
 	glm::mat4 model_matrix_cangrejo1 = glm::translate(model_matrix, pos_cangrejo1);
 	//this->cangrejo1.renderizar(model_matrix_cangrejo1);
 
-	bool RENDERIZAR_PLANTAS = false;
+	bool RENDERIZAR_PLANTAS = true;
 	if(RENDERIZAR_PLANTAS) {
 		glm::mat4 model_matrix_planta1 = glm::translate(model_matrix,glm::vec3(-5.0f, 5.0f, 0.9f));
 		this->planta1.renderizar(model_matrix_planta1);

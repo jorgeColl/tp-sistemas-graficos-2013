@@ -37,7 +37,9 @@ class SuperficieBarrido : public Superficie {
 							std::vector<unsigned int>* indices);
 		void copiar_puntos (std::vector<glm::vec3>* puntosOrigen, GLfloat* puntosDestino);
 		
-		
+	protected:
+		virtual int cant_puntos_por_salto () { return (this->pasos_seccion + 1); };
+	
 	public:
 		SuperficieBarrido (Curva* trayectoriaRecibida, Curva* seccionRecibida, unsigned int pasosTray,
 						   unsigned int pasosSec, std::vector<glm::mat4> transformacionesRecibidas, myWindow* passed_window);

@@ -25,8 +25,18 @@ FuncionCurvaBezier::FuncionCurvaBezier (std::vector<glm::vec3> puntosControl) :
 }
 
 float FuncionCurvaBezier::evaluar_en (float x) {
-	float u = ( x - this->x_min ) / ( this->x_max - this->x_min );
+	float u = ( x - this->x_min );
+	if (this->x_max != this->x_min) u = u / ( this->x_max - this->x_min );
+	
 	return ( (this->mi_curva.damePunto(u)).y );
+}
+
+float FuncionCurvaBezier::get_x_min () {
+	return this->x_min;
+}
+
+float FuncionCurvaBezier::get_x_max () {
+	return this->x_max;
 }
 
 FuncionCurvaBezier::~FuncionCurvaBezier () { }
