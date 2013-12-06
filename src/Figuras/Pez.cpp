@@ -273,8 +273,8 @@ void Pez::animar() {
 	}
 	glm::vec3 b = trayecto->dameTangente(u, 0.001f);
 	glm::vec3 bN = glm::normalize (b);
-	glm::vec3 ProyBZ = glm::normalize( glm::dot(bN, glm::vec3(0, 0, 1))* b);
-	glm::vec3 ProyBY = glm::normalize( glm::dot(bN, glm::vec3(0, 1, 0))* b);
+
+
 	glm::vec3 ProyBX = glm::normalize( glm::dot(bN, glm::vec3(1, 0, 0))* b);
 
 	// asigno siguiente posicion al pez

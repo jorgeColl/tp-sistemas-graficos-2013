@@ -499,8 +499,9 @@ Cangrejo::~Cangrejo() {
 }
 void Cangrejo::renderizar(glm::mat4 model_matrix) {
 	model_matrix = glm::translate(model_matrix, m_pos);
-
-	this->torso.renderizar(model_matrix);
+	float escala = 1.2;
+	glm::mat4 model_matrix_torso = glm::scale(model_matrix, glm::vec3(1.1*escala,1.1*escala,0.8*escala));
+	this->torso.renderizar(model_matrix_torso);
 	this->cabeza.renderizar(model_matrix);
 
 	model_matrix = glm::scale(model_matrix, glm::vec3 (0.3f,0.3f,0.3f));
@@ -527,9 +528,9 @@ void Cangrejo::renderizar(glm::mat4 model_matrix) {
 	glm::mat4 m_pata;
 	for (int i=0;i<6;++i) {
 		if(i<3){
-			m_pata = glm::translate(model_matrix , glm::vec3 (-3.2f+(0.8*i) , 0.8f - (2*i), 0.0f));
+			m_pata = glm::translate(model_matrix , glm::vec3 (-3.8f+(0.8*i) , 0.8f - (2*i), 0.0f));
 		}else{
-			m_pata = glm::translate(model_matrix , glm::vec3 (3.2f-0.8*(i-3), 0.8f - (2*(i-3)), 0.0f));
+			m_pata = glm::translate(model_matrix , glm::vec3 (3.8f-0.8*(i-3), 0.8f - (2*(i-3)), 0.0f));
 		}
 		m_pata  = glm::rotate(m_pata , ang_pata_Z[i], glm::vec3(0.0f, 0.0f, 1.0f));
 		m_pata  = glm::rotate(m_pata , ang_pata_X[i], glm::vec3(1.0f, 0.0f, 0.0f));

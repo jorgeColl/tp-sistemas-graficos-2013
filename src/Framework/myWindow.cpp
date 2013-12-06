@@ -3,6 +3,11 @@
 #include <GL/glut.h>
 #include <GL/glext.h>
 
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+
+
 #include <glm/glm.hpp> 
 #include <glm/gtc/matrix_transform.hpp> 
 #include <glm/gtx/transform2.hpp> 
@@ -107,13 +112,13 @@ void myWindow::axuuu(int a, int b){
 		subio_antes = false;
 		glutWarpPointer(width/2,height/2);
 	}
-	std::cout<<"ROTY: "<<roty.x<<" , "<<roty.y<<" , "<<roty.z<<std::endl;
+	//std::cout<<"ROTY: "<<roty.x<<" , "<<roty.y<<" , "<<roty.z<<std::endl;
 
 	this->Repaint();
 
 }
 extern void* instancia;
-void aux (int a, int b){
+void aux (int a, int b) {
 	((myWindow*)instancia)->axuuu(a,b);
 }
 
@@ -167,7 +172,7 @@ void myWindow::OnRender(void)
 		glUniformMatrix4fv( location_view_matrix, 1, GL_FALSE, &view_matrix[0][0]); 
 	}
 
-    // Bind View MAtrix
+    // Bind Projection Matrix
     GLuint location_projection_matrix = glGetUniformLocation( this->programHandle, "ProjectionMatrix"); 
     if( location_projection_matrix >= 0 ) 
 	{ 
@@ -214,8 +219,6 @@ void myWindow::OnRender(void)
 
     // Rotaci\F3n de ejemplo
     model_matrix = glm::rotate (model_matrix, -95.0f, glm::vec3( 1.0, 0.0, 1.0));
-
-    //this->renderArm(model_matrix);
     
     glutSwapBuffers();
 }
