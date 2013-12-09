@@ -149,8 +149,8 @@ CabezaCangrejo::CabezaCangrejo(myWindow* ventana) : Figura (ventana),
 CabezaCangrejo::~CabezaCangrejo() { }
 
 void CabezaCangrejo::renderizar(glm::mat4 model_matrix) {
-	glm::mat4 antDer = glm::translate(model_matrix, glm::vec3 (-0.4f, 0.8, 0.25));
-	glm::mat4 antIzq = glm::translate(model_matrix, glm::vec3 ( 0.4f, 0.8, 0.25));
+	glm::mat4 antDer = glm::translate(model_matrix, glm::vec3 (-0.38f, 0.8, 0.17));
+	glm::mat4 antIzq = glm::translate(model_matrix, glm::vec3 ( 0.38f, 0.8, 0.17));
 	this->antenaDerecha.renderizar(antDer);
 	this->antenaIzquierda.renderizar(antIzq);
 }
@@ -158,13 +158,11 @@ void CabezaCangrejo::renderizar(glm::mat4 model_matrix) {
 // ****************************** ANTENA *******************************
 // ************************ PARTE DE LA CABEZA *************************
 AntenaCangrejo::AntenaCangrejo(myWindow* ventana) : Figura (ventana) {
-	std::cout << "comienzo antena cangrejo" << std::endl;
 	this->mi_superficie = this->crear_superficie (ventana);
-	std::cout << "fin antena cangrejo" << std::endl;
 }
 AntenaCangrejo::~AntenaCangrejo() { }
 void AntenaCangrejo::renderizar(glm::mat4 model_matrix) {
-	model_matrix = glm::scale (model_matrix, glm::vec3 (1.0, 0.45, 1.0));
+	//model_matrix = glm::scale (model_matrix, glm::vec3 (1.0, 0.45, 1.0));
 	Figura::renderizar(model_matrix);
 }
 
@@ -172,8 +170,8 @@ Curva* AntenaCangrejo::crear_curva_trayectoria () {
 	std::vector<glm::vec3> control_trayectoria;
 	
 	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.0, 0.0) );
-	control_trayectoria.push_back ( glm::vec3 ( 0.0, -0.1, 0.5) );
-	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.0, 1.0) );
+	//control_trayectoria.push_back ( glm::vec3 ( 0.0, -0.1, 0.5) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.0, 0.7) );
 	return (new CurvaBezier (control_trayectoria, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
 }
 Curva* AntenaCangrejo::crear_curva_seccion () {
@@ -189,9 +187,9 @@ FuncionCurvaBezier AntenaCangrejo::crear_funcion () {
 	std::vector<glm::vec3> puntos;
 	int pasosSegundoTramo = (this->obtener_pasos_trayectoria() / 2);
 	puntos.push_back ( glm::vec3 (0.0, 1.0, 0.0) );
-	puntos.push_back ( glm::vec3 (0.01 * pasosSegundoTramo, 7.0, 0.0) );
-	puntos.push_back ( glm::vec3 (0.5 * pasosSegundoTramo, 4.0, 0.0) );
-	puntos.push_back ( glm::vec3 (0.99 * pasosSegundoTramo, 7.0, 0.0) );
+	puntos.push_back ( glm::vec3 (0.01 * pasosSegundoTramo, 5.0, 0.0) );
+	puntos.push_back ( glm::vec3 (0.5 * pasosSegundoTramo, 3.0, 0.0) );
+	puntos.push_back ( glm::vec3 (0.99 * pasosSegundoTramo, 5.0, 0.0) );
 	puntos.push_back ( glm::vec3 (pasosSegundoTramo, 0.0, 0.0) );
 	return (FuncionCurvaBezier(puntos));
 }
@@ -230,13 +228,13 @@ void BrazoCangrejo::renderizar(glm::mat4 model_matrix) {
 	// primera parte del brazo
 	this->antebrazo.renderizar(model_matrix);
 
-	model_matrix = glm::translate(model_matrix, glm::vec3 (0.0f, 0.0f, 3.5f));
-	model_matrix = glm::rotate(model_matrix, this->ang_braz2_X, glm::vec3 (1.0f,0.0f,0.0f));
-	model_matrix = glm::rotate(model_matrix, this->ang_braz2_Z, glm::vec3 ( 0.0f,0.0f,1.0f));
-
 	// segunda parte del brazo
+	model_matrix = glm::translate(model_matrix, glm::vec3 (0.0f, 0.15f, 3.27f));
+	model_matrix = glm::rotate(model_matrix, this->ang_braz2_X, glm::vec3 (1.0f,0.0f,0.0f));
+	model_matrix = glm::rotate(model_matrix, this->ang_braz2_Z, glm::vec3 (0.0f,0.0f,1.0f));
 	this->brazoMedio.renderizar(model_matrix);
-
+	
+	// pinzas
 	model_matrix= glm::translate(model_matrix, glm::vec3 (0.0f, 0.0f, 3.5f));
 	model_matrix = glm::rotate(model_matrix, this->ang_mano, glm::vec3 (0.0f, 0.0f,1.0f));
 
@@ -266,7 +264,7 @@ Curva* AntebrazoCangrejo::crear_curva_trayectoria () {
 	
 	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.0, 0.0) );
 	control_trayectoria.push_back ( glm::vec3 ( -0.1, 0.0, 1.75) );
-	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.0, 3.52) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.0, 3.5) );
 	return (new CurvaBezier (control_trayectoria, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
 }
 Curva* AntebrazoCangrejo::crear_curva_seccion () {
@@ -432,7 +430,7 @@ Curva* TorsoCangrejo::crear_curva_trayectoria () {
 	return (new CurvaBezier (control_trayectoria, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
 }
 Curva* TorsoCangrejo::crear_curva_seccion () {
-	return (new Circunferencia(glm::vec3(0.0,0.0,0.0),0.5));
+	return (new Elipse(glm::vec3(0.0,0.0,0.0), 0.50, 0.25));
 }
 
 int TorsoCangrejo::obtener_pasos_trayectoria () {
@@ -499,12 +497,11 @@ Cangrejo::~Cangrejo() {
 }
 void Cangrejo::renderizar(glm::mat4 model_matrix) {
 	model_matrix = glm::translate(model_matrix, m_pos);
-	float escala = 1.2;
-	glm::mat4 model_matrix_torso = glm::scale(model_matrix, glm::vec3(1.1*escala,1.1*escala,0.8*escala));
-	this->torso.renderizar(model_matrix_torso);
+
+	this->torso.renderizar(model_matrix);
 	this->cabeza.renderizar(model_matrix);
 
-	model_matrix = glm::scale(model_matrix, glm::vec3 (0.3f,0.3f,0.3f));
+	model_matrix = glm::scale(model_matrix, glm::vec3 (0.27f,0.27f,0.27f));
 
 	float ang_braz1_X = -100;
 	float ang_braz1_Z = -70;
@@ -522,15 +519,15 @@ void Cangrejo::renderizar(glm::mat4 model_matrix) {
 	this->brazo2.renderizar(m_brazo2);
 
 	// Achico un poco para q las patas sean mas chicas que los brazos
-	model_matrix = glm::scale(model_matrix, glm::vec3 (0.8f,0.8f,0.8f));
+	model_matrix = glm::scale(model_matrix, glm::vec3 (0.77f,0.77f,0.77f));
 
 	// Dibujo las patas
 	glm::mat4 m_pata;
 	for (int i=0;i<6;++i) {
 		if(i<3){
-			m_pata = glm::translate(model_matrix , glm::vec3 (-3.8f+(0.8*i) , 0.8f - (2*i), 0.0f));
+			m_pata = glm::translate(model_matrix , glm::vec3 (-3.2f+(0.8*i) , 0.8f - (2*i), 0.0f));
 		}else{
-			m_pata = glm::translate(model_matrix , glm::vec3 (3.8f-0.8*(i-3), 0.8f - (2*(i-3)), 0.0f));
+			m_pata = glm::translate(model_matrix , glm::vec3 (3.2f-0.8*(i-3), 0.8f - (2*(i-3)), 0.0f));
 		}
 		m_pata  = glm::rotate(m_pata , ang_pata_Z[i], glm::vec3(0.0f, 0.0f, 1.0f));
 		m_pata  = glm::rotate(m_pata , ang_pata_X[i], glm::vec3(1.0f, 0.0f, 0.0f));

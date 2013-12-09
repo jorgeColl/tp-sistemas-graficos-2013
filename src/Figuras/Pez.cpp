@@ -81,7 +81,7 @@ FuncionCurvaBezier ColaPez::crear_funcion () {
 	puntos.push_back ( glm::vec3 (0.05 * this->obtener_pasos_trayectoria(), 2.20, 0.0) );
 	puntos.push_back ( glm::vec3 (0.30 * this->obtener_pasos_trayectoria(), 1.75, 0.0) );
 	puntos.push_back ( glm::vec3 (0.50 * this->obtener_pasos_trayectoria(), 1.20, 0.0) );
-	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.80, 0.0) );
+	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.25, 0.0) );
 	return (FuncionCurvaBezier(puntos));
 }
 
@@ -91,57 +91,60 @@ TorsoPez::TorsoPez(myWindow* ventana) :Figura(ventana) {
 }
 TorsoPez::~TorsoPez() { }
 void TorsoPez::renderizar(glm::mat4 model_matrix) {
-	if(MODELO_SIMPLE){
-		model_matrix = glm::scale(model_matrix,glm::vec3(0.5f,0.5f,1.0f));
-	} else {
-		model_matrix = glm::scale(model_matrix,glm::vec3 (0.2f,0.9f,1.5f));
-	}
+	if(MODELO_SIMPLE) model_matrix = glm::scale(model_matrix,glm::vec3(0.5f,0.5f,1.0f));
 	Figura::renderizar(model_matrix);
 }
-
 Superficie* TorsoPez::crear_superficie (myWindow* ventana) {
-	if (MODELO_SIMPLE) {
-		return (new Cubo(ventana));
-	}else{
-		// aca va la superficie
-		return (new Esfera (ventana, 1.0, 32, 32) );
-	}
+	if (MODELO_SIMPLE) return (new Cubo(ventana));
+	else return (Figura::crear_superficie(ventana));
 }
-// **************************** AletaDorsal ****************************
 
+Curva* TorsoPez::crear_curva_trayectoria () {
+	std::vector<glm::vec3> control_trayectoria;
+	
+	control_trayectoria.push_back ( glm::vec3 (  0.0,  0.0, -1.5) );
+	control_trayectoria.push_back ( glm::vec3 (  0.0,  0.0, 1.5) );
+	return (new CurvaBezier (control_trayectoria, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
+}
+Curva* TorsoPez::crear_curva_seccion () {
+	return (new Elipse(glm::vec3(0.0,0.0,0.0), 0.25, 1.0));
+}
+int TorsoPez::obtener_pasos_trayectoria () {
+	return 50;
+}
+int TorsoPez::obtener_pasos_seccion () {
+	return 100;
+}
+FuncionCurvaBezier TorsoPez::crear_funcion () {
+	std::vector<glm::vec3> puntos;
+	puntos.push_back ( glm::vec3 (0.0, 0.0, 0.0) );
+	puntos.push_back ( glm::vec3 (0.03 * this->obtener_pasos_trayectoria(), 1.7, 0.0) );
+	puntos.push_back ( glm::vec3 (0.5 * this->obtener_pasos_trayectoria(), 1.0, 0.0) );
+	puntos.push_back ( glm::vec3 (0.97 * this->obtener_pasos_trayectoria(), 1.7, 0.0) );
+	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.0, 0.0) );
+	return (FuncionCurvaBezier(puntos));
+}
+
+// **************************** AletaDorsal ****************************
 AletaDorsal::AletaDorsal(myWindow* ventana): Figura(ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 }
 AletaDorsal::~AletaDorsal(){ }
 void AletaDorsal::renderizar(glm::mat4 model_matrix) {
-	model_matrix = glm::scale(model_matrix,glm::vec3 (0.4f,1.0f,1.0f));
+	model_matrix = glm::scale(model_matrix,glm::vec3 (0.8f,1.0f,1.0f));
 	Figura::renderizar(model_matrix);
 }
 
 Curva* AletaDorsal::crear_curva_trayectoria () {
 	std::vector<glm::vec3> control_trayectoria;
 	
-	control_trayectoria.push_back ( glm::vec3 ( 0.0, -0.1, -0.9) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, -0.25, -0.95) );
 	control_trayectoria.push_back ( glm::vec3 ( 0.0,  0.05, 0.0) );
-	control_trayectoria.push_back ( glm::vec3 ( 0.0, -0.45, 1.3) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, -0.45, 1.2) );
 	return (new CurvaBezier (control_trayectoria, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
 }
 Curva* AletaDorsal::crear_curva_seccion () {
-	std::vector<glm::vec3> puntosAux;
-	puntosAux.push_back ( glm::vec3 ( -0.1, -0.4, 0.0) );
-	puntosAux.push_back ( glm::vec3 (  0.0, 0.3, 0.0) );
-	puntosAux.push_back ( glm::vec3 (  0.1, -0.4, 0.0) );
-	puntosAux.push_back ( glm::vec3 ( -0.1, -0.4, 0.0) );
-	puntosAux.push_back ( glm::vec3 (  0.0, 0.3, 0.0) );
-	unsigned int cantidades[] = { 1 , 3 , 1 , 1 , 2 };
-	
-	std::vector<glm::vec3> control_seccion;
-	for (unsigned int i = 0 ; i < puntosAux.size() ; i++) {
-		for (unsigned int j = 0 ; j < cantidades[i] ; j++) {
-			control_seccion.push_back (puntosAux.at(i));
-		}
-	}
-	return (new CurvaBSpline (control_seccion, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
+	return (new Elipse(glm::vec3(0.0,0.0,0.0), 0.05, 0.3));
 }
 int AletaDorsal::obtener_pasos_trayectoria () {
 	return 50;
@@ -152,7 +155,7 @@ int AletaDorsal::obtener_pasos_seccion () {
 FuncionCurvaBezier AletaDorsal::crear_funcion () {
 	std::vector<glm::vec3> puntos;
 	puntos.push_back ( glm::vec3 (0.0, 0.0, 0.0) );
-	puntos.push_back ( glm::vec3 (0.35 * this->obtener_pasos_trayectoria(), 0.5, 0.0) );
+	puntos.push_back ( glm::vec3 (0.35 * this->obtener_pasos_trayectoria(), 0.65, 0.0) );
 	puntos.push_back ( glm::vec3 (0.90 * this->obtener_pasos_trayectoria(), 0.5, 0.0) );
 	puntos.push_back ( glm::vec3 (0.95 * this->obtener_pasos_trayectoria(), 3.5, 0.0) );
 	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.0, 0.0) );
@@ -173,7 +176,7 @@ Pez::Pez(myWindow* ventana) :
 		torso(ventana),ojo1(ventana), ojo2(ventana), m_pos(0,0,0) {
 	trayecto=NULL;
 	u=0;
-	angCola=25.0f;
+	angCola=5.0f;
 	angAleta=25.0f;
 	cola_girando=true;
 	aleta_girando=true;
@@ -216,7 +219,7 @@ void Pez::renderizar(glm::mat4 model_matrix) {
 	model_temp = glm::translate(model_matrix, glm::vec3(0,0.8f,0));
 	aleta_dorsal.renderizar(model_temp);
 
-	model_temp = glm::translate(model_matrix,glm::vec3 (0,0,-2));
+	model_temp = glm::translate(model_matrix,glm::vec3 (0,0,-1.95));
 	model_temp = glm::translate(model_temp,glm::vec3(0,0,0.5));
 	model_temp = glm::rotate(model_temp,angCola,glm::vec3(0,1,0));
 	model_temp = glm::translate(model_temp,glm::vec3(0,0,-0.5));
@@ -255,11 +258,10 @@ void Pez::animar() {
 
 	// ################################ PARTE COMPLICADA #############################
 	std::cout << "Cantidad de tramos: " << trayecto->cantidad_tramos() << " "<< std::endl;
-	glm::vec3 a = trayecto->dameTangente(u, 0.001f);
-	glm::vec3 aN = glm::normalize (a);
+	glm::vec3 aN = trayecto->dameTangente(u);
 
 
-	glm::vec3 ProyAX = glm::normalize( glm::dot(aN, glm::vec3(1, 0, 0))* a );
+	glm::vec3 ProyAX = glm::normalize( glm::dot(aN, glm::vec3(1, 0, 0))* aN );
 	
 	// cont es el u , y avanzo al siguiente paso
 	u += 0.01;
@@ -271,11 +273,8 @@ void Pez::animar() {
 		m_pos = trayecto->damePunto(u);
 		return;
 	}
-	glm::vec3 b = trayecto->dameTangente(u, 0.001f);
-	glm::vec3 bN = glm::normalize (b);
-
-
-	glm::vec3 ProyBX = glm::normalize( glm::dot(bN, glm::vec3(1, 0, 0))* b);
+	glm::vec3 bN = trayecto->dameTangente(u);
+	glm::vec3 ProyBX = glm::normalize( glm::dot(bN, glm::vec3(1, 0, 0))* bN);
 
 	// asigno siguiente posicion al pez
 	glm::vec3 nueva_pos = trayecto->damePunto(u);
@@ -304,13 +303,13 @@ void Pez::animar() {
 	// modifico angulo de giro de la COLA
 	if(cola_girando){
 		angCola++;
-		if(angCola>30.0){
+		if(angCola>15.0){
 			cola_girando=false;
 		}
 	}
 	if(!cola_girando){
 		angCola--;
-		if(angCola<-30.0f){
+		if(angCola<-15.0f){
 			cola_girando=true;
 		}
 	}

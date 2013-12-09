@@ -51,6 +51,7 @@ Curva* Piedra::crear_curva_seccion () {
 			control_seccion.push_back (puntosAux.at(0));
 			control_seccion.push_back (puntosAux.at(0));
 			control_seccion.push_back (puntosAux.at(1));
+			//control_seccion.push_back (puntosAux.at(2)); // nuevo
 		}
 	}
 	return (new CurvaBSpline (control_seccion, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));

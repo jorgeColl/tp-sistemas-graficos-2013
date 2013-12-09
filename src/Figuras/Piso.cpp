@@ -6,12 +6,9 @@
  */
 
 #include "Piso.h"
-#include "CurvaPerturbada.h"
 
 const float Piso::LARGO = 100.0;
 const float Piso::ANCHO = 100.0;
-const float Piso::SEPARACION = 25.0;
-const float Piso::PERTURBACION = 0.1;
 
 Piso::Piso(myWindow* ventana):Figura(ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
@@ -28,13 +25,9 @@ Curva* Piso::crear_curva_trayectoria () {
 Curva* Piso::crear_curva_seccion () {
 	std::vector<glm::vec3> control_seccion;
 	
-	float puntos = Piso::ANCHO / Piso::SEPARACION;
-	for (int i = 0 ; i <= int(puntos) ; i++) {
-		control_seccion.push_back ( glm::vec3 (0.0, -Piso::ANCHO/2.0 + i * Piso::SEPARACION, 0.0) );
-		control_seccion.push_back ( glm::vec3 (0.0, -Piso::ANCHO/2.0 + i * Piso::SEPARACION, 0.0) );
-	}
-	
-	return (new CurvaPerturbada(control_seccion, glm::vec3(0.0,0.0,0.0),glm::vec3(0.0,0.0,1.0), Piso::PERTURBACION));
+	control_seccion.push_back ( glm::vec3 (0.0, -Piso::ANCHO/2.0 , 0.0) );
+	control_seccion.push_back ( glm::vec3 (0.0,  Piso::ANCHO/2.0 , 0.0) );
+	return (new CurvaBezier (control_seccion, glm::vec3(0.0, 0.0, 0.0), glm::vec3(-1.0, 0.0, 0.0)));
 }
 
 int Piso::obtener_pasos_trayectoria () {

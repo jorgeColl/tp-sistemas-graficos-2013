@@ -10,6 +10,11 @@ int Helper::factorial (int n) {
 float Helper::potencia (float x, int p) {
 	if (p == 0) return 1.0;
 	if (p == 1) return x;
+	if (p < 0) {
+		float otro_x = x;
+		if ((x == 0.0) || (x == -0.0)) otro_x += 0.001;
+		return (1.0 / potencia(otro_x, (-1)*p));
+	}
 	return (x * potencia(x, p-1));
 }
 
@@ -22,4 +27,8 @@ float Helper::coef_binomial (int n, int i) {
 float Helper::num_aleatorio (float lim_inf, float lim_sup) {
 	if ( lim_inf > lim_sup ) return 0.0;
 	return ( lim_inf + ((float)rand()/(float)RAND_MAX) * (lim_sup-lim_inf) );
+}
+
+bool Helper::is_nan (glm::vec3 vector) {
+	return ((vector.x != vector.x) || (vector.y != vector.y) || (vector.z != vector.z));
 }

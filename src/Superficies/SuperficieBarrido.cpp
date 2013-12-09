@@ -68,9 +68,8 @@ void SuperficieBarrido::crear_puntos () {
 		
 		for (unsigned int j = 0; j <= this->pasos_seccion ; j++) {
 			float u = ((j*1.0) / (this->pasos_seccion*1.0)) * this->seccion->cantidad_tramos();
-			glm::vec3 puntoSeccion = this->seccion->damePunto (u);
-			vertices.push_back (puntoSeccion);
-			normales.push_back (this->calcular_normal (puntoSeccion));
+			vertices.push_back (this->seccion->damePunto (u));
+			normales.push_back (this->seccion->dameNormal (u));
 			this->cargar_indices (i, j, &indices_seccion, &indices);
 		}
 		this->seccion->reset();
@@ -81,22 +80,22 @@ void SuperficieBarrido::crear_puntos () {
 void SuperficieBarrido::preparar_seccion (unsigned int i) {
 	float ui = ((i*1.0) / (this->pasos_trayectoria*1.0));
 	float u = ui * this->trayectoria->cantidad_tramos();
-	glm::vec3 puntoTrayectoria = this->trayectoria->damePunto (u);
 	
-	float pasoTangente = ((1.0) / (this->pasos_trayectoria*1.0)) * this->trayectoria->cantidad_tramos();
 	glm::mat4 transformacion = glm::mat4 (1.0f);
 	if (i < this->transformaciones.size()) transformacion = this->transformaciones.at(i);
 	
 	this->seccion->transformar(transformacion);
-	this->seccion->alinear (this->trayectoria->dameTangente(u, pasoTangente));
-	this->seccion->centrar (puntoTrayectoria);
-}
-
-glm::vec3 SuperficieBarrido::calcular_normal (glm::vec3 punto) {
-	glm::vec3 punto_plano = this->seccion->dameCentro();
-	glm::vec3 normal_plano = this->seccion->dameOrientacion();
-	PlanoAlgebraico plano (punto_plano, normal_plano);
-	return (plano.proyectar (punto));
+	
+	// temp
+/*	if ((u == 0.0) || (u == 0.25) || (u == 0.5) || (u == 0.75) || (u == 1.0)) {
+		glm::vec3 tangente = this->trayectoria->dameTangente(u);
+		std::cout << "u: " << u << std::endl;
+		std::cout << "tangente: ( " << tangente.x << " , " << tangente.y << " , " << tangente.z << " )" << std::endl;
+	}
+*/	// ---
+	
+	this->seccion->alinear (this->trayectoria->dameTangente(u));
+	this->seccion->centrar (this->trayectoria->damePunto (u));
 }
 
 void SuperficieBarrido::cargar_indices (unsigned int i, unsigned int j,
@@ -151,15 +150,5 @@ void SuperficieBarrido::copiar_puntos (std::vector<glm::vec3>* puntosOrigen, GLf
 }
 
 void SuperficieBarrido::render (glm::mat4 view_model_matrix) {
-/*	for (unsigned int i = 0 ; i < (this->vertex_buffer_size - 2) ; i = i + 3) {
-		std::cout << "vertex: ( " << this->vertex_buffer[i] << " , " << this->vertex_buffer[i+1] << " , " << this->vertex_buffer[i+2] << " )" << std::endl;
-		std::cout << "normal: ( " << this->normal_buffer[i] << " , " << this->normal_buffer[i+1] << " , " << this->normal_buffer[i+2] << " )" << std::endl;
-	}
-	std::cout << "index: ";
-	for (unsigned int j = 0 ; j < (this->index_buffer_size) ; j++) {
-		std::cout << this->index_buffer[j];
-		if (j < (this->index_buffer_size - 1)) std::cout << " , ";
-			else std::cout << std::endl;
-	}
-*/	Superficie::render (view_model_matrix);
+	Superficie::render (view_model_matrix);
 }
