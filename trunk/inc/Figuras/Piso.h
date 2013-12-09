@@ -13,8 +13,6 @@
 class Piso: public Figura {
 	static const float LARGO;
 	static const float ANCHO;
-	static const float SEPARACION;
-	static const float PERTURBACION;
 	
 public:
 	Piso(myWindow* ventana);

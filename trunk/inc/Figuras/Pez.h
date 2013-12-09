@@ -49,6 +49,11 @@ public:
 	virtual void renderizar(glm::mat4 model_matrix);
 protected:
 	virtual Superficie* crear_superficie (myWindow* ventana);
+	virtual Curva* crear_curva_trayectoria ();
+	virtual Curva* crear_curva_seccion ();
+	virtual int obtener_pasos_trayectoria ();
+	virtual int obtener_pasos_seccion ();
+	virtual FuncionCurvaBezier crear_funcion ();
 };
 
 // *************************** ALETA DORSAL ****************************

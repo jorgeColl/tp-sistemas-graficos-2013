@@ -1,4 +1,5 @@
 #pragma once
+#include <glm/glm.hpp>
 #include <iostream>
 #include <string>
 #include <map>
@@ -24,4 +25,5 @@ class  Helper {
 		static float potencia (float x, int p);
 		static float coef_binomial (int n, int i);
 		static float num_aleatorio (float lim_inf, float lim_sup);
+		static bool is_nan (glm::vec3 vector);
 };

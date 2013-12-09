@@ -184,7 +184,7 @@ void myWindow::OnRender(void)
 
     //////////////////////////////////////
     // Bind Light Settings
-    glm::vec4 light_position = glm::vec4( 8.0f, 8.0f, 2.0f, 1.0f );
+    glm::vec4 light_position = glm::vec4( 8.0, 8.0, 2.0, 1.0 ); // 8.0, 8.0, 2.0, 1.0
     glm::vec3 light_intensity = glm::vec3( 1.0f, 1.0f, 1.0f );
        
     GLuint location_light_position = glGetUniformLocation( this->programHandle, "LightPosition"); 

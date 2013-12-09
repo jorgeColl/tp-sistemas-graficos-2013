@@ -28,18 +28,50 @@ int CurvaBSpline::cantidad_tramos () {
 	return (this->tramos->size());
 }
 
-glm::vec3 CurvaBSpline::damePunto (float u) {
+glm::vec3 CurvaBSpline::dameVectorDeTramo (float u, TipoVector tipo) {
 	if ((u < 0.0) || (u > (this->cantidad_tramos()*1.0))) throw std::exception();
 	
 	int num_tramo = int(u);
 	if (num_tramo == this->cantidad_tramos()) num_tramo--;
-	Curva* tramo = this->tramos->at(num_tramo);
-	return (tramo->damePunto (u - num_tramo));
+	CurvaBSplineCubica* tramo = this->tramos->at(num_tramo);
+	if (tipo == Punto)	  return (tramo->damePunto	  (u - num_tramo));
+	if (tipo == Tangente) return (tramo->dameTangente (u - num_tramo));
+	if (tipo == Normal)	  return (tramo->dameNormal	  (u - num_tramo));
+	if (tipo == Binormal) return (tramo->dameBinormal (u - num_tramo));
+	return (glm::vec3 (0.0,0.0,0.0));
+}
+
+glm::vec3 CurvaBSpline::damePunto (float u) {
+	return (this->dameVectorDeTramo (u, Punto));
+}
+
+glm::vec3 CurvaBSpline::dameTangente (float u) {
+	return (this->dameVectorDeTramo (u, Tangente));
+}
+
+glm::vec3 CurvaBSpline::dameNormal   (float u) {
+	return (this->dameVectorDeTramo (u, Normal));
+}
+
+glm::vec3 CurvaBSpline::dameBinormal (float u) {
+	return (this->dameVectorDeTramo (u, Binormal));
 }
 
 void CurvaBSpline::transformar (glm::mat4 matriz) {
 	for (int i = 0 ; i < this->cantidad_tramos() ; i++) {
 		this->tramos->at(i)->transformar (matriz);
+	}
+}
+
+void CurvaBSpline::centrar (glm::vec3 vector) {
+	for (int i = 0 ; i < this->cantidad_tramos() ; i++) {
+		this->tramos->at(i)->centrar (vector);
+	}
+}
+
+void CurvaBSpline::alinear (glm::vec3 vector) {
+	for (int i = 0 ; i < this->cantidad_tramos() ; i++) {
+		this->tramos->at(i)->alinear (vector);
 	}
 }
 

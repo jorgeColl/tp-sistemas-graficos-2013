@@ -72,7 +72,7 @@ Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 
 Escenario::~Escenario() { delete (this->grilla_debug); }
 
 // true para ver la grilla, false para ver el piso
-const bool Escenario::DEBUG = true;
+const bool Escenario::DEBUG = false;
 
 void Escenario::renderizar(glm::mat4 model_matrix) {
 	if (Escenario::DEBUG) this->grilla_debug->render(model_matrix);
@@ -89,15 +89,15 @@ void Escenario::renderizar(glm::mat4 model_matrix) {
 
 	bool RENDERIZAR_PLANTAS = true;
 	if(RENDERIZAR_PLANTAS) {
-		glm::mat4 model_matrix_planta1 = glm::translate(model_matrix,glm::vec3(-5.0f, 5.0f, 0.9f));
+		glm::mat4 model_matrix_planta1 = glm::translate(model_matrix,glm::vec3(-5.0f, 5.0f, 0.0f));
 		this->planta1.renderizar(model_matrix_planta1);
-		glm::mat4 model_matrix_planta2 = glm::translate(model_matrix,glm::vec3(-15.0f, 5.0f, 0.9f));
+		glm::mat4 model_matrix_planta2 = glm::translate(model_matrix,glm::vec3(-15.0f, 5.0f, 0.0f));
 		this->planta2.renderizar(model_matrix_planta2);
-		glm::mat4 model_matrix_planta3 = glm::translate(model_matrix,glm::vec3(-5.0f, 25.0f, 0.9f));
+		glm::mat4 model_matrix_planta3 = glm::translate(model_matrix,glm::vec3(-5.0f, 25.0f, 0.0f));
 		this->planta3.renderizar(model_matrix_planta3);
-		glm::mat4 model_matrix_planta4 = glm::translate(model_matrix,glm::vec3(-5.0f, -15.0f, 0.9f));
+		glm::mat4 model_matrix_planta4 = glm::translate(model_matrix,glm::vec3(-5.0f, -15.0f, 0.0f));
 		this->planta4.renderizar(model_matrix_planta4);
-		glm::mat4 model_matrix_planta5 = glm::translate(model_matrix,glm::vec3(13.0f, 13.0f, 0.9f));
+		glm::mat4 model_matrix_planta5 = glm::translate(model_matrix,glm::vec3(13.0f, 13.0f, 0.0f));
 		this->planta5.renderizar(model_matrix_planta5);
 	}
 	bool RENDERIZAR_PIEDRAS = true;
