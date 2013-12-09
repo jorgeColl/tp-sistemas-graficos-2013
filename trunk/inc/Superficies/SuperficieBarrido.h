@@ -29,13 +29,13 @@ class SuperficieBarrido : public Superficie {
 		bool atributosValidos();
 		void inicializarNulo();
 		void crear_puntos();
-		void preparar_seccion (unsigned int i);
-		glm::vec3 calcular_normal (glm::vec3 punto);
+		float preparar_seccion (unsigned int i);
 		void cargar_indices (unsigned int i, unsigned int j, std::list<unsigned int>* indices_seccion,
 							 std::vector<unsigned int>* indices);
-		void cargar_puntos (std::vector<glm::vec3>* vertices, std::vector<glm::vec3>* normales,
-							std::vector<unsigned int>* indices);
-		void copiar_puntos (std::vector<glm::vec3>* puntosOrigen, GLfloat* puntosDestino);
+		void cargar_puntos (std::vector<glm::vec3>* vertices, std::vector<glm::vec3>* tangentes, std::vector<glm::vec3>* normales,
+							std::vector<glm::vec2>* textura, std::vector<unsigned int>* indices);
+		void copiar_puntos_3D (std::vector<glm::vec3>* puntosOrigen, GLfloat* puntosDestino);
+		void copiar_puntos_2D (std::vector<glm::vec2>* puntosOrigen, GLfloat* puntosDestino);
 		
 	protected:
 		virtual int cant_puntos_por_salto () { return (this->pasos_seccion + 1); };
@@ -47,9 +47,6 @@ class SuperficieBarrido : public Superficie {
 		void set_pasos_trayectoria (unsigned int pasos);
 		void set_pasos_seccion (unsigned int pasos);
 		void set_transformaciones (std::vector<glm::mat4> transformacionesRecibidas);
-		
-		// render heredado de Superficie
-		virtual void render (glm::mat4 view_model_matrix);
 		
 		~SuperficieBarrido ();
 		
