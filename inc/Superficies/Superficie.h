@@ -18,12 +18,18 @@ class Superficie {
 		glm::mat3 calcular_normal_matrix (glm::mat4 view_model_matrix);
 		void bind_matrix (GLuint* programHandle, const char* matriz, GLfloat* origen);
 	
+		void init ();
+	
 	protected:
 		GLfloat* vertex_buffer;
+		GLfloat* tangent_buffer;
 		GLfloat* normal_buffer;
+		GLfloat* texture_buffer;
 		GLuint* index_buffer;
 		unsigned int vertex_buffer_size;
+		unsigned int tangent_buffer_size;
 		unsigned int normal_buffer_size;
+		unsigned int texture_buffer_size;
 		unsigned int index_buffer_size;
 		GLenum modo;
 		

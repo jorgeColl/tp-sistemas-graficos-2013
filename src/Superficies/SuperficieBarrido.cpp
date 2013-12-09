@@ -33,7 +33,9 @@ void SuperficieBarrido::set_transformaciones (std::vector<glm::mat4> transformac
 
 SuperficieBarrido::~SuperficieBarrido () {
 	delete[] this->vertex_buffer;
+	delete[] this->tangent_buffer;
 	delete[] this->normal_buffer;
+	delete[] this->texture_buffer;
 	delete[] this->index_buffer;
 	
 	delete (this->trayectoria);
@@ -59,25 +61,30 @@ void SuperficieBarrido::inicializarNulo () {
 
 void SuperficieBarrido::crear_puntos () {
 	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec3> tangentes;
 	std::vector<glm::vec3> normales;
+	std::vector<glm::vec2> textura;
 	std::vector<unsigned int> indices;
 	std::list<unsigned int> indices_seccion;
 	
 	for (unsigned int i = 0; i <= this->pasos_trayectoria ; i++) {
-		this->preparar_seccion (i);
+		float ui = this->preparar_seccion (i);
 		
 		for (unsigned int j = 0; j <= this->pasos_seccion ; j++) {
-			float u = ((j*1.0) / (this->pasos_seccion*1.0)) * this->seccion->cantidad_tramos();
-			vertices.push_back (this->seccion->damePunto (u));
-			normales.push_back (this->seccion->dameNormal (u));
+			float vi = ((j*1.0) / (this->pasos_seccion*1.0));
+			float v = vi * this->seccion->cantidad_tramos();
+			vertices.push_back  (this->seccion->damePunto (v));
+			tangentes.push_back (this->seccion->dameTangente (v));
+			normales.push_back  (this->seccion->dameNormal (v));
+			textura.push_back (glm::vec2 (ui,vi));
 			this->cargar_indices (i, j, &indices_seccion, &indices);
 		}
 		this->seccion->reset();
 	}
-	this->cargar_puntos (&vertices, &normales, &indices);
+	this->cargar_puntos (&vertices, &tangentes, &normales, &textura, &indices);
 }
 
-void SuperficieBarrido::preparar_seccion (unsigned int i) {
+float SuperficieBarrido::preparar_seccion (unsigned int i) {
 	float ui = ((i*1.0) / (this->pasos_trayectoria*1.0));
 	float u = ui * this->trayectoria->cantidad_tramos();
 	
@@ -96,6 +103,7 @@ void SuperficieBarrido::preparar_seccion (unsigned int i) {
 	
 	this->seccion->alinear (this->trayectoria->dameTangente(u));
 	this->seccion->centrar (this->trayectoria->damePunto (u));
+	return ui;
 }
 
 void SuperficieBarrido::cargar_indices (unsigned int i, unsigned int j,
@@ -119,26 +127,32 @@ void SuperficieBarrido::cargar_indices (unsigned int i, unsigned int j,
 	indices_seccion->push_back (indice_actual);
 }
 
-void SuperficieBarrido::cargar_puntos (std::vector<glm::vec3>* vertices,
-									   std::vector<glm::vec3>* normales,
+void SuperficieBarrido::cargar_puntos (std::vector<glm::vec3>* vertices, std::vector<glm::vec3>* tangentes,
+									   std::vector<glm::vec3>* normales, std::vector<glm::vec2>* textura,
 									   std::vector<unsigned int>* indices) {
 	
-	this->vertex_buffer_size = (3 * vertices->size());
-	this->normal_buffer_size = (3 * normales->size());
+	this->vertex_buffer_size =  (3 * vertices->size());
+	this->tangent_buffer_size = (3 * tangentes->size());
+	this->normal_buffer_size =  (3 * normales->size());
+	this->texture_buffer_size = (2 * textura->size());
 	this->index_buffer_size = indices->size();
 	
 	this->vertex_buffer = new GLfloat[this->vertex_buffer_size];
+	this->tangent_buffer = new GLfloat[this->tangent_buffer_size];
 	this->normal_buffer = new GLfloat[this->normal_buffer_size];
+	this->texture_buffer = new GLfloat[this->texture_buffer_size];
 	this->index_buffer = new GLuint[this->index_buffer_size];
 	
-	this->copiar_puntos (vertices, this->vertex_buffer);
-	this->copiar_puntos (normales, this->normal_buffer);
+	this->copiar_puntos_3D (vertices, this->vertex_buffer);
+	this->copiar_puntos_3D (tangentes, this->tangent_buffer);
+	this->copiar_puntos_3D (normales, this->normal_buffer);
+	this->copiar_puntos_2D (textura, this->texture_buffer);
 	for (unsigned int i = 0 ; i < this->index_buffer_size ; i++) {
 		this->index_buffer[i] = indices->at (i);
 	}
 }
 
-void SuperficieBarrido::copiar_puntos (std::vector<glm::vec3>* puntosOrigen, GLfloat* puntosDestino) {
+void SuperficieBarrido::copiar_puntos_3D (std::vector<glm::vec3>* puntosOrigen, GLfloat* puntosDestino) {
 	std::vector<glm::vec3>::iterator it;
     unsigned int i = 0;
     for (it = puntosOrigen->begin() ; it != puntosOrigen->end(); it++) {
@@ -149,6 +163,12 @@ void SuperficieBarrido::copiar_puntos (std::vector<glm::vec3>* puntosOrigen, GLf
     }
 }
 
-void SuperficieBarrido::render (glm::mat4 view_model_matrix) {
-	Superficie::render (view_model_matrix);
+void SuperficieBarrido::copiar_puntos_2D (std::vector<glm::vec2>* puntosOrigen, GLfloat* puntosDestino) {
+	std::vector<glm::vec2>::iterator it;
+    unsigned int i = 0;
+    for (it = puntosOrigen->begin() ; it != puntosOrigen->end(); it++) {
+        puntosDestino[i] = ((*it).x);
+        puntosDestino[i+1] = ((*it).y);
+        i += 2;
+    }
 }

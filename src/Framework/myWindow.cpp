@@ -22,6 +22,45 @@
 #include "Esfera.h"
 #include "Cubo.h"
 
+
+// RENDER CON BUFFERS DE TANGENTES Y TEXTURAS
+void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* tangent_buff, GLfloat* normal_buff,
+							 GLfloat* texture_buff, GLuint* index_buff, unsigned int index_buff_size, GLenum modo)
+{
+	// Normal Matrix
+    glm::mat3 normal_matrix = glm::mat3 ( 1.0f );
+    glm::mat4 aux = this->view_matrix * model_matrix;
+    for (int i=0; i<3; i++)
+        for (int j=0; j<3; j++)
+            normal_matrix[i][j] = aux[i][j];
+
+    // Bind Normal MAtrix
+    GLuint location_normal_matrix = glGetUniformLocation( this->programHandle, "NormalMatrix"); 
+    if( location_normal_matrix >= 0 ) 
+	{ 
+        glUniformMatrix3fv( location_normal_matrix, 1, GL_FALSE, &normal_matrix[0][0]); 
+	}
+
+    // Bind Model Matrix
+    GLuint location_model_matrix = glGetUniformLocation( this->programHandle, "ModelMatrix"); 
+    if( location_model_matrix >= 0 ) 
+	{ 
+		glUniformMatrix4fv( location_model_matrix, 1, GL_FALSE, &model_matrix[0][0]); 
+	}
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, vertex_buff);
+	glNormalPointer(GL_FLOAT, 0, normal_buff);
+
+    glDrawElements (modo, index_buff_size, GL_UNSIGNED_INT, index_buff);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+}
+
+// RENDER SIN BUFFERS DE TANGENTES Y TEXTURAS
 void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
 							 GLuint* index_buff, unsigned int index_buff_size, GLenum modo)
 {
