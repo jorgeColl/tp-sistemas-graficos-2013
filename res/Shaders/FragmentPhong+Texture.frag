@@ -1,7 +1,8 @@
 #version 110
 
-varying  vec3 Normal_eye;
-varying  vec4 Position_eye;
+varying vec3 Normal_eye;
+varying vec4 Position_eye;
+varying vec2 TexCoord;
 
 // PROPIEDADES DE LA LUZ , LUZ DEL ENTORNO
 uniform vec4 LightPosition; // Light position in eye coords.
@@ -20,6 +21,9 @@ uniform mat4 ViewMatrix;
 uniform mat3 NormalMatrix;
 uniform mat4 ProjectionMatrix;
 
+// COORDENADA DE LA TEXTURA
+uniform sampler2D Tex1;
+
 vec3 phongModel( vec4 position, vec3 norm ) {	
 	vec3 s = normalize(vec3(LightPosition - position));
 	vec3 v = normalize(-position.xyz);
@@ -35,8 +39,9 @@ vec3 phongModel( vec4 position, vec3 norm ) {
 	//return ambient;
 	//return spec;
 }
+
 void main() {
-	// Evaluate the lighting equation.
+	vec4 texColor = texture2D( Tex1, TexCoord );
 	vec3 LightIntensity = phongModel( Position_eye, Normal_eye );
-	gl_FragColor = vec4(LightIntensity, 1.0);
+	gl_FragColor  = texColor * vec4 (LightIntensity, 1.0);
 }

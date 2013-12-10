@@ -2,6 +2,7 @@
 
 varying  vec3 Normal_eye;
 varying  vec4 Position_eye;
+varying  vec2 TexCoord;
 
 // PROPIEDADES DE LA LUZ , LUZ DEL ENTORNO
 uniform vec4 LightPosition; // Light position in eye coords.
@@ -20,23 +21,27 @@ uniform mat4 ViewMatrix;
 uniform mat3 NormalMatrix;
 uniform mat4 ProjectionMatrix;
 
-vec3 phongModel( vec4 position, vec3 norm ) {	
-	vec3 s = normalize(vec3(LightPosition - position));
-	vec3 v = normalize(-position.xyz);
-	vec3 r = reflect( -s, norm );
-	vec3 ambient = La * Ka;
-	float sDotN = max( dot(s,norm), 0.0 );
-	vec3 diffuse = Ld * Kd * sDotN;
-	vec3 spec = vec3(0.0);
-	if( sDotN > 0.0 )
-		spec = Ls * Ks * pow( max( dot(r,v), 0.0 ), Shininess );
-	return ambient + diffuse + spec;
-	//return diffuse;
-	//return ambient;
-	//return spec;
+void getEyeSpace( out vec3 norm, out vec4 position ) {
+	norm = normalize( NormalMatrix * gl_Normal);
+	position = ViewMatrix * gl_Vertex;
 }
+
 void main() {
-	// Evaluate the lighting equation.
-	vec3 LightIntensity = phongModel( Position_eye, Normal_eye );
-	gl_FragColor = vec4(LightIntensity, 1.0);
+	vec3 eyeNorm;
+	vec4 eyePosition;
+	// Get the position and normal in eye space
+	getEyeSpace(Normal_eye, Position_eye);
+	// Pasamos la posicion
+	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * gl_Vertex;
+	// Pasamos las coordenadas de texturas a los FShaders
+	TexCoord = gl_MultiTexCoord0.xy;
 }
+
+
+
+
+
+
+
+
+
