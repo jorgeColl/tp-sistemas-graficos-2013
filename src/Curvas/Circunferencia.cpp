@@ -12,9 +12,9 @@ std::vector<glm::vec3> Circunferencia::mis_puntos (glm::vec3 centro, float radio
 	std::vector<glm::vec3> ptosControl;
 	
 	std::vector<glm::vec3> puntos;
-	puntos.push_back (glm::vec3 (centro.x - radio, centro.y, centro.z));
-	puntos.push_back (glm::vec3 (centro.x, centro.y + radio, centro.z));
 	puntos.push_back (glm::vec3 (centro.x + radio, centro.y, centro.z));
+	puntos.push_back (glm::vec3 (centro.x, centro.y + radio, centro.z));
+	puntos.push_back (glm::vec3 (centro.x - radio, centro.y, centro.z));
 	puntos.push_back (glm::vec3 (centro.x, centro.y - radio, centro.z));
 	
 	// doy dos vueltas omitiendo el ultimo punto de la segunda

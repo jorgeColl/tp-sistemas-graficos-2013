@@ -20,6 +20,7 @@ protected:
 	virtual Curva* crear_curva_seccion ();
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
+	virtual FuncionCurvaBezier crear_funcion ();
 	virtual std::vector<glm::mat4> crear_transformaciones ();
 };
 

@@ -49,7 +49,7 @@ all: clean
 	@echo "	. El ejecutable "$(EXENAME)" ha sido creado exitosamente!"
 	@echo "	  Ingresar 'make exe' para ejecutarlo normalmente"
 	@echo "	  o 'make vexe' para correrlo con valgrind.\n"
-	@$(RMDIR) $(TEMPDIR)
+#	@$(RMDIR) $(TEMPDIR)
 
 # Creacion de directorios
 $(TEMPDIR):
