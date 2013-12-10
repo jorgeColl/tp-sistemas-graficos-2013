@@ -42,6 +42,10 @@ public:
 	void renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
 					   GLuint* index_buff, unsigned int index_buff_size, GLenum modo);
 	
+	// renderObject que recibe parametros del material (Ka Kd Ks Shininess)
+	void renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
+								 GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
+								 glm::vec3 Ka,glm::vec3 Kd,glm::vec3 Ks,float Shininess);
 	
 	virtual void agregar_figura(Figura* fig);
 	void axuuu(int a, int b);

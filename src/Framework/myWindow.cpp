@@ -25,7 +25,7 @@
 
 // RENDER CON BUFFERS DE TANGENTES Y TEXTURAS
 void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* tangent_buff, GLfloat* normal_buff,
-							 GLfloat* texture_buff, GLuint* index_buff, unsigned int index_buff_size, GLenum modo)
+							 	GLfloat* texture_buff, GLuint* index_buff, unsigned int index_buff_size, GLenum modo)
 {
 	// Normal Matrix
     glm::mat3 normal_matrix = glm::mat3 ( 1.0f );
@@ -62,8 +62,20 @@ void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLflo
 
 // RENDER SIN BUFFERS DE TANGENTES Y TEXTURAS
 void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
-							 GLuint* index_buff, unsigned int index_buff_size, GLenum modo)
+							 	GLuint* index_buff, unsigned int index_buff_size, GLenum modo)
 {
+	glm::vec3 Ka = glm::vec3(0.8,0.8,0.3);
+	glm::vec3 Kd = glm::vec3(0.8,0.8,0.3);
+	glm::vec3 Ks = glm::vec3(0.8,0.8,0.3);
+	float Shininess = 0.1;
+	renderObject(model_matrix,vertex_buff,normal_buff,index_buff,index_buff_size,modo,Ka,Kd,Ks,Shininess);
+}
+// NUCLEO BASE DE RENDER -> SOLO PHONG
+void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
+							 GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
+							 glm::vec3 Ka,glm::vec3 Kd,glm::vec3 Ks,float Shininess)
+{
+	//changeObjectColor(0.8,0.8,0.3);
 	// Normal Matrix
     glm::mat3 normal_matrix = glm::mat3 ( 1.0f );
     glm::mat4 aux = this->view_matrix * model_matrix;
@@ -72,17 +84,34 @@ void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLflo
             normal_matrix[i][j] = aux[i][j];
 
     // Bind Normal MAtrix
-    GLuint location_normal_matrix = glGetUniformLocation( this->programHandle, "NormalMatrix"); 
-    if( location_normal_matrix >= 0 ) 
-	{ 
-        glUniformMatrix3fv( location_normal_matrix, 1, GL_FALSE, &normal_matrix[0][0]); 
+    GLuint location_normal_matrix = glGetUniformLocation( this->programHandle, "NormalMatrix");
+    if( location_normal_matrix >= 0 )
+	{
+        glUniformMatrix3fv( location_normal_matrix, 1, GL_FALSE, &normal_matrix[0][0]);
 	}
 
     // Bind Model Matrix
-    GLuint location_model_matrix = glGetUniformLocation( this->programHandle, "ModelMatrix"); 
-    if( location_model_matrix >= 0 ) 
-	{ 
-		glUniformMatrix4fv( location_model_matrix, 1, GL_FALSE, &model_matrix[0][0]); 
+    GLuint location_model_matrix = glGetUniformLocation( this->programHandle, "ModelMatrix");
+    if( location_model_matrix >= 0 )
+	{
+		glUniformMatrix4fv( location_model_matrix, 1, GL_FALSE, &model_matrix[0][0]);
+	}
+
+	GLuint location_Kd = glGetUniformLocation(this->programHandle, "Kd");
+	if (location_Kd >= 0) {
+		glUniform3fv(location_Kd, 1, &Kd[0]);
+	}
+	GLuint location_Ka = glGetUniformLocation(this->programHandle, "Ka");
+	if (location_Ka >= 0) {
+		glUniform3fv(location_Ka, 1, &Ka[0]);
+	}
+	GLuint location_Ks = glGetUniformLocation(this->programHandle, "Ks");
+	if (location_Ks >= 0) {
+		glUniform3fv(location_Ks, 1, &Ks[0]);
+	}
+	GLuint location_Shininess = glGetUniformLocation(this->programHandle, "Shininess");
+	if (location_Shininess >= 0) {
+		glUniform1fv(location_Shininess, 1, &Shininess);
 	}
 
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -96,7 +125,6 @@ void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLflo
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
 }
-
 const char* loadShaderAsString(const char* file)
 {
     std::ifstream shader_file(file, std::ifstream::in);
@@ -225,6 +253,8 @@ void myWindow::OnRender(void)
     // Bind Light Settings
     glm::vec4 light_position = glm::vec4( 8.0, 8.0, 2.0, 1.0 ); // 8.0, 8.0, 2.0, 1.0
     glm::vec3 light_intensity = glm::vec3( 1.0f, 1.0f, 1.0f );
+    glm::vec3 light_La = glm::vec3( 1.0f, 1.0f, 1.0f );
+    glm::vec3 light_Ls = glm::vec3( 1.0f, 1.0f, 1.0f );
        
     GLuint location_light_position = glGetUniformLocation( this->programHandle, "LightPosition"); 
     if( location_light_position >= 0 ) 
@@ -236,6 +266,14 @@ void myWindow::OnRender(void)
     if( location_light_intensity >= 0 ) 
 	{ 
 		glUniform3fv( location_light_intensity, 1, &light_intensity[0]); 
+	}
+	GLuint location_La = glGetUniformLocation(this->programHandle, "La");
+	if (location_La >= 0) {
+		glUniform3fv(location_La, 1, &light_La[0]);
+	}
+	GLuint location_Ls = glGetUniformLocation(this->programHandle, "Ls");
+	if (location_Ls >= 0) {
+		glUniform3fv(location_Ls, 1, &light_Ls[0]);
 	}
     //
     ///////////////////////////////////////////
@@ -308,7 +346,7 @@ void  myWindow::OnInit()
             std::cout << "Error creating vertex shader" << std::endl;
         }
 
-        std::ifstream v_shader_file("DiffuseShadingVShader.vert", std::ifstream::in);
+        std::ifstream v_shader_file("VertexSoloPhong.vert", std::ifstream::in);
         std::string v_str((std::istreambuf_iterator<char>(v_shader_file)), std::istreambuf_iterator<char>());
         const char* vs_code_array[] = {v_str.c_str()};
         
@@ -342,7 +380,7 @@ void  myWindow::OnInit()
             std::cout << "Error creating fragment shader" << std::endl;
         }
 
-        std::ifstream f_shader_file("DiffuseShadingFShader.frag", std::ifstream::in);
+        std::ifstream f_shader_file("FragmentSoloPhong.frag", std::ifstream::in);
         std::string f_str((std::istreambuf_iterator<char>(f_shader_file)), std::istreambuf_iterator<char>());
         const char* fs_code_array[] = {f_str.c_str()};
         
