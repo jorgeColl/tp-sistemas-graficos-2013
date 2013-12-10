@@ -5,9 +5,11 @@
 #include <list>
 
 void Curva::init (glm::vec3 centro, glm::vec3 orientacion) {
+	if ((orientacion.x == 0.0) && (orientacion.y == 0.0) && (orientacion.z == 0.0)) throw std::exception();
+	
 	this->puntosControl = new std::vector<glm::vec3>();
 	this->miCentro = glm::vec3 (centro);
-	this->miOrientacion = glm::vec3 (orientacion);
+	this->miOrientacion = glm::normalize(orientacion);
 	
 	this->puntosControlOriginal = new std::vector<glm::vec3>();
 	this->miCentroOriginal = glm::vec3 (centro);
@@ -72,27 +74,11 @@ glm::vec3 Curva::damePunto (float u) {
 	return dameVector (u, Cero);
 }
 
-glm::vec3 Curva::dameTangenteNoDefinida (float u, float paso) {
-	glm::vec3 puntoInicial = this->damePunto (u);
-	glm::vec3 puntoFinal = glm::vec3 (0.0, 0.0, 0.0);
-	int coeficiente = 1;
-	try {
-		puntoFinal = this->damePunto (u + paso);
-	} catch (std::exception error) {
-		puntoFinal = this->damePunto (u - paso);
-		coeficiente = -1;
-	}
-	
-	glm::vec3 resultado = (puntoFinal - puntoInicial);
-	resultado *= coeficiente;
-	return resultado;
-}
-
 glm::vec3 Curva::dameTangente (float u) {
 	glm::vec3 tangente = dameVector (u, PrimeraDerivada);
 	if (Helper::is_nan (tangente)) tangente = dameVectorNoDefinido (u, PrimeraDerivada, tangente);
-	if ((tangente.x == 0.0) && (tangente.y == 0.0) && (tangente.z == 0.0)) return tangente;
-	return (glm::normalize (tangente));
+	if ((tangente.x != 0.0) || (tangente.y != 0.0) || (tangente.z != 0.0)) tangente = glm::normalize (tangente);
+	return tangente;
 }
 
 glm::vec3 Curva::dameBinormal (float u) {
@@ -111,7 +97,18 @@ glm::vec3 Curva::dameBinormal (float u) {
 	this->redondear_valor (binormal.z);
 	
 	if ((binormal.x == 0.0) && (binormal.y == 0.0) && (binormal.z == 0.0)) return (this->dameOrientacion());
-	return (glm::normalize (binormal));
+	binormal = glm::normalize (binormal);
+	return (this->corregirBinormal (binormal));
+}
+
+glm::vec3 Curva::corregirBinormal (glm::vec3 binormal) {
+	glm::vec3 resultado = (binormal + this->dameOrientacion()); // si la suma da cero, entonces la binormal se dio vuelta
+	this->redondear_valor (resultado.x);
+	this->redondear_valor (resultado.y);
+	this->redondear_valor (resultado.z);
+	
+	if ((resultado.x == 0.0) && (resultado.y == 0.0) && (resultado.z == 0.0)) binormal *= (-1);
+	return binormal;
 }
 
 glm::vec3 Curva::dameNormal (float u) {
@@ -125,8 +122,8 @@ glm::vec3 Curva::dameNormal (float u) {
 	this->redondear_valor (normal.y);
 	this->redondear_valor (normal.z);
 	
-	if ((normal.x == 0.0) && (normal.y == 0.0) && (normal.z == 0.0)) return normal;
-	return (glm::normalize (normal));
+	if ((normal.x != 0.0) || (normal.y != 0.0) || (normal.z != 0.0)) normal = glm::normalize (normal);
+	return normal;
 }
 
 glm::vec3 Curva::dameCentro () {
@@ -191,6 +188,7 @@ void Curva::alinear (glm::vec3 vector) {
 				matriz = glm::scale (matriz, glm::vec3 (1.0,1.0,-1.0));
 		}
 		this->transformar (matriz);
+		this->miOrientacion = this->transformar_punto (this->miOrientacion, matriz);
 		this->centrar (centroActual);
 	}
 }

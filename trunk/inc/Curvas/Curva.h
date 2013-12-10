@@ -25,7 +25,7 @@ class Curva {
 		
 		glm::vec3 dameVector (float u, OrdenBase orden);
 		glm::vec3 dameVectorNoDefinido (float u, OrdenBase orden, glm::vec3 vector);
-		glm::vec3 dameTangenteNoDefinida (float u, float paso);
+		glm::vec3 corregirBinormal (glm::vec3 binormal);
 		
 	protected:
 		std::vector<glm::vec3>* puntosControl;

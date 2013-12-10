@@ -12,9 +12,9 @@ std::vector<glm::vec3> Elipse::mis_puntos (glm::vec3 centro, float semieje_horiz
 	std::vector<glm::vec3> ptosControl;
 	
 	std::vector<glm::vec3> puntos;
-	puntos.push_back (glm::vec3 ( centro.x - semieje_horizontal  ,			centro.y		   , centro.z ));
-	puntos.push_back (glm::vec3 (			centro.x			 , centro.y + semieje_vertical , centro.z ));
 	puntos.push_back (glm::vec3 ( centro.x + semieje_horizontal  ,			centro.y		   , centro.z ));
+	puntos.push_back (glm::vec3 (			centro.x			 , centro.y + semieje_vertical , centro.z ));
+	puntos.push_back (glm::vec3 ( centro.x - semieje_horizontal  ,			centro.y		   , centro.z ));
 	puntos.push_back (glm::vec3 (			centro.x			 , centro.y - semieje_vertical , centro.z ));
 	
 	// doy dos vueltas omitiendo el ultimo punto de la segunda

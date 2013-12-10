@@ -92,15 +92,6 @@ float SuperficieBarrido::preparar_seccion (unsigned int i) {
 	if (i < this->transformaciones.size()) transformacion = this->transformaciones.at(i);
 	
 	this->seccion->transformar(transformacion);
-	
-	// temp
-/*	if ((u == 0.0) || (u == 0.25) || (u == 0.5) || (u == 0.75) || (u == 1.0)) {
-		glm::vec3 tangente = this->trayectoria->dameTangente(u);
-		std::cout << "u: " << u << std::endl;
-		std::cout << "tangente: ( " << tangente.x << " , " << tangente.y << " , " << tangente.z << " )" << std::endl;
-	}
-*/	// ---
-	
 	this->seccion->alinear (this->trayectoria->dameTangente(u));
 	this->seccion->centrar (this->trayectoria->damePunto (u));
 	return ui;
