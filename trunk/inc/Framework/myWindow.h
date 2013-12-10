@@ -56,13 +56,15 @@ private:
 	bool full_screen, Cmode, subio_antes;
 
     void changeObjectColor(float r, float g, float b);
-
+    virtual void compilarPrograma(const char* nombreVertexShader, const char* nombreFragmentShader, GLuint& punteroProgramaFinal);
     glm::mat4 view_matrix;
 
     Superficie* mySphere;
     Superficie* myCube;
 
-    GLuint programHandle;
+    GLuint programHandleSoloPhong;
+    GLuint programHandlePhongAndTexture;
+    GLuint programHandlePhongAndTextureAndNormalMap;
     GLuint vertShader;
     GLuint fragShader;
 };
