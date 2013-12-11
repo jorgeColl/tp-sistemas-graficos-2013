@@ -282,6 +282,7 @@ void myWindow::setDefault(GLuint programHandle){
 	    //////////////////////////////////////
 	    // Bind Light Settings
 	    glm::vec4 light_position = glm::vec4( 8.0, 8.0, 2.0, 1.0 ); // 8.0, 8.0, 2.0, 1.0
+	    light_position = this->view_matrix * light_position;
 	    glm::vec3 light_intensity = glm::vec3( 1.0f, 1.0f, 1.0f );
 	    glm::vec3 light_La = glm::vec3( 1.0f, 1.0f, 1.0f );
 	    glm::vec3 light_Ls = glm::vec3( 1.0f, 1.0f, 1.0f );
