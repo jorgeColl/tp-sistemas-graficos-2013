@@ -3,7 +3,7 @@
 #include <GL/glut.h>
 #include <GL/glext.h>
 
-
+#include <iostream>
 #include <GL/gl.h>
 #include <GL/glu.h>
 
@@ -48,8 +48,6 @@ void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, st
 			this->cacheChannels[nombreTextura]=image_channels;
 
 			glGenTextures(1, &textureid);
-			glBindTexture(GL_TEXTURE_2D, textureid);
-
 			this->cacheTextureId[nombreTextura]=textureid;
 	}else{
 		//std::cout<<"se cargo desde cache"<<std::endl;
@@ -59,14 +57,9 @@ void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, st
 		image_channels = this->cacheChannels[nombreTextura];
 		textureid = this->cacheTextureId[nombreTextura];
 	}
-	image_buffer = SOIL_load_image(nombreTextura.c_str(),&image_witdh, &image_height, &image_channels, SOIL_LOAD_RGBA);
-
-	// Copy file to OpenGL
-
-
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height, 0,
-			GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
+	//image_buffer = SOIL_load_image(nombreTextura.c_str(),&image_witdh, &image_height, &image_channels, SOIL_LOAD_RGBA);
+	glBindTexture(GL_TEXTURE_2D, textureid);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
@@ -97,6 +90,7 @@ void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLflo
 }
 
 // RENDER SIN BUFFERS DE TANGENTES Y TEXTURAS
+// USA PHONG CON PARAMETROS KA,KS,KD,SHININESS DEFAULTS
 void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
 							 	GLuint* index_buff, unsigned int index_buff_size, GLenum modo)
 {
@@ -106,6 +100,7 @@ void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLflo
 	float Shininess = 0.1;
 	renderObject(model_matrix,vertex_buff,normal_buff,index_buff,index_buff_size,modo,Ka,Kd,Ks,Shininess);
 }
+// RENDER SOLO PHONG RECIBIENDO PARAMETROS KA,KD,KS,SHININESS
 void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
 							 GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
 							 glm::vec3 Ka,glm::vec3 Kd,glm::vec3 Ks,float Shininess)
@@ -113,6 +108,7 @@ void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLflo
 	renderObjectCore(model_matrix, vertex_buff, normal_buff, index_buff, index_buff_size,modo,Ka,Kd,Ks,Shininess,this->programHandleSoloPhong);
 }
 // NUCLEO BASE DE RENDER -> SOLO PHONG
+// NOTAR QUE RECIBE COMO PARAMETRO EL PROGRAMHANDLE
 void myWindow::renderObjectCore (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
 							 GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
 							 glm::vec3 Ka,glm::vec3 Kd,glm::vec3 Ks,float Shininess,GLuint programShader)
@@ -130,31 +126,33 @@ void myWindow::renderObjectCore (glm::mat4 model_matrix, GLfloat* vertex_buff, G
     if( location_normal_matrix >= 0 )
 	{
         glUniformMatrix3fv( location_normal_matrix, 1, GL_FALSE, &normal_matrix[0][0]);
-	}
+	}else {throw std::ios_base::failure("Error en Binding");}
 
     // Bind Model Matrix
     GLuint location_model_matrix = glGetUniformLocation( programShader, "ModelMatrix");
-    if( location_model_matrix >= 0 )
-	{
+    if( location_model_matrix >= 0 ) {
 		glUniformMatrix4fv( location_model_matrix, 1, GL_FALSE, &model_matrix[0][0]);
-	}
+	}else {throw std::ios_base::failure("Error en Binding");}
 
 	GLuint location_Kd = glGetUniformLocation(programShader, "Kd");
 	if (location_Kd >= 0) {
 		glUniform3fv(location_Kd, 1, &Kd[0]);
-	}
+	}else {throw std::ios_base::failure("Error en Binding");}
+
 	GLuint location_Ka = glGetUniformLocation(programShader, "Ka");
 	if (location_Ka >= 0) {
 		glUniform3fv(location_Ka, 1, &Ka[0]);
-	}
+	}else {throw std::ios_base::failure("Error en Binding");}
+
 	GLuint location_Ks = glGetUniformLocation(programShader, "Ks");
 	if (location_Ks >= 0) {
 		glUniform3fv(location_Ks, 1, &Ks[0]);
-	}
+	}else {throw std::ios_base::failure("Error en Binding");}
+
 	GLuint location_Shininess = glGetUniformLocation(programShader, "Shininess");
 	if (location_Shininess >= 0) {
 		glUniform1fv(location_Shininess, 1, &Shininess);
-	}
+	}else {throw std::ios_base::failure("Error en Binding");}
 
     glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
@@ -259,9 +257,8 @@ void myWindow::changeObjectColor(float r, float g, float b)
 void myWindow::setDefault(GLuint programHandle){
 		this->view_matrix = glm::lookAt ( this->m_pos,this->m_direct, glm::vec3 ( 0.0, 0.0, 1.0 ) );
 
-	    // Projection Matrix
-	    glm::mat4 projection_matrix = glm::mat4 ( 1.0f );
-	    projection_matrix = glm::infinitePerspective( 52.0f , (float)this->width / (float)this->height, 0.1f);
+	    // projection_matrix = glm::mat4 ( 1.0f );
+	     glm::mat4 projection_matrix = glm::infinitePerspective( 52.0f , (float)this->width / (float)this->height, 0.1f);
 
 	    glUseProgram( programHandle );
 
@@ -270,14 +267,14 @@ void myWindow::setDefault(GLuint programHandle){
 	    if( location_view_matrix >= 0 )
 		{
 			glUniformMatrix4fv( location_view_matrix, 1, GL_FALSE, &view_matrix[0][0]);
-		}
+		}else {throw std::ios_base::failure("Error en Binding");}
 
 	    // Bind Projection Matrix
 	    GLuint location_projection_matrix = glGetUniformLocation( programHandle, "ProjectionMatrix");
 	    if( location_projection_matrix >= 0 )
 		{
 			glUniformMatrix4fv( location_projection_matrix, 1, GL_FALSE, &projection_matrix[0][0]);
-		}
+		}else {throw std::ios_base::failure("Error en Binding");}
 
 	    //////////////////////////////////////
 	    // Bind Light Settings
@@ -291,21 +288,23 @@ void myWindow::setDefault(GLuint programHandle){
 	    if( location_light_position >= 0 )
 		{
 	        glUniform4fv( location_light_position, 1, &light_position[0]);
-		}
+		}else {throw std::ios_base::failure("Error en Binding");}
 
 	    GLuint Ld = glGetUniformLocation( programHandle, "Ld");
 	    if( Ld >= 0 )
 		{
 			glUniform3fv( Ld, 1, &light_intensity[0]);
-		}
+		}else {throw std::ios_base::failure("Error en Binding");}
+
 		GLuint location_La = glGetUniformLocation(programHandle, "La");
 		if (location_La >= 0) {
 			glUniform3fv(location_La, 1, &light_La[0]);
-		}
+		}else {throw std::ios_base::failure("Error en Binding");}
+
 		GLuint location_Ls = glGetUniformLocation(programHandle, "Ls");
 		if (location_Ls >= 0) {
 			glUniform3fv(location_Ls, 1, &light_Ls[0]);
-		}
+		}else {throw std::ios_base::failure("Error en Binding");}
 }
 void myWindow::OnRender(void)
 {
