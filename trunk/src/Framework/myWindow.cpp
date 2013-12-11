@@ -24,6 +24,7 @@
 #include "Cubo.h"
 
 void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme) {
+	glActiveTexture(GL_TEXTURE0);
 	// Load texture file
 	unsigned int textureid;
 	int image_witdh;
@@ -31,7 +32,7 @@ void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, st
 	int image_channels;
 	unsigned char* image_buffer;
 	// INTENTO FALLUTO DE AGILIZAR LAS COSAS, PERO SIGUE ANDANDO LENTO Y ADEMAS PUEDE INSTRODUCIR ALGUN ERROR
-	/*if(this->cacheTexture.count(nombreTextura) == 0) {
+	if(this->cacheTexture.count(nombreTextura) == 0) {
 			std::ifstream ifile(nombreTextura.c_str());
 			if (!ifile) {
 				throw("error cargar textura");
@@ -45,19 +46,24 @@ void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, st
 			this->cahcheWhitdh[nombreTextura]=image_witdh;
 			this->cacheHeight[nombreTextura]=image_height;
 			this->cacheChannels[nombreTextura]=image_channels;
+
+			glGenTextures(1, &textureid);
+			glBindTexture(GL_TEXTURE_2D, textureid);
+
+			this->cacheTextureId[nombreTextura]=textureid;
 	}else{
 		//std::cout<<"se cargo desde cache"<<std::endl;
 		image_buffer = this->cacheTexture[nombreTextura];
 		image_witdh = this->cahcheWhitdh[nombreTextura];
 		image_height = this->cacheHeight[nombreTextura];
 		image_channels = this->cacheChannels[nombreTextura];
-	}*/
+		textureid = this->cacheTextureId[nombreTextura];
+	}
 	image_buffer = SOIL_load_image(nombreTextura.c_str(),&image_witdh, &image_height, &image_channels, SOIL_LOAD_RGBA);
 
 	// Copy file to OpenGL
-	glActiveTexture(GL_TEXTURE0);
-	glGenTextures(1, &textureid);
-	glBindTexture(GL_TEXTURE_2D, textureid);
+
+
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height, 0,
 			GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
@@ -111,6 +117,7 @@ void myWindow::renderObjectCore (glm::mat4 model_matrix, GLfloat* vertex_buff, G
 							 GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
 							 glm::vec3 Ka,glm::vec3 Kd,glm::vec3 Ks,float Shininess,GLuint programShader)
 {
+	setDefault(programShader);
 	// Normal Matrix
     glm::mat3 normal_matrix = glm::mat3 ( 1.0f );
     glm::mat4 aux = this->view_matrix * model_matrix;
@@ -249,88 +256,65 @@ void myWindow::changeObjectColor(float r, float g, float b)
 		glUniform3fv( location_diffuse_reflectivity, 1, &diffuse_reflectivity[0]); 
 	}
 }
+void myWindow::setDefault(GLuint programHandle){
+		this->view_matrix = glm::lookAt ( this->m_pos,this->m_direct, glm::vec3 ( 0.0, 0.0, 1.0 ) );
 
+	    // Projection Matrix
+	    glm::mat4 projection_matrix = glm::mat4 ( 1.0f );
+	    projection_matrix = glm::infinitePerspective( 52.0f , (float)this->width / (float)this->height, 0.1f);
+
+	    glUseProgram( programHandle );
+
+	    // Bind View MAtrix
+	    GLuint location_view_matrix = glGetUniformLocation( programHandle, "ViewMatrix");
+	    if( location_view_matrix >= 0 )
+		{
+			glUniformMatrix4fv( location_view_matrix, 1, GL_FALSE, &view_matrix[0][0]);
+		}
+
+	    // Bind Projection Matrix
+	    GLuint location_projection_matrix = glGetUniformLocation( programHandle, "ProjectionMatrix");
+	    if( location_projection_matrix >= 0 )
+		{
+			glUniformMatrix4fv( location_projection_matrix, 1, GL_FALSE, &projection_matrix[0][0]);
+		}
+
+	    //////////////////////////////////////
+	    // Bind Light Settings
+	    glm::vec4 light_position = glm::vec4( 8.0, 8.0, 2.0, 1.0 ); // 8.0, 8.0, 2.0, 1.0
+	    glm::vec3 light_intensity = glm::vec3( 1.0f, 1.0f, 1.0f );
+	    glm::vec3 light_La = glm::vec3( 1.0f, 1.0f, 1.0f );
+	    glm::vec3 light_Ls = glm::vec3( 1.0f, 1.0f, 1.0f );
+
+	    GLuint location_light_position = glGetUniformLocation( programHandle, "LightPosition");
+	    if( location_light_position >= 0 )
+		{
+	        glUniform4fv( location_light_position, 1, &light_position[0]);
+		}
+
+	    GLuint Ld = glGetUniformLocation( programHandle, "Ld");
+	    if( Ld >= 0 )
+		{
+			glUniform3fv( Ld, 1, &light_intensity[0]);
+		}
+		GLuint location_La = glGetUniformLocation(programHandle, "La");
+		if (location_La >= 0) {
+			glUniform3fv(location_La, 1, &light_La[0]);
+		}
+		GLuint location_Ls = glGetUniformLocation(programHandle, "Ls");
+		if (location_Ls >= 0) {
+			glUniform3fv(location_Ls, 1, &light_Ls[0]);
+		}
+}
 void myWindow::OnRender(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    //////////////////////////////////////
-    // View and Projection Matrices Setting
-    //
-    // View (camera) Matrix
 
-    this->view_matrix = glm::lookAt ( this->m_pos,this->m_direct, glm::vec3 ( 0.0, 0.0, 1.0 ) );
-
-    // Projection Matrix
-    glm::mat4 projection_matrix = glm::mat4 ( 1.0f );
-    projection_matrix = glm::infinitePerspective( 52.0f , (float)this->width / (float)this->height, 0.1f);
-
-    glUseProgram( this->programHandleSoloPhong );
-
-    // Bind View MAtrix
-    GLuint location_view_matrix = glGetUniformLocation( this->programHandleSoloPhong, "ViewMatrix"); 
-    if( location_view_matrix >= 0 ) 
-	{ 
-		glUniformMatrix4fv( location_view_matrix, 1, GL_FALSE, &view_matrix[0][0]); 
-	}
-
-    // Bind Projection Matrix
-    GLuint location_projection_matrix = glGetUniformLocation( this->programHandleSoloPhong, "ProjectionMatrix"); 
-    if( location_projection_matrix >= 0 ) 
-	{ 
-		glUniformMatrix4fv( location_projection_matrix, 1, GL_FALSE, &projection_matrix[0][0]); 
-	}
-    //
-    ///////////////////////////////////////////
-    
-
-    //////////////////////////////////////
-    // Bind Light Settings
-    glm::vec4 light_position = glm::vec4( 8.0, 8.0, 2.0, 1.0 ); // 8.0, 8.0, 2.0, 1.0
-    glm::vec3 light_intensity = glm::vec3( 1.0f, 1.0f, 1.0f );
-    glm::vec3 light_La = glm::vec3( 1.0f, 1.0f, 1.0f );
-    glm::vec3 light_Ls = glm::vec3( 1.0f, 1.0f, 1.0f );
-       
-    GLuint location_light_position = glGetUniformLocation( this->programHandleSoloPhong, "LightPosition"); 
-    if( location_light_position >= 0 ) 
-	{ 
-        glUniform4fv( location_light_position, 1, &light_position[0]); 
-	}
-
-    GLuint location_light_intensity = glGetUniformLocation( this->programHandleSoloPhong, "Ld"); 
-    if( location_light_intensity >= 0 ) 
-	{ 
-		glUniform3fv( location_light_intensity, 1, &light_intensity[0]); 
-	}
-	GLuint location_La = glGetUniformLocation(this->programHandleSoloPhong, "La");
-	if (location_La >= 0) {
-		glUniform3fv(location_La, 1, &light_La[0]);
-	}
-	GLuint location_Ls = glGetUniformLocation(this->programHandleSoloPhong, "Ls");
-	if (location_Ls >= 0) {
-		glUniform3fv(location_Ls, 1, &light_Ls[0]);
-	}
-    //
-    ///////////////////////////////////////////
-
-
-    // Drawing Grid
-    /*changeObjectColor(0.5, 0.5, 0.5);
-    glm::mat4 model_matrix_grid = glm::mat4 ( 1.0f );
-	this->myGrid->render(model_matrix_grid);
-	*/
-
-
-    // ARM
     glm::mat4 model_matrix = glm::mat4 ( 1.0f );
-    changeObjectColor(0.8, 0.8, 0.3);
     
     for (unsigned int i = 0; i < figs.size(); ++i) {
    		figs[i]->renderizar(model_matrix);
    	}
-
-    // Rotaci\F3n de ejemplo
-    model_matrix = glm::rotate (model_matrix, -95.0f, glm::vec3( 1.0, 0.0, 1.0));
     
     glutSwapBuffers();
 }

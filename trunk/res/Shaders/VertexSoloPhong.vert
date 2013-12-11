@@ -1,4 +1,4 @@
-#version 110
+#version 130
 
 varying  vec3 Normal_eye;
 varying  vec4 Position_eye;
