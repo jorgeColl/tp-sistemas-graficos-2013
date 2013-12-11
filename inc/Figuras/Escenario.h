@@ -15,7 +15,7 @@
 #include "Piso.h"
 #include "Pez.h"
 #include "Grilla.h"
-#include "Ladrillo.h"
+
 
 class Escenario: public Figura {
 	static const bool DEBUG;
@@ -38,7 +38,6 @@ protected:
 	Planta planta5;
 
 	Piso piso;
-	Ladrillo ladrillo;
 	std::vector<Figura*> figuras;
 	glm::vec3 pos_cangrejo1,pos_pez1;
 
