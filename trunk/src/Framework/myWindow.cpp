@@ -14,6 +14,7 @@
 #include <glm/gtx/projection.hpp>
 
 #include "myWindow.h"
+#include "SOIL.h"
 
 #include <iostream>
 #include <fstream>
@@ -22,42 +23,63 @@
 #include "Esfera.h"
 #include "Cubo.h"
 
+void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme) {
+
+	// Load texture file
+	unsigned int textureid;
+	int image_witdh;
+	int image_height;
+	int image_channels;
+	unsigned char* image_buffer;
+	if(this->cacheTexture.count(nombreTextura) == 0) {
+			std::ifstream ifile(nombreTextura.c_str());
+			if (!ifile) {
+				throw("error cargar textura");
+			}
+			image_buffer = SOIL_load_image(nombreTextura.c_str(),
+			&image_witdh, &image_height, &image_channels, SOIL_LOAD_RGBA);
+			if(image_buffer == 0){
+				throw("error cargar textura");
+			}
+			this->cacheTexture[nombreTextura]=image_buffer;
+	}else{
+		image_buffer = this->cacheTexture[nombreTextura];
+	}
+
+	// Copy file to OpenGL
+	glActiveTexture(GL_TEXTURE0);
+	glGenTextures(1, &textureid);
+	glBindTexture(GL_TEXTURE_2D, textureid);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	// Set the Tex1 sampler uniform to refer to texture unit 0
+	int Tex1 = glGetUniformLocation(programShader, nombreVariableUniforme.c_str());
+
+	if (Tex1 >= 0) {
+		// We indicate that Uniform Variable sampler2D "text" uses  Texture Unit 0
+		glUniform1i(Tex1, 0);
+	}else{
+		throw("error al cargar textura en myWindow, metodo cargarTextura");
+	}
+}
 
 // RENDER CON BUFFERS DE TANGENTES Y TEXTURAS
 void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* tangent_buff, GLfloat* normal_buff,
-							 	GLfloat* texture_buff, GLuint* index_buff, unsigned int index_buff_size, GLenum modo)
+							 	GLfloat* texture_buff, std::string nombreTextura, GLuint* index_buff, unsigned int index_buff_size, GLenum modo)
 {
-	// Normal Matrix
-    glm::mat3 normal_matrix = glm::mat3 ( 1.0f );
-    glm::mat4 aux = this->view_matrix * model_matrix;
-    for (int i=0; i<3; i++)
-        for (int j=0; j<3; j++)
-            normal_matrix[i][j] = aux[i][j];
-
-    // Bind Normal MAtrix
-    GLuint location_normal_matrix = glGetUniformLocation( this->programHandleSoloPhong, "NormalMatrix"); 
-    if( location_normal_matrix >= 0 ) 
-	{ 
-        glUniformMatrix3fv( location_normal_matrix, 1, GL_FALSE, &normal_matrix[0][0]); 
-	}
-
-    // Bind Model Matrix
-    GLuint location_model_matrix = glGetUniformLocation( this->programHandleSoloPhong, "ModelMatrix"); 
-    if( location_model_matrix >= 0 ) 
-	{ 
-		glUniformMatrix4fv( location_model_matrix, 1, GL_FALSE, &model_matrix[0][0]); 
-	}
-
-    glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-
-	glVertexPointer(3, GL_FLOAT, 0, vertex_buff);
-	glNormalPointer(GL_FLOAT, 0, normal_buff);
-
-    glDrawElements (modo, index_buff_size, GL_UNSIGNED_INT, index_buff);
-
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
+	std::cout<<nombreTextura<<std::endl;
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	cargarTextura(nombreTextura,this->programHandlePhongAndTexture,"Tex1");
+	glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
+	glm::vec3 Ka = glm::vec3(0.5,0.5,0.5);
+	glm::vec3 Kd = glm::vec3(0.5,0.5,0.5);
+	glm::vec3 Ks = glm::vec3(0.5,0.5,0.5);
+	float Shininess = 0.1;
+	renderObjectCore(model_matrix, vertex_buff, normal_buff, index_buff, index_buff_size,modo,Ka,Kd,Ks,Shininess,this->programHandlePhongAndTexture);
 }
 
 // RENDER SIN BUFFERS DE TANGENTES Y TEXTURAS
@@ -70,12 +92,17 @@ void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLflo
 	float Shininess = 0.1;
 	renderObject(model_matrix,vertex_buff,normal_buff,index_buff,index_buff_size,modo,Ka,Kd,Ks,Shininess);
 }
-// NUCLEO BASE DE RENDER -> SOLO PHONG
 void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
 							 GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
 							 glm::vec3 Ka,glm::vec3 Kd,glm::vec3 Ks,float Shininess)
 {
-	//changeObjectColor(0.8,0.8,0.3);
+	renderObjectCore(model_matrix, vertex_buff, normal_buff, index_buff, index_buff_size,modo,Ka,Kd,Ks,Shininess,this->programHandleSoloPhong);
+}
+// NUCLEO BASE DE RENDER -> SOLO PHONG
+void myWindow::renderObjectCore (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
+							 GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
+							 glm::vec3 Ka,glm::vec3 Kd,glm::vec3 Ks,float Shininess,GLuint programShader)
+{
 	// Normal Matrix
     glm::mat3 normal_matrix = glm::mat3 ( 1.0f );
     glm::mat4 aux = this->view_matrix * model_matrix;
@@ -84,32 +111,32 @@ void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLflo
             normal_matrix[i][j] = aux[i][j];
 
     // Bind Normal MAtrix
-    GLuint location_normal_matrix = glGetUniformLocation( this->programHandleSoloPhong, "NormalMatrix");
+    GLuint location_normal_matrix = glGetUniformLocation( programShader, "NormalMatrix");
     if( location_normal_matrix >= 0 )
 	{
         glUniformMatrix3fv( location_normal_matrix, 1, GL_FALSE, &normal_matrix[0][0]);
 	}
 
     // Bind Model Matrix
-    GLuint location_model_matrix = glGetUniformLocation( this->programHandleSoloPhong, "ModelMatrix");
+    GLuint location_model_matrix = glGetUniformLocation( programShader, "ModelMatrix");
     if( location_model_matrix >= 0 )
 	{
 		glUniformMatrix4fv( location_model_matrix, 1, GL_FALSE, &model_matrix[0][0]);
 	}
 
-	GLuint location_Kd = glGetUniformLocation(this->programHandleSoloPhong, "Kd");
+	GLuint location_Kd = glGetUniformLocation(programShader, "Kd");
 	if (location_Kd >= 0) {
 		glUniform3fv(location_Kd, 1, &Kd[0]);
 	}
-	GLuint location_Ka = glGetUniformLocation(this->programHandleSoloPhong, "Ka");
+	GLuint location_Ka = glGetUniformLocation(programShader, "Ka");
 	if (location_Ka >= 0) {
 		glUniform3fv(location_Ka, 1, &Ka[0]);
 	}
-	GLuint location_Ks = glGetUniformLocation(this->programHandleSoloPhong, "Ks");
+	GLuint location_Ks = glGetUniformLocation(programShader, "Ks");
 	if (location_Ks >= 0) {
 		glUniform3fv(location_Ks, 1, &Ks[0]);
 	}
-	GLuint location_Shininess = glGetUniformLocation(this->programHandleSoloPhong, "Shininess");
+	GLuint location_Shininess = glGetUniformLocation(programShader, "Shininess");
 	if (location_Shininess >= 0) {
 		glUniform1fv(location_Shininess, 1, &Shininess);
 	}

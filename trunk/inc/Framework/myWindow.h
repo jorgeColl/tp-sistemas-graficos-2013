@@ -4,8 +4,9 @@
 #include "glutWindow.h"
 #include <glm/glm.hpp> 
 #include <glm/gtc/matrix_transform.hpp> 
-
+#include <string>
 #include <vector>
+#include <map>
 class Figura;
 
 #include "Superficie.h"
@@ -34,6 +35,11 @@ public:
 	virtual void OnKeyUp(int nKey, char cAscii);
 
     // Scene functions
+	void cargarTextura (std::string nombreTextura,GLuint programShader ,std::string nombreVariableUniforme);
+	// render con buffers de tangentes y texturas
+	void renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* tangent_buff, GLfloat* normal_buff,
+						   GLfloat* texture_buff,std::string nombreTextura, GLuint* index_buff, unsigned int index_buff_size, GLenum modo);
+
     // render con buffers de tangentes y texturas
 	void renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* tangent_buff, GLfloat* normal_buff,
 					   GLfloat* texture_buff, GLuint* index_buff, unsigned int index_buff_size, GLenum modo);
@@ -57,8 +63,12 @@ private:
 
     void changeObjectColor(float r, float g, float b);
     virtual void compilarPrograma(const char* nombreVertexShader, const char* nombreFragmentShader, GLuint& punteroProgramaFinal);
+    // tener en cuenta que utiliza el ShaderProgram que le pasas
+    void renderObjectCore (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
+    							 GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
+    							 glm::vec3 Ka,glm::vec3 Kd,glm::vec3 Ks,float Shininess,GLuint programShader);
     glm::mat4 view_matrix;
-
+    std::map<std::string,unsigned char*> cacheTexture;
     Superficie* mySphere;
     Superficie* myCube;
 
