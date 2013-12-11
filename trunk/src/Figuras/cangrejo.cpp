@@ -419,6 +419,7 @@ FuncionCurvaBezier TenazaInferiorCangrejo::crear_funcion () {
 // ******************************* TORSO *******************************
 TorsoCangrejo::TorsoCangrejo(myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
+	this->mi_superficie->nombreTextura="cangrejo.jpg";
 }
 TorsoCangrejo::~TorsoCangrejo() { }
 
