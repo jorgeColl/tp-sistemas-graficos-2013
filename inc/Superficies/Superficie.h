@@ -27,7 +27,7 @@ protected:
 	unsigned int texture_buffer_size;
 	unsigned int index_buffer_size;
 	GLenum modo;
-	std::string nombreTextura;
+
 
 	Animacion* mi_animacion;
 
@@ -36,6 +36,7 @@ protected:
 	};
 
 public:
+	std::string nombreTextura;
 	myWindow* window;
 	Superficie();
 	Superficie(myWindow* passed_window);
