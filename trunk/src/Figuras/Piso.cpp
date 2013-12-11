@@ -12,6 +12,7 @@ const float Piso::ANCHO = 100.0;
 
 Piso::Piso(myWindow* ventana):Figura(ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
+	this->mi_superficie->nombreTextura="piso.jpg";
 }
 Piso::~Piso() { }
 

@@ -10,7 +10,7 @@
 class Figura;
 
 #include "Superficie.h"
-
+#include <exception>
 class myWindow : public cwc::glutWindow
 {
 public:
