@@ -31,37 +31,24 @@ void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, st
 	int image_height;
 	int image_channels;
 	unsigned char* image_buffer;
-	// INTENTO FALLUTO DE AGILIZAR LAS COSAS, PERO SIGUE ANDANDO LENTO Y ADEMAS PUEDE INSTRODUCIR ALGUN ERROR
-	if(this->cacheTexture.count(nombreTextura) == 0) {
-			std::ifstream ifile(nombreTextura.c_str());
-			if (!ifile) {
-				throw("error cargar textura");
-			}
-			image_buffer = SOIL_load_image(nombreTextura.c_str(),
-			&image_witdh, &image_height, &image_channels, SOIL_LOAD_RGBA);
-			if(*image_buffer == 0){
-				throw("error cargar textura");
-			}
-			this->cacheTexture[nombreTextura]=image_buffer;
-			this->cahcheWhitdh[nombreTextura]=image_witdh;
-			this->cacheHeight[nombreTextura]=image_height;
-			this->cacheChannels[nombreTextura]=image_channels;
+	// hash que hace eficiente el programa :)
+	if(this->cacheTextureId.count(nombreTextura) == 0) {
+		std::ifstream ifile(nombreTextura.c_str());
+		if (!ifile) {
+			throw("error cargar textura");
+		}
+		image_buffer = SOIL_load_image(nombreTextura.c_str(), &image_witdh, &image_height, &image_channels, SOIL_LOAD_RGBA);
 
-			glGenTextures(1, &textureid);
-			this->cacheTextureId[nombreTextura]=textureid;
+		glGenTextures(1, &textureid);
+		glBindTexture(GL_TEXTURE_2D, textureid);
+		this->cacheTextureId[nombreTextura]=textureid;
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	}else{
-		//std::cout<<"se cargo desde cache"<<std::endl;
-		image_buffer = this->cacheTexture[nombreTextura];
-		image_witdh = this->cahcheWhitdh[nombreTextura];
-		image_height = this->cacheHeight[nombreTextura];
-		image_channels = this->cacheChannels[nombreTextura];
 		textureid = this->cacheTextureId[nombreTextura];
 	}
-	//image_buffer = SOIL_load_image(nombreTextura.c_str(),&image_witdh, &image_height, &image_channels, SOIL_LOAD_RGBA);
 	glBindTexture(GL_TEXTURE_2D, textureid);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 	// Set the Tex1 sampler uniform to refer to texture unit 0
 	int Tex1 = glGetUniformLocation(programShader, nombreVariableUniforme.c_str());
