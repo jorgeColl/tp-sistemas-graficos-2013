@@ -57,6 +57,7 @@ public:
 	void axuuu(int a, int b);
 	
 private:
+	void setDefault(GLuint programHandle);
 	glm::vec3 m_pos, m_direct;
 	std::vector<Figura*> figs;
 	bool full_screen, Cmode, subio_antes;
@@ -72,6 +73,7 @@ private:
     std::map<std::string,int>cahcheWhitdh;
     std::map<std::string,int>cacheHeight;
     std::map<std::string,int>cacheChannels;
+    std::map<std::string,int>cacheTextureId;
     Superficie* mySphere;
     Superficie* myCube;
 
