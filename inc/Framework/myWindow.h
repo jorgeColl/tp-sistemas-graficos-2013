@@ -69,6 +69,9 @@ private:
     							 glm::vec3 Ka,glm::vec3 Kd,glm::vec3 Ks,float Shininess,GLuint programShader);
     glm::mat4 view_matrix;
     std::map<std::string,unsigned char*> cacheTexture;
+    std::map<std::string,int>cahcheWhitdh;
+    std::map<std::string,int>cacheHeight;
+    std::map<std::string,int>cacheChannels;
     Superficie* mySphere;
     Superficie* myCube;
 

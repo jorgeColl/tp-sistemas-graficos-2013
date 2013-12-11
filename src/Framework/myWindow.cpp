@@ -24,27 +24,35 @@
 #include "Cubo.h"
 
 void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme) {
-
 	// Load texture file
 	unsigned int textureid;
 	int image_witdh;
 	int image_height;
 	int image_channels;
 	unsigned char* image_buffer;
-	if(this->cacheTexture.count(nombreTextura) == 0) {
+	// INTENTO FALLUTO DE AGILIZAR LAS COSAS, PERO SIGUE ANDANDO LENTO Y ADEMAS PUEDE INSTRODUCIR ALGUN ERROR
+	/*if(this->cacheTexture.count(nombreTextura) == 0) {
 			std::ifstream ifile(nombreTextura.c_str());
 			if (!ifile) {
 				throw("error cargar textura");
 			}
 			image_buffer = SOIL_load_image(nombreTextura.c_str(),
 			&image_witdh, &image_height, &image_channels, SOIL_LOAD_RGBA);
-			if(image_buffer == 0){
+			if(*image_buffer == 0){
 				throw("error cargar textura");
 			}
 			this->cacheTexture[nombreTextura]=image_buffer;
+			this->cahcheWhitdh[nombreTextura]=image_witdh;
+			this->cacheHeight[nombreTextura]=image_height;
+			this->cacheChannels[nombreTextura]=image_channels;
 	}else{
+		//std::cout<<"se cargo desde cache"<<std::endl;
 		image_buffer = this->cacheTexture[nombreTextura];
-	}
+		image_witdh = this->cahcheWhitdh[nombreTextura];
+		image_height = this->cacheHeight[nombreTextura];
+		image_channels = this->cacheChannels[nombreTextura];
+	}*/
+	image_buffer = SOIL_load_image(nombreTextura.c_str(),&image_witdh, &image_height, &image_channels, SOIL_LOAD_RGBA);
 
 	// Copy file to OpenGL
 	glActiveTexture(GL_TEXTURE0);
@@ -71,7 +79,7 @@ void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, st
 void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* tangent_buff, GLfloat* normal_buff,
 							 	GLfloat* texture_buff, std::string nombreTextura, GLuint* index_buff, unsigned int index_buff_size, GLenum modo)
 {
-	std::cout<<nombreTextura<<std::endl;
+	//std::cout<<nombreTextura<<std::endl;
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	cargarTextura(nombreTextura,this->programHandlePhongAndTexture,"Tex1");
 	glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
