@@ -11,7 +11,7 @@
 #include "figura.h"
 // parametros que definen como se muestra al pez
 #define MODELO_SIMPLE false
-#define MOSTRAR_RECORRIDOS true
+#define MOSTRAR_RECORRIDOS false
 
 // *************************** ALETA LATERAL ***************************
 class AletaPez: public Figura {
