@@ -35,7 +35,7 @@ void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, st
 	if(this->cacheTextureId.count(nombreTextura) == 0) {
 		std::ifstream ifile(nombreTextura.c_str());
 		if (!ifile) {
-			throw("error cargar textura");
+			throw std::ios_base::failure("error cargar textura");
 		}
 		image_buffer = SOIL_load_image(nombreTextura.c_str(), &image_witdh, &image_height, &image_channels, SOIL_LOAD_RGBA);
 
@@ -57,23 +57,43 @@ void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, st
 		// We indicate that Uniform Variable sampler2D "text" uses  Texture Unit 0
 		glUniform1i(Tex1, 0);
 	}else{
-		throw("error al cargar textura en myWindow, metodo cargarTextura");
+		throw std::ios_base::failure("error al cargar textura en myWindow, metodo cargarTextura");
 	}
 }
+// RENDER CON BUFFERS DE TANGENTES Y TEXTURAS Y MAPA DE NORMALES
+// PHONG RECIBIDO POR PARAMETRO
+void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
+		GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
+		std::string nombreTextura, std::string nombreTexturaNormales,
+		GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
+		glm::vec3 Ka, glm::vec3 Kd, glm::vec3 Ks, float Shininess) {
 
+}
 // RENDER CON BUFFERS DE TANGENTES Y TEXTURAS
+// PHONG CON PARAMETROS RECIBIDOS
+void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
+		GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
+		std::string nombreTextura, GLuint* index_buff,
+		unsigned int index_buff_size, GLenum modo,
+		glm::vec3 Ka, glm::vec3 Kd, glm::vec3 Ks, float Shininess)
+{
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	cargarTextura(nombreTextura, this->programHandlePhongAndTexture, "Tex1");
+	glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
+	renderObjectCore(model_matrix, vertex_buff, normal_buff, index_buff,index_buff_size, modo, Ka, Kd, Ks, Shininess,this->programHandlePhongAndTexture);
+}
+// RENDER CON BUFFERS DE TANGENTES Y TEXTURAS
+// PHONG DEFAULT
 void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* tangent_buff, GLfloat* normal_buff,
 							 	GLfloat* texture_buff, std::string nombreTextura, GLuint* index_buff, unsigned int index_buff_size, GLenum modo)
 {
-	//std::cout<<nombreTextura<<std::endl;
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	cargarTextura(nombreTextura,this->programHandlePhongAndTexture,"Tex1");
-	glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
+
 	glm::vec3 Ka = glm::vec3(0.5,0.5,0.5);
 	glm::vec3 Kd = glm::vec3(0.5,0.5,0.5);
 	glm::vec3 Ks = glm::vec3(0.5,0.5,0.5);
 	float Shininess = 20.0;
-	renderObjectCore(model_matrix, vertex_buff, normal_buff, index_buff, index_buff_size,modo,Ka,Kd,Ks,Shininess,this->programHandlePhongAndTexture);
+	renderObject(model_matrix,vertex_buff,tangent_buff,normal_buff,texture_buff,nombreTextura,index_buff,index_buff_size,modo,Ka,Kd,Ks,Shininess);
+
 }
 
 // RENDER SIN BUFFERS DE TANGENTES Y TEXTURAS

@@ -34,25 +34,42 @@ public:
 
 	virtual void OnKeyUp(int nKey, char cAscii);
 
-    // Scene functions
-	void cargarTextura (std::string nombreTextura,GLuint programShader ,std::string nombreVariableUniforme);
+	// Scene functions
+	void cargarTextura(std::string nombreTextura, GLuint programShader,
+			std::string nombreVariableUniforme);
 	// render con buffers de tangentes y texturas
-	void renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* tangent_buff, GLfloat* normal_buff,
-						   GLfloat* texture_buff,std::string nombreTextura, GLuint* index_buff, unsigned int index_buff_size, GLenum modo);
+	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
+			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
+			std::string nombreTextura, GLuint* index_buff,
+			unsigned int index_buff_size, GLenum modo);
 
-    // render con buffers de tangentes y texturas
-	void renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* tangent_buff, GLfloat* normal_buff,
-					   GLfloat* texture_buff, GLuint* index_buff, unsigned int index_buff_size, GLenum modo);
-	
+	// render con buffers de tangentes y texturas
+	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
+			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
+			GLuint* index_buff, unsigned int index_buff_size, GLenum modo);
+
 	// render sin buffers de tangentes y texturas
-	void renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
-					   GLuint* index_buff, unsigned int index_buff_size, GLenum modo);
-	
+	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
+			GLfloat* normal_buff, GLuint* index_buff,
+			unsigned int index_buff_size, GLenum modo);
+
 	// renderObject que recibe parametros del material (Ka Kd Ks Shininess)
-	void renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
-								 GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
-								 glm::vec3 Ka,glm::vec3 Kd,glm::vec3 Ks,float Shininess);
-	
+	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
+			GLfloat* normal_buff, GLuint* index_buff,
+			unsigned int index_buff_size, GLenum modo, glm::vec3 Ka,
+			glm::vec3 Kd, glm::vec3 Ks, float Shininess);
+	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
+			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
+			std::string nombreTextura, GLuint* index_buff,
+			unsigned int index_buff_size, GLenum modo, glm::vec3 Ka,
+			glm::vec3 Kd, glm::vec3 Ks, float Shininess);
+
+	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
+			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
+			std::string nombreTextura, std::string nombreTexturaNormales,
+			GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
+			glm::vec3 Ka, glm::vec3 Kd, glm::vec3 Ks, float Shininess);
+
 	virtual void agregar_figura(Figura* fig);
 	void axuuu(int a, int b);
 	
