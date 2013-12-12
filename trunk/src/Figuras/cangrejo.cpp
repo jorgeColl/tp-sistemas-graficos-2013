@@ -42,6 +42,7 @@ void PataCangrejo::renderizar(glm::mat4 model_matrix) {
 // ********************** PRIMERA PARTE DE LA PATA *********************
 PataMusloCangrejo::PataMusloCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
+	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 }
 PataMusloCangrejo::~PataMusloCangrejo() { }
 
@@ -76,6 +77,7 @@ FuncionCurvaBezier PataMusloCangrejo::crear_funcion () {
 // ********************** SEGUNDA PARTE DE LA PATA *********************
 PataGemeloCangrejo::PataGemeloCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
+	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 }
 PataGemeloCangrejo::~PataGemeloCangrejo() { }
 
@@ -110,6 +112,7 @@ FuncionCurvaBezier PataGemeloCangrejo::crear_funcion () {
 // ********************** TERCERA PARTE DE LA PATA *********************
 PataPieCangrejo::PataPieCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
+	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 }
 PataPieCangrejo::~PataPieCangrejo() { }
 
@@ -256,6 +259,7 @@ void BrazoCangrejo::set_angulos ( float ang_braz2_X, float ang_braz2_Z, float an
 // *********************** PRIMERA PARTE DEL BRAZO *********************
 AntebrazoCangrejo::AntebrazoCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
+	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 }
 AntebrazoCangrejo::~AntebrazoCangrejo() { }
 
@@ -291,6 +295,7 @@ FuncionCurvaBezier AntebrazoCangrejo::crear_funcion () {
 // *********************** SEGUNDA PARTE DEL BRAZO *********************
 BrazoMedioCangrejo::BrazoMedioCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
+	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 }
 BrazoMedioCangrejo::~BrazoMedioCangrejo() { }
 
@@ -322,6 +327,7 @@ float BrazoMedioCangrejo::obtener_valor_final_funcion() {
 // ****************** TERCERA PARTE SUPERIOR DEL BRAZO *****************
 TenazaSuperiorCangrejo::TenazaSuperiorCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
+	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 }
 TenazaSuperiorCangrejo::~TenazaSuperiorCangrejo() { }
 
@@ -373,6 +379,7 @@ FuncionCurvaBezier TenazaSuperiorCangrejo::crear_funcion () {
 // ****************** TERCERA PARTE INFERIOR DEL BRAZO *****************
 TenazaInferiorCangrejo::TenazaInferiorCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
+	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 }
 TenazaInferiorCangrejo::~TenazaInferiorCangrejo() { }
 
@@ -419,7 +426,7 @@ FuncionCurvaBezier TenazaInferiorCangrejo::crear_funcion () {
 // ******************************* TORSO *******************************
 TorsoCangrejo::TorsoCangrejo(myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
-	this->mi_superficie->nombreTextura="cangrejo.jpg";
+	this->mi_superficie->nombreTextura="cangrejoTorso.jpg";
 }
 TorsoCangrejo::~TorsoCangrejo() { }
 
@@ -438,7 +445,7 @@ int TorsoCangrejo::obtener_pasos_trayectoria () {
 	return 85;
 }
 int TorsoCangrejo::obtener_pasos_seccion () {
-	return 100;
+	return 150;
 }
 FuncionCurvaBezier TorsoCangrejo::crear_funcion () {
 	std::vector<glm::vec3> puntos;

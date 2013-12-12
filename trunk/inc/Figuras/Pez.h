@@ -75,7 +75,7 @@ class Ojo: public Figura {
 public:
 	Ojo(myWindow* ventana);
 	~Ojo();
-	virtual void renderizar(glm::mat4 model_matrix);
+	virtual Superficie* crear_superficie (myWindow* ventana);
 };
 
 // ******************************** PEZ ********************************

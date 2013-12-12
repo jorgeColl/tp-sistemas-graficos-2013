@@ -165,11 +165,14 @@ FuncionCurvaBezier AletaDorsal::crear_funcion () {
 }
 
 // ******************************** Ojo********************************
-Ojo::Ojo(myWindow* ventana):Figura(ventana) { }
+Ojo::Ojo(myWindow* ventana):Figura(ventana) {
+	this->mi_superficie = this->crear_superficie (ventana);
+	this->mi_superficie->nombreTextura="ojoPez.jpg";
+}
 Ojo::~Ojo() { }
-void Ojo::renderizar(glm::mat4 model_matrix) {
-	model_matrix = glm::scale(model_matrix, glm::vec3(0.1f,0.1f,0.1f));
-	this->mySphere->render(model_matrix);
+
+Superficie* Ojo::crear_superficie (myWindow* ventana) {
+	return (new Esfera (ventana, 0.1, 32, 32));
 }
 
 // ******************************** PEZ ********************************
@@ -205,34 +208,38 @@ void Pez::renderizar(glm::mat4 model_matrix) {
 	// ############################ FIN DE PARTE COMPLICADA ##########################
 	model_matrix = glm::rotate(model_matrix,90.0f,glm::vec3(0,0,1));
 	model_matrix = glm::rotate(model_matrix,90.0f,glm::vec3(1,0,0));
+	
 	if (!MODELO_SIMPLE) {
+		model_temp = glm::translate(model_matrix,glm::vec3(0.15f,0,0.3f));
+		model_temp = glm::translate(model_temp,glm::vec3(0,0,0.5));
+		model_temp = glm::rotate(model_temp,-angAleta,glm::vec3(0,1,0));
+		model_temp = glm::translate(model_temp,glm::vec3(0,0,-0.5));
+		aleta1.renderizar(model_temp);
 
-	model_temp = glm::translate(model_matrix,glm::vec3(0.15f,0,0.3f));
-	model_temp = glm::translate(model_temp,glm::vec3(0,0,0.5));
-	model_temp = glm::rotate(model_temp,-angAleta,glm::vec3(0,1,0));
-	model_temp = glm::translate(model_temp,glm::vec3(0,0,-0.5));
-	aleta1.renderizar(model_temp);
+		model_temp = glm::translate(model_matrix,glm::vec3(-0.15f,0,0.3f));
+		model_temp = glm::translate(model_temp,glm::vec3(0,0,0.5));
+		model_temp = glm::rotate(model_temp,angAleta,glm::vec3(0,1,0));
+		model_temp = glm::translate(model_temp,glm::vec3(0,0,-0.5));
+		aleta2.renderizar(model_temp);
 
-	model_temp = glm::translate(model_matrix,glm::vec3(-0.15f,0,0.3f));
-	model_temp = glm::translate(model_temp,glm::vec3(0,0,0.5));
-	model_temp = glm::rotate(model_temp,angAleta,glm::vec3(0,1,0));
-	model_temp = glm::translate(model_temp,glm::vec3(0,0,-0.5));
-	aleta2.renderizar(model_temp);
+		model_temp = glm::translate(model_matrix, glm::vec3(0,0.8f,0));
+		aleta_dorsal.renderizar(model_temp);
 
-	model_temp = glm::translate(model_matrix, glm::vec3(0,0.8f,0));
-	aleta_dorsal.renderizar(model_temp);
+		model_temp = glm::translate(model_matrix,glm::vec3 (0,0,-1.95));
+		model_temp = glm::translate(model_temp,glm::vec3(0,0,0.5));
+		model_temp = glm::rotate(model_temp,angCola,glm::vec3(0,1,0));
+		model_temp = glm::translate(model_temp,glm::vec3(0,0,-0.5));
+		cola.renderizar(model_temp);
+		
+		// Ojos
+		model_temp = glm::translate(model_matrix,glm::vec3 (-0.1,0,1.1));
+		model_temp = glm::rotate(model_temp, 17.0f, glm::vec3 (0.0,1.0,0.0));
+		ojo1.renderizar(model_temp);
 
-	model_temp = glm::translate(model_matrix,glm::vec3 (0,0,-1.95));
-	model_temp = glm::translate(model_temp,glm::vec3(0,0,0.5));
-	model_temp = glm::rotate(model_temp,angCola,glm::vec3(0,1,0));
-	model_temp = glm::translate(model_temp,glm::vec3(0,0,-0.5));
-	cola.renderizar(model_temp);
-
-	model_temp = glm::translate(model_matrix,glm::vec3 (-0.1,0,1.1));
-	ojo1.renderizar(model_temp);
-
-	model_temp = glm::translate(model_matrix,glm::vec3 (0.1,0,1.1));
-	ojo2.renderizar(model_temp);
+		model_temp = glm::translate(model_matrix,glm::vec3 (0.1,0,1.1));
+		model_temp = glm::rotate(model_temp, -17.0f, glm::vec3 (0.0,1.0,0.0));
+		model_temp = glm::scale(model_temp,glm::vec3 (-1.0,1.0,1.0));
+		ojo2.renderizar(model_temp);
 	}
 	torso.renderizar(model_matrix);
 

@@ -37,7 +37,6 @@ protected:
 	// temporal
 	Superficie* mySphere;
 	Superficie* myCube;
-	void renderArm (glm::mat4 model_matrix);
 	
 public:
 	Figura (myWindow* ventana);
