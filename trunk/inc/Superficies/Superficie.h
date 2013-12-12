@@ -36,8 +36,13 @@ protected:
 	};
 
 public:
+	glm::vec3 ka;
+	glm::vec3 kd;
+	glm::vec3 ks;
+	float shininess;
 	std::string nombreTextura;
 	std::string nombreTexturaNormal;
+	
 	myWindow* window;
 	Superficie();
 	Superficie(myWindow* passed_window);

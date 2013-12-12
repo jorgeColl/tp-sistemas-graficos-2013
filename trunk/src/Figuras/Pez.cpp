@@ -12,6 +12,8 @@
 // ******************************* ALETA *******************************
 AletaPez::AletaPez(myWindow* ventana) :Figura(ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
+	this->mi_superficie->nombreTextura="aletaPez.jpg";
+	this->mi_superficie->nombreTexturaNormal="aletaPezNormal.jpg";
 }
 AletaPez::~AletaPez() { }
 void AletaPez::renderizar(glm::mat4 model_matrix) {
