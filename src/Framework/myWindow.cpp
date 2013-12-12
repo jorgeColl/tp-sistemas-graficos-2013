@@ -149,33 +149,33 @@ void myWindow::renderObjectCore (glm::mat4 model_matrix, GLfloat* vertex_buff, G
     if( location_normal_matrix >= 0 )
 	{
         glUniformMatrix3fv( location_normal_matrix, 1, GL_FALSE, &normal_matrix[0][0]);
-	}else {throw std::ios_base::failure("Error en Binding");}
+	}else {throw std::ios_base::failure("Error en Binding: NormalMatrix");}
 
     // Bind Model Matrix
     GLuint location_model_matrix = glGetUniformLocation( programShader, "ModelMatrix");
     if( location_model_matrix >= 0 ) {
 		glUniformMatrix4fv( location_model_matrix, 1, GL_FALSE, &model_matrix[0][0]);
-	}else {throw std::ios_base::failure("Error en Binding");}
+	}else {throw std::ios_base::failure("Error en Binding: ModelMatrix");}
 
 	GLuint location_Kd = glGetUniformLocation(programShader, "Kd");
 	if (location_Kd >= 0) {
 		glUniform3fv(location_Kd, 1, &Kd[0]);
-	}else {throw std::ios_base::failure("Error en Binding");}
+	}else {throw std::ios_base::failure("Error en Binding: Kd");}
 
 	GLuint location_Ka = glGetUniformLocation(programShader, "Ka");
 	if (location_Ka >= 0) {
 		glUniform3fv(location_Ka, 1, &Ka[0]);
-	}else {throw std::ios_base::failure("Error en Binding");}
+	}else {throw std::ios_base::failure("Error en Binding: Ka");}
 
 	GLuint location_Ks = glGetUniformLocation(programShader, "Ks");
 	if (location_Ks >= 0) {
 		glUniform3fv(location_Ks, 1, &Ks[0]);
-	}else {throw std::ios_base::failure("Error en Binding");}
+	}else {throw std::ios_base::failure("Error en Binding: Ks");}
 
 	GLuint location_Shininess = glGetUniformLocation(programShader, "Shininess");
 	if (location_Shininess >= 0) {
 		glUniform1fv(location_Shininess, 1, &Shininess);
-	}else {throw std::ios_base::failure("Error en Binding");}
+	}else {throw std::ios_base::failure("Error en Binding: Shininess");}
 
     glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
@@ -306,14 +306,14 @@ void myWindow::setDefault(GLuint programHandle){
 	    if( location_view_matrix >= 0 )
 		{
 			glUniformMatrix4fv( location_view_matrix, 1, GL_FALSE, &view_matrix[0][0]);
-		}else {throw std::ios_base::failure("Error en Binding");}
+		}else {throw std::ios_base::failure("Error en Binding: ViewMatrix");}
 
 	    // Bind Projection Matrix
 	    GLuint location_projection_matrix = glGetUniformLocation( programHandle, "ProjectionMatrix");
 	    if( location_projection_matrix >= 0 )
 		{
 			glUniformMatrix4fv( location_projection_matrix, 1, GL_FALSE, &projection_matrix[0][0]);
-		}else {throw std::ios_base::failure("Error en Binding");}
+		}else {throw std::ios_base::failure("Error en Binding: ProjectionMatrix");}
 
 	    //////////////////////////////////////
 	    // Bind Light Settings
@@ -327,23 +327,47 @@ void myWindow::setDefault(GLuint programHandle){
 	    if( location_light_position >= 0 )
 		{
 	        glUniform4fv( location_light_position, 1, &light_position[0]);
-		}else {throw std::ios_base::failure("Error en Binding");}
+		}else {throw std::ios_base::failure("Error en Binding: LightPosition");}
 
 	    GLuint Ld = glGetUniformLocation( programHandle, "Ld");
 	    if( Ld >= 0 )
 		{
 			glUniform3fv( Ld, 1, &light_intensity[0]);
-		}else {throw std::ios_base::failure("Error en Binding");}
+		}else {throw std::ios_base::failure("Error en Binding: Ld");}
 
 		GLuint location_La = glGetUniformLocation(programHandle, "La");
 		if (location_La >= 0) {
 			glUniform3fv(location_La, 1, &light_La[0]);
-		}else {throw std::ios_base::failure("Error en Binding");}
+		}else {throw std::ios_base::failure("Error en Binding: La");}
 
 		GLuint location_Ls = glGetUniformLocation(programHandle, "Ls");
 		if (location_Ls >= 0) {
 			glUniform3fv(location_Ls, 1, &light_Ls[0]);
-		}else {throw std::ios_base::failure("Error en Binding");}
+		}else {throw std::ios_base::failure("Error en Binding: Ls");}
+		
+		//////////////////////////////////////
+	    // Bind Fog Settings
+	    glm::vec3 fog_color = this->background_color;
+	    float fog_maxDist = 45.0f;
+	    float fog_minDist = 10.0f;
+	    
+	    GLuint location_fog_color = glGetUniformLocation (programHandle, "FogColor");
+	    if( location_fog_color >= 0 )
+		{
+	        glUniform3fv (location_fog_color, 1, &fog_color[0]);
+		}else {throw std::ios_base::failure("Error en Binding: FogColor");}
+
+	    GLuint location_fog_maxDist = glGetUniformLocation (programHandle, "FogMaxDist");
+	    if( location_fog_maxDist >= 0 )
+		{
+			glUniform1fv (location_fog_maxDist, 1, &fog_maxDist);
+		}else {throw std::ios_base::failure("Error en Binding: FogMaxDist");}
+		
+		GLuint location_fog_minDist = glGetUniformLocation (programHandle, "FogMinDist");
+	    if( location_fog_minDist >= 0 )
+		{
+			glUniform1fv (location_fog_minDist, 1, &fog_minDist);
+		}else {throw std::ios_base::failure("Error en Binding: FogMinDist");}
 }
 void myWindow::OnRender(void)
 {
@@ -477,14 +501,14 @@ void  myWindow::OnInit()
 {
     this->mySphere = new Esfera (this, 1.0, 32, 32);
     this->myCube = new Cubo (this);
-
-	glClearColor(0.3f, 0.3f, 0.4f, 0.0f);
+	this->background_color = glm::vec3 (0.0f, 0.2f, 0.35f);
+	glClearColor(background_color.x, background_color.y, background_color.z, 0.0f);
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_DEPTH_TEST);
 
-	compilarPrograma("VertexSoloPhong.vert","FragmentSoloPhong.frag",this->programHandleSoloPhong);
-	compilarPrograma("VertexPhong+Texture.vert", "FragmentPhong+Texture.frag",this->programHandlePhongAndTexture);
-	compilarPrograma("VertexPhong+Texture+NormalMap.vert","FragmentPhong+Texture+NormalMap.frag",this->programHandlePhongAndTextureAndNormalMap);
+	compilarPrograma("VertexSoloPhong+Fog.vert","FragmentSoloPhong+Fog.frag",this->programHandleSoloPhong);
+	compilarPrograma("VertexPhong+Texture+Fog.vert", "FragmentPhong+Texture+Fog.frag",this->programHandlePhongAndTexture);
+	compilarPrograma("VertexPhong+Texture+NormalMap+Fog.vert","FragmentPhong+Texture+NormalMap+Fog.frag",this->programHandlePhongAndTextureAndNormalMap);
 
 
 }
