@@ -13,26 +13,27 @@ void* instancia;
 
 //-----------------------------------------------------------------------------
 
-int main(void)
-{
-	myApplication*  pApp = new myApplication;
-	myWindow* myWin = new myWindow();
-	instancia = (void*)myWin;
-	
-	std::cout << "Cargando Escenario.." << std::endl;
-	Escenario escenario (myWin);
-	myWin->agregar_figura(&escenario);
-	 std::cout << "Escenario Cargado!\n" << std::endl;
-	 
-    GLenum err = glewInit();
-    if (GLEW_OK != err)
-    {
-        std::cout << "Failed to initialize GLEW!" << std::endl;
-    }
-    std::cout << "Using GLEW Version: " << glewGetString(GLEW_VERSION) << std::endl;
+int main(void) {
+	try {
+		myApplication*  pApp = new myApplication;
+		myWindow* myWin = new myWindow();
+		instancia = (void*)myWin;
 
-	pApp->run();
-	delete pApp;
+		Escenario escenario (myWin);
+		myWin->agregar_figura(&escenario);
+
+		GLenum err = glewInit();
+		if (GLEW_OK != err) {
+			std::cout << "Failed to initialize GLEW!" << std::endl;
+		}
+		std::cout << "Using GLEW Version: " << glewGetString(GLEW_VERSION) << std::endl;
+	
+		pApp->run();
+		delete pApp;
+
+	}catch (std::exception& ex) {
+		std::cout << ex.what();
+	}
 	return 0;
 }
 
