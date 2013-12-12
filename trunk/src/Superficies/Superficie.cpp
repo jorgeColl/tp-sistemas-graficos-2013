@@ -17,6 +17,7 @@ void Superficie::init () {
 	this->modo = GL_TRIANGLE_STRIP;
 	this->mi_animacion = new Animacion(SINvar);
 	this->nombreTextura="defaultTexture.jpg";
+	this->nombreTexturaNormal="";
 }
 
 Superficie::Superficie () {
@@ -29,8 +30,15 @@ Superficie::Superficie (myWindow* passed_window) {
 }
 
 void Superficie::render (glm::mat4 view_model_matrix) {
+	glm::vec3 Ka = glm::vec3(0.5, 0.5, 0.5);
+	glm::vec3 Kd = glm::vec3(0.5, 0.5, 0.5);
+	glm::vec3 Ks = glm::vec3(0.5, 0.5, 0.5);
+	float Shininess = 20.0;
 	if (this->window != NULL) {
-		if ((this->tangent_buffer != NULL) && (this->texture_buffer != NULL)) {
+		if ((this->tangent_buffer != NULL) && (texture_buffer != NULL) && nombreTexturaNormal!="") {
+			this->window->renderObject(view_model_matrix, vertex_buffer,tangent_buffer, normal_buffer,
+			texture_buffer, nombreTextura,nombreTexturaNormal,index_buffer, index_buffer_size, modo,Ka,Kd,Ks,Shininess);
+		}else if ((this->tangent_buffer != NULL) && (this->texture_buffer != NULL)) {
 			this->window->renderObject (view_model_matrix, this->vertex_buffer, this->tangent_buffer, this->normal_buffer,
 										this->texture_buffer, this->nombreTextura, this->index_buffer, this->index_buffer_size, this->modo);
 		} else {

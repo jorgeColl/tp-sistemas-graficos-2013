@@ -23,8 +23,7 @@
 #include "Esfera.h"
 #include "Cubo.h"
 
-void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme) {
-	glActiveTexture(GL_TEXTURE0);
+void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme,std::string nombreTexturaNormal="",std::string nombreVUniformeNormal="") {
 	// Load texture file
 	unsigned int textureid;
 	int image_witdh;
@@ -38,13 +37,20 @@ void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, st
 			throw std::ios_base::failure("error cargar textura");
 		}
 		image_buffer = SOIL_load_image(nombreTextura.c_str(), &image_witdh, &image_height, &image_channels, SOIL_LOAD_RGBA);
-
+		glActiveTexture(GL_TEXTURE0);
 		glGenTextures(1, &textureid);
 		glBindTexture(GL_TEXTURE_2D, textureid);
 		this->cacheTextureId[nombreTextura]=textureid;
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		if(nombreTexturaNormal!=""){
+			glActiveTexture(GL_TEXTURE1);
+			image_buffer = SOIL_load_image(nombreTexturaNormal.c_str(), &image_witdh,&image_height, &image_channels, SOIL_LOAD_RGBA);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height,0, GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		}
 	}else{
 		textureid = this->cacheTextureId[nombreTextura];
 	}
@@ -59,6 +65,17 @@ void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, st
 	}else{
 		throw std::ios_base::failure("error al cargar textura en myWindow, metodo cargarTextura");
 	}
+	if(nombreVUniformeNormal!=""){
+		// Set the Tex1 sampler uniform to refer to texture unit 0
+		int loc = glGetUniformLocation(programShader,nombreVUniformeNormal.c_str());
+
+		if (loc >= 0) {
+			// We indicate that Uniform Variable sampler2D "text" uses  Texture Unit 0
+			glUniform1i(loc, 1);
+		}else{
+			throw std::ios_base::failure("error al cargar textura en myWindow, metodo cargarTextura");
+		}
+	}
 }
 // RENDER CON BUFFERS DE TANGENTES Y TEXTURAS Y MAPA DE NORMALES
 // PHONG RECIBIDO POR PARAMETRO
@@ -68,6 +85,10 @@ void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 		GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
 		glm::vec3 Ka, glm::vec3 Kd, glm::vec3 Ks, float Shininess) {
 
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	cargarTextura(nombreTextura, this->programHandlePhongAndTextureAndNormalMap,"Tex1",nombreTexturaNormales,"NormalMapTex");
+	glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
+	renderObjectCore(model_matrix, vertex_buff, normal_buff, index_buff,index_buff_size, modo, Ka, Kd, Ks, Shininess,this->programHandlePhongAndTexture);
 }
 // RENDER CON BUFFERS DE TANGENTES Y TEXTURAS
 // PHONG CON PARAMETROS RECIBIDOS
@@ -463,6 +484,7 @@ void  myWindow::OnInit()
 
 	compilarPrograma("VertexSoloPhong.vert","FragmentSoloPhong.frag",this->programHandleSoloPhong);
 	compilarPrograma("VertexPhong+Texture.vert", "FragmentPhong+Texture.frag",this->programHandlePhongAndTexture);
+	compilarPrograma("VertexPhong+Texture+NormalMap.vert","FragmentPhong+Texture+NormalMap.frag",this->programHandlePhongAndTextureAndNormalMap);
 
 
 }

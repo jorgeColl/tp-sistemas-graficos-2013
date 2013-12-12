@@ -37,6 +37,7 @@ protected:
 
 public:
 	std::string nombreTextura;
+	std::string nombreTexturaNormal;
 	myWindow* window;
 	Superficie();
 	Superficie(myWindow* passed_window);
