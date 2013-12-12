@@ -52,7 +52,7 @@ Curva* Piedra::crear_curva_seccion () {
 }
 
 int Piedra::obtener_pasos_trayectoria () {
-	return 50;
+	return 100;
 }
 
 int Piedra::obtener_pasos_seccion () {

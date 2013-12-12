@@ -106,12 +106,3 @@ Figura::Figura (myWindow* ventana) {
     this->myCube = new Cubo (ventana);
 }
 
-void Figura::renderArm (glm::mat4 model_matrix) {
-    this->mySphere->render(model_matrix);
-
-    model_matrix = glm::scale(model_matrix, glm::vec3 (0.6f, 0.6f, 3.0f) );
-    model_matrix = glm::translate(model_matrix , glm::vec3(0.0, 0.0, 0.5) );
-
-    this->myCube->render(model_matrix);
-}
-
