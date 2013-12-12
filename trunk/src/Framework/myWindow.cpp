@@ -72,7 +72,7 @@ void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLflo
 	glm::vec3 Ka = glm::vec3(0.5,0.5,0.5);
 	glm::vec3 Kd = glm::vec3(0.5,0.5,0.5);
 	glm::vec3 Ks = glm::vec3(0.5,0.5,0.5);
-	float Shininess = 0.1;
+	float Shininess = 20.0;
 	renderObjectCore(model_matrix, vertex_buff, normal_buff, index_buff, index_buff_size,modo,Ka,Kd,Ks,Shininess,this->programHandlePhongAndTexture);
 }
 
@@ -84,7 +84,7 @@ void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLflo
 	glm::vec3 Ka = glm::vec3(0.8,0.8,0.3);
 	glm::vec3 Kd = glm::vec3(0.8,0.8,0.3);
 	glm::vec3 Ks = glm::vec3(0.8,0.8,0.3);
-	float Shininess = 0.1;
+	float Shininess = 20.0;
 	renderObject(model_matrix,vertex_buff,normal_buff,index_buff,index_buff_size,modo,Ka,Kd,Ks,Shininess);
 }
 // RENDER SOLO PHONG RECIBIENDO PARAMETROS KA,KD,KS,SHININESS
@@ -101,13 +101,8 @@ void myWindow::renderObjectCore (glm::mat4 model_matrix, GLfloat* vertex_buff, G
 							 glm::vec3 Ka,glm::vec3 Kd,glm::vec3 Ks,float Shininess,GLuint programShader)
 {
 	setDefault(programShader);
-	// Normal Matrix
-    glm::mat3 normal_matrix = glm::mat3 ( 1.0f );
-    glm::mat4 aux = this->view_matrix * model_matrix;
-    for (int i=0; i<3; i++)
-        for (int j=0; j<3; j++)
-            normal_matrix[i][j] = aux[i][j];
-
+	
+	glm::mat3 normal_matrix = calculateNormalMatrix (model_matrix);
     // Bind Normal MAtrix
     GLuint location_normal_matrix = glGetUniformLocation( programShader, "NormalMatrix");
     if( location_normal_matrix >= 0 )
@@ -152,6 +147,22 @@ void myWindow::renderObjectCore (glm::mat4 model_matrix, GLfloat* vertex_buff, G
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
 }
+
+glm::mat3 myWindow::calculateNormalMatrix (glm::mat4 model_matrix) {
+	glm::mat4 aux = this->view_matrix * model_matrix;
+	if (glm::determinant (aux) != 0) {
+		aux = glm::inverse (aux);
+		aux = glm::transpose (aux);
+	}
+	
+	glm::mat3 normal_matrix = glm::mat3 (1.0f);
+	for (int i=0; i<3; i++)
+		for (int j=0; j<3; j++)
+			normal_matrix[i][j] = aux[i][j];
+	
+	return normal_matrix;
+}
+
 const char* loadShaderAsString(const char* file)
 {
     std::ifstream shader_file(file, std::ifstream::in);
@@ -266,7 +277,7 @@ void myWindow::setDefault(GLuint programHandle){
 	    //////////////////////////////////////
 	    // Bind Light Settings
 	    glm::vec4 light_position = glm::vec4( 8.0, 8.0, 2.0, 1.0 ); // 8.0, 8.0, 2.0, 1.0
-	    light_position = this->view_matrix * light_position;
+	    light_position = this->view_matrix * light_position; // la llevo al eye space
 	    glm::vec3 light_intensity = glm::vec3( 1.0f, 1.0f, 1.0f );
 	    glm::vec3 light_La = glm::vec3( 1.0f, 1.0f, 1.0f );
 	    glm::vec3 light_Ls = glm::vec3( 1.0f, 1.0f, 1.0f );

@@ -68,6 +68,9 @@ private:
     void renderObjectCore (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* normal_buff,
     							 GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
     							 glm::vec3 Ka,glm::vec3 Kd,glm::vec3 Ks,float Shininess,GLuint programShader);
+    
+    glm::mat3 calculateNormalMatrix (glm::mat4 model_matrix);
+    
     glm::mat4 view_matrix;
     std::map<std::string,unsigned char*> cacheTexture;
     std::map<std::string,int>cahcheWhitdh;
