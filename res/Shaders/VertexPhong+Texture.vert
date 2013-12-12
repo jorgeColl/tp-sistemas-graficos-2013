@@ -23,7 +23,7 @@ uniform mat4 ProjectionMatrix;
 
 void getEyeSpace( out vec3 norm, out vec4 position ) {
 	norm = normalize( NormalMatrix * gl_Normal);
-	position = ViewMatrix * gl_Vertex;
+	position = ViewMatrix * ModelMatrix * gl_Vertex;
 }
 
 void main() {
@@ -32,7 +32,7 @@ void main() {
 	// Get the position and normal in eye space
 	getEyeSpace(Normal_eye, Position_eye);
 	// Pasamos la posicion
-	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * gl_Vertex;
+	gl_Position = ProjectionMatrix * Position_eye;
 	// Pasamos las coordenadas de texturas a los FShaders
 	TexCoord = gl_MultiTexCoord0.xy;
 }
