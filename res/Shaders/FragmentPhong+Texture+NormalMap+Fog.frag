@@ -35,8 +35,11 @@ uniform sampler2D NormalMapTex;
 
 vec3 phongModel( vec3 norm, vec3 diffR ) {
 	vec3 r = reflect( -LightDir, norm );
-	vec3 ambient = La * Ka;
+	r = normalize (r);
+	vec3 ambient = (La/2) * Ka;
+	
 	float sDotN = max( dot(LightDir, norm), 0.0 );
+	
 	vec3 diffuse = Ld * diffR * sDotN;
 	vec3 spec = vec3(0.0);
 	if( sDotN > 0.0 )
@@ -47,6 +50,7 @@ vec3 phongModel( vec3 norm, vec3 diffR ) {
 vec3 getShadeColor () {
 	// Lookup the normal from the normal map
 	vec4 normal = texture2D (NormalMapTex, TexCoord);
+	normal = normalize (normal);
 	// The color texture is used as the diffuse reflectivity
 	vec4 texColor = texture2D (Tex1, TexCoord);
 	

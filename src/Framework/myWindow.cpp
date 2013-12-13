@@ -139,7 +139,7 @@ void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	cargarTexturaYNormal(nombreTextura, this->programHandlePhongAndTextureAndNormalMap,"Tex1",nombreTexturaNormales,"NormalMapTex");
 	glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
-	renderObjectCore(model_matrix, vertex_buff, normal_buff, index_buff,index_buff_size, modo, Ka, Kd, Ks, Shininess,this->programHandlePhongAndTexture);
+	renderObjectCore(model_matrix, vertex_buff, normal_buff, index_buff,index_buff_size, modo, Ka, Kd, Ks, Shininess,this->programHandlePhongAndTextureAndNormalMap);
 }
 // RENDER CON BUFFERS DE TANGENTES Y TEXTURAS
 // PHONG CON PARAMETROS RECIBIDOS
@@ -152,7 +152,13 @@ void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	cargarTextura(nombreTextura, this->programHandlePhongAndTexture, "Tex1");
 	glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
+	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	
 	renderObjectCore(model_matrix, vertex_buff, normal_buff, index_buff,index_buff_size, modo, Ka, Kd, Ks, Shininess,this->programHandlePhongAndTexture);
+	// ES IMPORTANTE QUE ESTO ESTE DESPUES DE RENDER OBJECT CORE
+	glEnableClientState(GL_COLOR_ARRAY);
+	glColorPointer(3, GL_FLOAT, 0, tangent_buff);
+	glDisableClientState(GL_COLOR_ARRAY);
 }
 // RENDER CON BUFFERS DE TANGENTES Y TEXTURAS
 // PHONG DEFAULT
@@ -368,10 +374,10 @@ void myWindow::setDefault(GLuint programHandle){
 
 	    //////////////////////////////////////
 	    // Bind Light Settings
-	    glm::vec4 light_position = glm::vec4( 8.0, 8.0, 2.0, 1.0 ); // 8.0, 8.0, 2.0, 1.0
+	    glm::vec4 light_position = glm::vec4( 0.0, 0.0, 15.0, 1.0 ); // 8.0, 8.0, 2.0, 1.0
 	    light_position = this->view_matrix * light_position; // la llevo al eye space
 	    glm::vec3 light_intensity = glm::vec3( 1.0f, 1.0f, 1.0f );
-	    glm::vec3 light_La = glm::vec3( 1.0f, 1.0f, 1.0f );
+	    glm::vec3 light_La = glm::vec3( 0.2f, 0.2f, 0.3f );
 	    glm::vec3 light_Ls = glm::vec3( 1.0f, 1.0f, 1.0f );
 
 	    GLuint location_light_position = glGetUniformLocation( programHandle, "LightPosition");
