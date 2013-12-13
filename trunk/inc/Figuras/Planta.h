@@ -13,21 +13,19 @@
 // ************************** HOJAS DE PLANTA **************************
 class HojaPlanta: public Figura {
 private:
-	float altura;
-	
 	void agregar_traslacion (Animacion* ani);
 	void agregar_rotacion   (Animacion* ani);
 public:
 	HojaPlanta(myWindow* ventana);
 	virtual ~HojaPlanta();
-	virtual void renderizar(glm::mat4 model_matrix);
 	virtual void animar();
+	float altura;
 protected:
 	virtual Curva* crear_curva_trayectoria ();
 	virtual Curva* crear_curva_seccion ();
 	virtual int obtener_pasos_trayectoria ();
 	virtual int obtener_pasos_seccion ();
-	virtual std::vector<glm::mat4> crear_transformaciones ();
+	virtual FuncionCurvaBezier crear_funcion ();
 };
 
 // ****************************** PLANTA *******************************
