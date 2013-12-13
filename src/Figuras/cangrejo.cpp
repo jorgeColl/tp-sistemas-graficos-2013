@@ -165,6 +165,7 @@ void CabezaCangrejo::renderizar(glm::mat4 model_matrix) {
 // ************************ PARTE DE LA CABEZA *************************
 AntenaCangrejo::AntenaCangrejo(myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
+	this->mi_superficie->nombreTextura="cangrejoAntena.jpg";
 }
 AntenaCangrejo::~AntenaCangrejo() { }
 

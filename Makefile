@@ -93,5 +93,5 @@ vexe:
 clean:
 	@echo "\nLIMPIEZA:"
 	@$(RMDIR) $(OBJDIR) $(TEMPDIR) # $(BINDIR)
-	@$(RM) *.vert *.frag $(EXENAME)
+	@$(RM) *.vert *.frag *.jpg $(EXENAME)
 	@echo "	. El repositorio ha sido limpiado exitosamente!"
