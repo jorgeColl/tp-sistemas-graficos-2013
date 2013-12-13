@@ -76,7 +76,6 @@ class AntenaCangrejo: public Figura {
 public:
 	AntenaCangrejo(myWindow* ventana);
 	~AntenaCangrejo();
-	virtual void renderizar(glm::mat4 model_matrix);
 protected:
 	virtual Curva* crear_curva_trayectoria ();
 	virtual Curva* crear_curva_seccion ();
