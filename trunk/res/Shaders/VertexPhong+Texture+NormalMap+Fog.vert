@@ -31,7 +31,7 @@ uniform mat4 ProjectionMatrix;
 
 void getEyeSpace( out vec3 norm, out vec3 tang, out vec3 position ) {
 	norm = normalize (NormalMatrix * gl_Normal);
-	tang = normalize(NormalMatrix * vec3(gl_SecondaryColor));
+	tang = normalize(NormalMatrix * vec3(gl_Color));
 	position = vec3 (ViewMatrix * ModelMatrix * gl_Vertex);
 }
 
@@ -41,7 +41,7 @@ void main() {
 	vec3 tangent_eye;
 	getEyeSpace (normal_eye, tangent_eye, Position_eye);
 	// Compute the binormal
-	vec3 binormal = normalize( cross( normal_eye, tangent_eye ) ) * gl_SecondaryColor.w;
+	vec3 binormal = normalize( cross( normal_eye, tangent_eye ) ) * gl_Color.w;
 	// Matrix for transformation to tangent space
 	mat3 toObjectLocal = mat3(	tangent_eye.x, binormal.x, normal_eye.x,
 								tangent_eye.y, binormal.y, normal_eye.y,
