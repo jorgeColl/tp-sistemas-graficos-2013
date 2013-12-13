@@ -12,7 +12,7 @@
 Piedra::Piedra(myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="roca.jpg";
-	this->mi_superficie->nombreTexturaNormal="rocaNormal.jpg";
+	//this->mi_superficie->nombreTexturaNormal="rocaNormal.jpg";
 }
 Piedra::~Piedra() { }
 

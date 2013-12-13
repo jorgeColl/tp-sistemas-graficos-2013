@@ -41,7 +41,7 @@ HojaPlanta::HojaPlanta(myWindow* ventana): Figura(ventana) {
 	this->altura = Helper::num_aleatorio (1.8, 2.7);
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="hoja.jpg";
-	this->mi_superficie->nombreTexturaNormal="hojaNormal.jpg";
+	//this->mi_superficie->nombreTexturaNormal="hojaNormal.jpg";
 	
 	Animacion* ani = new Animacion (Zvar);
 	ani->set_velocidad ( 5 * 3.1415927f / 180.0 );
