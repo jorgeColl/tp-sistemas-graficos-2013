@@ -34,43 +34,55 @@ void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, st
 	if(this->cacheTextureId.count(nombreTextura) == 0) {
 		std::ifstream ifile(nombreTextura.c_str());
 		if (!ifile) {
-			throw std::ios_base::failure("error cargar textura");
-		}
-		image_buffer = SOIL_load_image(nombreTextura.c_str(), &image_witdh, &image_height, &image_channels, SOIL_LOAD_RGBA);
+			std::cout<<"error cargar textura: "+nombreTextura<<std::endl;
+			throw std::ios_base::failure("error cargar textura"+nombreTextura); }
+
 		glActiveTexture(GL_TEXTURE0);
 		glGenTextures(1, &textureid);
 		glBindTexture(GL_TEXTURE_2D, textureid);
 		this->cacheTextureId[nombreTextura]=textureid;
+		image_buffer = SOIL_load_image(nombreTextura.c_str(), &image_witdh, &image_height, &image_channels, SOIL_LOAD_RGBA);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		if(nombreTexturaNormal!=""){
+			std::ifstream ifileer(nombreTexturaNormal.c_str());
+			if (!ifileer) {
+				std::cout<<"error cargar textura: "+nombreTexturaNormal<<std::endl;
+				throw std::ios_base::failure("error cargar textura"+nombreTexturaNormal);
+			}
 			glActiveTexture(GL_TEXTURE1);
+			//glGenTextures(1, &textureid);
+			//glBindTexture(GL_TEXTURE_2D, textureid);
+			//this->cacheTextureNormalId[nombreTexturaNormal]=textureid;
 			image_buffer = SOIL_load_image(nombreTexturaNormal.c_str(), &image_witdh,&image_height, &image_channels, SOIL_LOAD_RGBA);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height,0, GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		}
-	}else{
-		textureid = this->cacheTextureId[nombreTextura];
 	}
+	glActiveTexture(GL_TEXTURE0);
+	textureid = this->cacheTextureId[nombreTextura];
 	glBindTexture(GL_TEXTURE_2D, textureid);
 
 	// Set the Tex1 sampler uniform to refer to texture unit 0
 	int Tex1 = glGetUniformLocation(programShader, nombreVariableUniforme.c_str());
-
 	if (Tex1 >= 0) {
-		// We indicate that Uniform Variable sampler2D "text" uses  Texture Unit 0
+		// We indicate that Uniform Variable sampler2D "Tex1" uses  Texture Unit 0
 		glUniform1i(Tex1, 0);
 	}else{
 		throw std::ios_base::failure("error al cargar textura en myWindow, metodo cargarTextura");
 	}
 	if(nombreVUniformeNormal!=""){
-		// Set the Tex1 sampler uniform to refer to texture unit 0
-		int loc = glGetUniformLocation(programShader,nombreVUniformeNormal.c_str());
 
+
+		glBindTexture(GL_TEXTURE_2D, textureid);
+		glActiveTexture(GL_TEXTURE1);
+		//textureid = this->cacheTextureNormalId[nombreTexturaNormal];
+		//glBindTexture(GL_TEXTURE_2D, textureid);
+		int loc = glGetUniformLocation(programShader,nombreVUniformeNormal.c_str());
 		if (loc >= 0) {
-			// We indicate that Uniform Variable sampler2D "text" uses  Texture Unit 0
+			// We indicate that Uniform Variable sampler2D "Tex1" uses  Texture Unit 1
 			glUniform1i(loc, 1);
 		}else{
 			throw std::ios_base::failure("error al cargar textura en myWindow, metodo cargarTextura");

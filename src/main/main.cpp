@@ -32,7 +32,7 @@ int main(void) {
 		delete pApp;
 
 	}catch (std::exception& ex) {
-		std::cout << ex.what();
+		std::cout << ex.what()<<std::endl;
 	}
 	return 0;
 }

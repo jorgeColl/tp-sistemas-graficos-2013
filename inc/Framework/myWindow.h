@@ -90,11 +90,8 @@ private:
     glm::mat3 calculateNormalMatrix (glm::mat4 model_matrix);
     
     glm::mat4 view_matrix;
-    std::map<std::string,unsigned char*> cacheTexture;
-    std::map<std::string,int>cahcheWhitdh;
-    std::map<std::string,int>cacheHeight;
-    std::map<std::string,int>cacheChannels;
-    std::map<std::string,int>cacheTextureId;
+    std::map<std::string,int> cacheTextureId;
+    std::map<std::string,int> cacheTextureNormalId;
     Superficie* mySphere;
     Superficie* myCube;
 
