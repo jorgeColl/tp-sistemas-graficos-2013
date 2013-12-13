@@ -35,8 +35,8 @@ public:
 	virtual void OnKeyUp(int nKey, char cAscii);
 
 	// Scene functions
-	void cargarTextura(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme,std::string nombreTexturaNormal,std::string nombreVUniformeNormal);
-
+	void cargarTextura(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme);
+	void cargarTexturaYNormal(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme,std::string nombreTexturaNormal,std::string nombreVUniformeNormal);
 	// render con buffers de tangentes y texturas
 	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,

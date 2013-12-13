@@ -23,7 +23,9 @@
 #include "Esfera.h"
 #include "Cubo.h"
 
-void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme,std::string nombreTexturaNormal="",std::string nombreVUniformeNormal="") {
+void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme) {
+	std::string nombreTexturaNormal="";
+	std::string nombreVUniformeNormal="";
 	// Load texture file
 	unsigned int textureid;
 	int image_witdh;
@@ -45,21 +47,6 @@ void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, st
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		if(nombreTexturaNormal!=""){
-			std::ifstream ifileer(nombreTexturaNormal.c_str());
-			if (!ifileer) {
-				std::cout<<"error cargar textura: "+nombreTexturaNormal<<std::endl;
-				throw std::ios_base::failure("error cargar textura"+nombreTexturaNormal);
-			}
-			glActiveTexture(GL_TEXTURE1);
-			//glGenTextures(1, &textureid);
-			//glBindTexture(GL_TEXTURE_2D, textureid);
-			//this->cacheTextureNormalId[nombreTexturaNormal]=textureid;
-			image_buffer = SOIL_load_image(nombreTexturaNormal.c_str(), &image_witdh,&image_height, &image_channels, SOIL_LOAD_RGBA);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height,0, GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		}
 	}
 	glActiveTexture(GL_TEXTURE0);
 	textureid = this->cacheTextureId[nombreTextura];
@@ -73,19 +60,71 @@ void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, st
 	}else{
 		throw std::ios_base::failure("error al cargar textura en myWindow, metodo cargarTextura");
 	}
-	if(nombreVUniformeNormal!=""){
+
+}
+void myWindow::cargarTexturaYNormal(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme,std::string nombreTexturaNormal,std::string nombreVUniformeNormal){
+	unsigned int textureid;
+	int image_witdh;
+	int image_height;
+	int image_channels;
+	unsigned char* image_buffer;
+
+	GLuint texIDs[2];
+	if(this->cacheTextureId.count(nombreTextura) == 0){
+		glGenTextures(2, texIDs);
+		this->cacheTextureId[nombreTextura]=texIDs[0];
+		this->cacheTextureId[nombreTexturaNormal]=texIDs[1];
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texIDs[0]);
+		image_buffer = SOIL_load_image(nombreTextura.c_str(), &image_witdh,&image_height, &image_channels, SOIL_LOAD_RGBA);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height,0, GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		// Set the BrickTex sampler uniform to texture unit 0
+		int uniloc = glGetUniformLocation(programShader, nombreVariableUniforme.c_str());
+		if (uniloc >= 0){
+			glUniform1i(uniloc, 0);
+		}else{
+				throw std::ios_base::failure("error al cargar textura en myWindow, metodo cargarTextura");
+			}
+
+		// Load moss texture file
 
 
-		glBindTexture(GL_TEXTURE_2D, textureid);
+		// Copy moss texture to OpenGL
 		glActiveTexture(GL_TEXTURE1);
-		//textureid = this->cacheTextureNormalId[nombreTexturaNormal];
-		//glBindTexture(GL_TEXTURE_2D, textureid);
-		int loc = glGetUniformLocation(programShader,nombreVUniformeNormal.c_str());
-		if (loc >= 0) {
-			// We indicate that Uniform Variable sampler2D "Tex1" uses  Texture Unit 1
-			glUniform1i(loc, 1);
+		glBindTexture(GL_TEXTURE_2D, texIDs[1]);
+		image_buffer = SOIL_load_image(nombreTexturaNormal.c_str(), &image_witdh,&image_height, &image_channels, SOIL_LOAD_RGBA);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height,0, GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		// Set the MossTex sampler uniform to texture unit 1
+		uniloc = glGetUniformLocation(programShader, nombreVUniformeNormal.c_str());
+		if (uniloc >= 0){
+			glUniform1i(uniloc, 1);
 		}else{
 			throw std::ios_base::failure("error al cargar textura en myWindow, metodo cargarTextura");
+		}
+
+	}else{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, this->cacheTextureId[nombreTextura]);
+		int uniloc = glGetUniformLocation(programShader,nombreVariableUniforme.c_str());
+		if (uniloc >= 0) {
+			glUniform1i(uniloc, 0);
+		} else {
+			throw std::ios_base::failure(
+					"error al cargar textura en myWindow, metodo cargarTextura");
+		}
+
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, cacheTextureId[nombreTexturaNormal]);
+		uniloc = glGetUniformLocation(programShader, nombreVUniformeNormal.c_str());
+		if (uniloc >= 0) {
+			glUniform1i(uniloc, 1);
+		} else {
+			throw std::ios_base::failure(
+					"error al cargar textura en myWindow, metodo cargarTextura");
 		}
 	}
 }
@@ -98,7 +137,7 @@ void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 		glm::vec3 Ka, glm::vec3 Kd, glm::vec3 Ks, float Shininess) {
 
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	cargarTextura(nombreTextura, this->programHandlePhongAndTextureAndNormalMap,"Tex1",nombreTexturaNormales,"NormalMapTex");
+	cargarTexturaYNormal(nombreTextura, this->programHandlePhongAndTextureAndNormalMap,"Tex1",nombreTexturaNormales,"NormalMapTex");
 	glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
 	renderObjectCore(model_matrix, vertex_buff, normal_buff, index_buff,index_buff_size, modo, Ka, Kd, Ks, Shininess,this->programHandlePhongAndTexture);
 }
