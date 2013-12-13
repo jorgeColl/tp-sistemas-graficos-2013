@@ -52,6 +52,8 @@ FuncionCurvaBezier AletaPez::crear_funcion () {
 // ******************************* COLA ********************************
 ColaPez::ColaPez(myWindow* ventana) :Figura(ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
+	this->mi_superficie->nombreTextura="colaPez.jpg";
+	this->mi_superficie->nombreTexturaNormal="colaPezNormal.jpg";
 }
 ColaPez::~ColaPez() { }
 void ColaPez::renderizar(glm::mat4 model_matrix) {
@@ -132,6 +134,8 @@ FuncionCurvaBezier TorsoPez::crear_funcion () {
 // **************************** AletaDorsal ****************************
 AletaDorsal::AletaDorsal(myWindow* ventana): Figura(ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
+	this->mi_superficie->nombreTextura="aletaDorsalPez.jpg";
+	this->mi_superficie->nombreTexturaNormal="aletaDorsalPezNormal.jpg";
 }
 AletaDorsal::~AletaDorsal(){ }
 void AletaDorsal::renderizar(glm::mat4 model_matrix) {
