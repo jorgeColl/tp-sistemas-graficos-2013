@@ -72,6 +72,11 @@ recursos: | directorios
 	@$(CPY) $(RESDIR)/*/*.* $(BINDIR)
 	@echo "	. Los recursos han sido copiados exitosamente!"
 
+copy:
+	@$(RM) *.vert *.frag *.jpg
+	@echo "\nRECURSOS:"
+	@make recursos
+
 # Compilaciones
 $(OBJECTS): $(OBJDIR)/%.o : $(TEMPDIR)/%.cpp | directorios
 	@$(CPP) $(CFLAGS) $(OTHERFLAGS) -c $< -o $@

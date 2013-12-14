@@ -250,6 +250,41 @@ void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
+
+// RENDER CON BUFFERS DE TANGENTES Y TEXTURAS + PARAMETROS DE ANIMACION
+// PHONG CON PARAMETROS RECIBIDOS
+void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
+		GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
+		std::string nombreTextura, GLuint* index_buff,
+		unsigned int index_buff_size, GLenum modo,
+		glm::vec3 Ka, glm::vec3 Kd, glm::vec3 Ks, float Shininess,
+		float amplitud, float numeroOnda, float velocidad, float tiempo)
+{
+	// QUE BUENO QUE ES REPETIR CODIGO !!!
+	GLuint location_amplitud = glGetUniformLocation(this->programHandlePhongAndTextureAndAnimation, "Amp");
+	if (location_amplitud >= 0) {
+		glUniform1fv(location_amplitud, 1, &amplitud);
+	}else {throw std::ios_base::failure("Error en Binding: Amp");}
+	
+	GLuint location_nOnda = glGetUniformLocation(this->programHandlePhongAndTextureAndAnimation, "WaveNumber");
+	if (location_nOnda >= 0) {
+		glUniform1fv(location_nOnda, 1, &numeroOnda);
+	}else {throw std::ios_base::failure("Error en Binding: WaveNumber");}
+	
+	GLuint location_velocidad = glGetUniformLocation(this->programHandlePhongAndTextureAndAnimation, "Velocity");
+	if (location_velocidad >= 0) {
+		glUniform1fv(location_velocidad, 1, &velocidad);
+	}else {throw std::ios_base::failure("Error en Binding: Velocity");}
+	
+	GLuint location_tiempo = glGetUniformLocation(this->programHandlePhongAndTextureAndAnimation, "Time");
+	if (location_tiempo >= 0) {
+		glUniform1fv(location_tiempo, 1, &tiempo);
+	}else {throw std::ios_base::failure("Error en Binding: Time");}
+	
+	this->renderObjectTextureCore (model_matrix, vertex_buff, tangent_buff, normal_buff, texture_buff, nombreTextura, index_buff,
+								   index_buff_size, modo, Ka, Kd, Ks, Shininess, this->programHandlePhongAndTextureAndAnimation);
+}
+
 // RENDER CON BUFFERS DE TANGENTES Y TEXTURAS
 // PHONG CON PARAMETROS RECIBIDOS
 void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
@@ -258,19 +293,32 @@ void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 		unsigned int index_buff_size, GLenum modo,
 		glm::vec3 Ka, glm::vec3 Kd, glm::vec3 Ks, float Shininess)
 {
+	this->renderObjectTextureCore (model_matrix, vertex_buff, tangent_buff, normal_buff, texture_buff, nombreTextura, index_buff,
+								   index_buff_size, modo, Ka, Kd, Ks, Shininess, this->programHandlePhongAndTexture);
+}
+
+// RENDER CON BUFFERS DE TANGENTES Y TEXTURAS   --> RECIBE PROGRAM HANDLE
+// PHONG CON PARAMETROS RECIBIDOS
+void myWindow::renderObjectTextureCore(glm::mat4 model_matrix, GLfloat* vertex_buff,
+		GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
+		std::string nombreTextura, GLuint* index_buff,
+		unsigned int index_buff_size, GLenum modo,
+		glm::vec3 Ka, glm::vec3 Kd, glm::vec3 Ks, float Shininess, GLuint programShader)
+{
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 
 	glColorPointer(3, GL_FLOAT, 0, tangent_buff);
-	cargarTextura(nombreTextura, this->programHandlePhongAndTexture, "Tex1");
+	cargarTextura(nombreTextura, programShader, "Tex1");
 	glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
 	
-	renderObjectCore(model_matrix, vertex_buff, normal_buff, index_buff,index_buff_size, modo, Ka, Kd, Ks, Shininess,this->programHandlePhongAndTexture);
+	renderObjectCore(model_matrix, vertex_buff, normal_buff, index_buff,index_buff_size, modo, Ka, Kd, Ks, Shininess,programShader);
 	// ES IMPORTANTE QUE ESTO ESTE DESPUES DE RENDER OBJECT CORE
 
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
+
 // RENDER CON BUFFERS DE TANGENTES Y TEXTURAS
 // PHONG DEFAULT
 void myWindow::renderObject (glm::mat4 model_matrix, GLfloat* vertex_buff, GLfloat* tangent_buff, GLfloat* normal_buff,
@@ -677,6 +725,7 @@ void  myWindow::OnInit()
 
 	compilarPrograma("VertexSoloPhong+Fog.vert","FragmentSoloPhong+Fog.frag",this->programHandleSoloPhong);
 	compilarPrograma("VertexPhong+Texture+Fog.vert", "FragmentPhong+Texture+Fog.frag",this->programHandlePhongAndTexture);
+	compilarPrograma("VertexPhong+Texture+Fog+Animation.vert", "FragmentPhong+Texture+Fog+Animation.frag",this->programHandlePhongAndTextureAndAnimation);
 	compilarPrograma("VertexPhong+Texture+NormalMap+Fog.vert","FragmentPhong+Texture+NormalMap+Fog.frag",this->programHandlePhongAndTextureAndNormalMap);
 	compilarPrograma("VertexPhong+Texture+NormalMap+Reflexion+Fog.vert","FragmentPhong+Texture+NormalMap+Reflexion+Fog.frag",this->programHandlePhongAndTextureAndNormalMapAndReflection);
 

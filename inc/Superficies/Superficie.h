@@ -4,7 +4,6 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
-#include "Animacion.h"
 
 class myWindow;
 
@@ -27,13 +26,11 @@ protected:
 	unsigned int texture_buffer_size;
 	unsigned int index_buffer_size;
 	GLenum modo;
-
-
-	Animacion* mi_animacion;
-
-	virtual int cant_puntos_por_salto() {
-		return 1;
-	};
+	
+	// Animacion senoidal
+	bool debeAnimarse;
+	float tiempo;
+	float amplitud, numeroOnda, velocidad;
 
 public:
 	glm::vec3 ka;
@@ -48,9 +45,8 @@ public:
 	Superficie(myWindow* passed_window);
 
 	virtual void render(glm::mat4 view_model_matrix);
-
-	virtual void set_animacion(Animacion* ani);
-
+	
+	virtual void set_parametros_animacion (float _amplitud, float _numeroOnda, float _velocidad);
 	virtual void animar();
 
 	virtual ~Superficie();

@@ -12,9 +12,6 @@
 
 // ************************** HOJAS DE PLANTA **************************
 class HojaPlanta: public Figura {
-private:
-	void agregar_traslacion (Animacion* ani);
-	void agregar_rotacion   (Animacion* ani);
 public:
 	HojaPlanta(myWindow* ventana);
 	virtual ~HojaPlanta();
