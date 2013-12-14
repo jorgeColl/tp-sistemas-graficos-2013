@@ -1,7 +1,7 @@
 #include "Esfera.h"
 #include <iostream>
 
-#define PI 3.1415f
+#define PI 3.1415926f
 
 GLenum Esfera::MODO = GL_TRIANGLE_STRIP;
 

@@ -12,7 +12,6 @@
 #include <vector>
 #include <iostream>
 #include <glm/glm.hpp>
-#include "Animacion.h"
 #include "Superficie.h"
 #include "Grilla.h"
 #include "Cubo.h"

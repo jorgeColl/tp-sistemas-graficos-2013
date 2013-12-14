@@ -60,20 +60,35 @@ public:
 			unsigned int index_buff_size, GLenum modo, glm::vec3 Ka,
 			glm::vec3 Kd, glm::vec3 Ks, float Shininess);
 
+	// renderObject que recibe parametros del material (Ka Kd Ks Shininess) y Textura Y PROGRAM HANDLE
+	void renderObjectTextureCore (glm::mat4 model_matrix, GLfloat* vertex_buff,
+			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
+			std::string nombreTextura, GLuint* index_buff,
+			unsigned int index_buff_size, GLenum modo, glm::vec3 Ka,
+			glm::vec3 Kd, glm::vec3 Ks, float Shininess, GLuint programShader);
+	
 	// renderObject que recibe parametros del material (Ka Kd Ks Shininess) y Textura
 	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
 			std::string nombreTextura, GLuint* index_buff,
 			unsigned int index_buff_size, GLenum modo, glm::vec3 Ka,
 			glm::vec3 Kd, glm::vec3 Ks, float Shininess);
-
+	
+	// renderObject que recibe parametros del material (Ka Kd Ks Shininess), Textura y parametros de animacion
+	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
+			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
+			std::string nombreTextura, GLuint* index_buff,
+			unsigned int index_buff_size, GLenum modo,
+			glm::vec3 Ka, glm::vec3 Kd, glm::vec3 Ks, float Shininess,
+			float amplitud, float numeroOnda, float velocidad, float tiempo);
+	
 	// renderObject que recibe parametros del material (Ka Kd Ks Shininess), Textura y Mapa de Normales
 	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
 			std::string nombreTextura, std::string nombreTexturaNormales,
 			GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
 			glm::vec3 Ka, glm::vec3 Kd, glm::vec3 Ks, float Shininess);
-
+	
 	// renderObject que recibe parametros del material (Ka Kd Ks Shininess), Textura , Mapa de Normales y imagenes de reflexion
 	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
@@ -108,6 +123,7 @@ private:
 
     GLuint programHandleSoloPhong;
     GLuint programHandlePhongAndTexture;
+    GLuint programHandlePhongAndTextureAndAnimation;
     GLuint programHandlePhongAndTextureAndNormalMap;
     GLuint programHandlePhongAndTextureAndNormalMapAndReflection;
     GLuint vertShader;

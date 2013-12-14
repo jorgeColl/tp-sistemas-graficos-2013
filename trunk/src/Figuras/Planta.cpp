@@ -7,6 +7,8 @@
 
 #include "Planta.h"
 
+#define PI 3.1415926f
+
 // ****************************** PLANTA *******************************
 Planta::Planta(myWindow* ventana):Figura(ventana),hoja1(ventana),hoja2(ventana),hoja3(ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
@@ -43,34 +45,15 @@ HojaPlanta::HojaPlanta(myWindow* ventana): Figura(ventana) {
 	this->mi_superficie->nombreTextura="hoja.jpg";
 	//this->mi_superficie->nombreTexturaNormal="hojaNormal.jpg";
 	
-	Animacion* ani = new Animacion (Zvar);
-	ani->set_velocidad ( 5 * 3.1415927f / 180.0 );
-	this->agregar_rotacion (ani);
-	this->agregar_traslacion (ani);
-	this->mi_superficie->set_animacion (ani);
+	float amplitud = Helper::num_aleatorio (0.10, 0.15);
+	float numeroOnda = 2; // long de onda = PI
+	float velocidad = 0.1 * PI * Helper::num_aleatorio (0.0, PI / 20.0); // atenuacion * long de onda * frecuencia
+	this->mi_superficie->set_parametros_animacion (amplitud, numeroOnda, velocidad);
 }
 HojaPlanta::~HojaPlanta() { }
 
 void HojaPlanta::animar() {
 	this->mi_superficie->animar();
-}
-
-void HojaPlanta::agregar_traslacion (Animacion* ani) {
-	std::vector<glm::vec3> puntosIntensidad;
-	puntosIntensidad.push_back ( glm::vec3 (0.0, 0.0, 0.0) );
-	puntosIntensidad.push_back ( glm::vec3 (this->altura, 0.02, 0.0) );
-	FuncionCurvaBezier* intensidad = new FuncionCurvaBezier (puntosIntensidad);
-	
-	float amplitud = Helper::num_aleatorio (0.80, 1.2);
-	float frecuencia = Helper::num_aleatorio (0.5, 2.0);
-	float fase = Helper::num_aleatorio (0.0, 1.0 * 3.1415927f);
-	FuncionSeno* coeficiente = new FuncionSeno (amplitud, frecuencia, fase);
-	glm::vec3 direccionY = glm::vec3 (0.0, 1.0, 0.0);
-	ani->agregar_animacion (Traslacion, intensidad, coeficiente, direccionY);
-}
-
-void HojaPlanta::agregar_rotacion (Animacion* ani) {
-	
 }
 
 Curva* HojaPlanta::crear_curva_trayectoria () {
