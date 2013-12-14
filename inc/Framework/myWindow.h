@@ -37,18 +37,19 @@ public:
 	// Scene functions
 	void cargarTextura(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme);
 	void cargarTexturaYNormal(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme,std::string nombreTexturaNormal,std::string nombreVUniformeNormal);
-	// render con buffers de tangentes y texturas
+	void cargarTexturasReflexion(std::vector<std::string> texturas,GLuint programShader,std::string nombreVariableUniforme);
+	// render CON buffers de tangentes y texturas
 	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
 			std::string nombreTextura, GLuint* index_buff,
 			unsigned int index_buff_size, GLenum modo);
 
-	// render con buffers de tangentes y texturas
+	// render CON buffers de tangentes y texturas
 	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
 			GLuint* index_buff, unsigned int index_buff_size, GLenum modo);
 
-	// render sin buffers de tangentes y texturas
+	// render SIN buffers de tangentes y texturas
 	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 			GLfloat* normal_buff, GLuint* index_buff,
 			unsigned int index_buff_size, GLenum modo);
@@ -58,17 +59,27 @@ public:
 			GLfloat* normal_buff, GLuint* index_buff,
 			unsigned int index_buff_size, GLenum modo, glm::vec3 Ka,
 			glm::vec3 Kd, glm::vec3 Ks, float Shininess);
+
+	// renderObject que recibe parametros del material (Ka Kd Ks Shininess) y Textura
 	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
 			std::string nombreTextura, GLuint* index_buff,
 			unsigned int index_buff_size, GLenum modo, glm::vec3 Ka,
 			glm::vec3 Kd, glm::vec3 Ks, float Shininess);
 
+	// renderObject que recibe parametros del material (Ka Kd Ks Shininess), Textura y Mapa de Normales
 	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
 			std::string nombreTextura, std::string nombreTexturaNormales,
 			GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
 			glm::vec3 Ka, glm::vec3 Kd, glm::vec3 Ks, float Shininess);
+
+	// renderObject que recibe parametros del material (Ka Kd Ks Shininess), Textura , Mapa de Normales y imagenes de reflexion
+	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
+			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,
+			std::string nombreTextura, std::string nombreTexturaNormales,
+			GLuint* index_buff, unsigned int index_buff_size, GLenum modo,
+			glm::vec3 Ka, glm::vec3 Kd, glm::vec3 Ks, float Shininess,std::string negx,std::string negy,std::string negz,std::string posx,std::string posy,std::string posz);
 
 	virtual void agregar_figura(Figura* fig);
 	void axuuu(int a, int b);
@@ -98,6 +109,7 @@ private:
     GLuint programHandleSoloPhong;
     GLuint programHandlePhongAndTexture;
     GLuint programHandlePhongAndTextureAndNormalMap;
+    GLuint programHandlePhongAndTextureAndNormalMapAndReflection;
     GLuint vertShader;
     GLuint fragShader;
 };
