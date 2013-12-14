@@ -210,8 +210,8 @@ void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 	glEnableClientState(GL_COLOR_ARRAY);
 
 	glColorPointer(3, GL_FLOAT, 0, tangent_buff);
+	cargarTexturaYNormal(nombreTextura, this->programHandlePhongAndTextureAndNormalMapAndReflection,"Tex1",nombreTexturaNormales,"NormalMapTex");
 	cargarTexturasReflexion(texturas,this->programHandlePhongAndTextureAndNormalMapAndReflection,"CubeMapTex");
-	//cargarTexturaYNormal(nombreTextura, this->programHandlePhongAndTextureAndNormalMapAndReflection,"Tex1",nombreTexturaNormales,"NormalMapTex");
 	glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
 
 	float reflectionFactor = 0.5;
