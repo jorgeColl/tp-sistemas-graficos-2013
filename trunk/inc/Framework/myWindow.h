@@ -100,6 +100,7 @@ public:
 	void axuuu(int a, int b);
 	
 private:
+	bool animar;
 	glm::vec3 background_color;
 	void setDefault(GLuint programHandle);
 	glm::vec3 m_pos, m_direct;

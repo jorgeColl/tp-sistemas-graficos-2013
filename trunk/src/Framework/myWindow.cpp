@@ -496,6 +496,7 @@ myWindow::myWindow():m_pos(8.0f, 0.0f,3.0f), m_direct(1.0f,0.0f,0.0f)
     full_screen = false;
     subio_antes = false;
     Cmode = false;
+    animar=false;
     glutPassiveMotionFunc(aux);
 }
 
@@ -600,8 +601,14 @@ void myWindow::OnRender(void)
 void myWindow::agregar_figura(Figura* fig){
 	this->figs.push_back(fig);
 }
-void  myWindow::OnIdle()
-{
+
+void myWindow::OnIdle() {
+	if (animar) {
+		for (unsigned int i = 0; i < this->figs.size(); ++i) {
+			figs[i]->animar();
+		}
+		OnRender();
+	}
 }
 
 void myWindow::compilarPrograma(const char* nombreVertexShader, const char* nombreFragmentShader, GLuint& punteroProgramaFinal) {
@@ -729,7 +736,7 @@ void  myWindow::OnInit()
 	compilarPrograma("VertexPhong+Texture+NormalMap+Fog.vert","FragmentPhong+Texture+NormalMap+Fog.frag",this->programHandlePhongAndTextureAndNormalMap);
 	compilarPrograma("VertexPhong+Texture+NormalMap+Reflexion+Fog.vert","FragmentPhong+Texture+NormalMap+Reflexion+Fog.frag",this->programHandlePhongAndTextureAndNormalMapAndReflection);
 
-
+	animar=false;
 }
 
 void myWindow::OnResize(int w, int h) 
@@ -842,9 +849,12 @@ void myWindow::OnKeyDown(int nKey, char cAscii)
 		}
 		break;
 	case ('h'):
-		for(unsigned int i=0;i<this->figs.size();++i) {
-			figs[i]->animar();
+		if(animar==false){
+			animar=true;
+		}else{
+			animar=false;
 		}
+		//this->animar=-(this->animar);
 		break;
 	case ('i'):
 		this->m_pos.z+=0.5f;
