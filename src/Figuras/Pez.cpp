@@ -268,12 +268,12 @@ void Pez::set_trayecto(std::vector<glm::vec3> puntos){
 }
 void Pez::animar() {
 	if (trayecto == NULL) {
-		std::cout << "TRAYECTO NO INICIADO";
+		//std::cout << "TRAYECTO NO INICIADO";
 		return;
 	}
 
 	// ################################ PARTE COMPLICADA #############################
-	std::cout << "Cantidad de tramos: " << trayecto->cantidad_tramos() << " "<< std::endl;
+	//std::cout << "Cantidad de tramos: " << trayecto->cantidad_tramos() << " "<< std::endl;
 	glm::vec3 aN = trayecto->dameTangente(u);
 
 
@@ -305,15 +305,15 @@ void Pez::animar() {
 		}
 		//std::cout << "angulo de NUEVOX: " << angXNuevo << std::endl;
 	}
-	std::cout << "angulo de giroX: " << angX << std::endl;
+	//std::cout << "angulo de giroX: " << angX << std::endl;
 
 	// Para rotacion hacia arriba o abajo
 	glm::vec3 dist =(nueva_pos-m_pos);
 	angZ-=atan((nueva_pos.z-m_pos.z)/sqrt(glm::dot(dist,dist)));
-	std::cout << "angulo de giroZ: " << angZ << std::endl;
+	//std::cout << "angulo de giroZ: " << angZ << std::endl;
 
 	m_pos = nueva_pos;
-	std::cout << "trayecto:" << nueva_pos.x << " , " << nueva_pos.y << " , "<< nueva_pos.z << std::endl;
+	//std::cout << "trayecto:" << nueva_pos.x << " , " << nueva_pos.y << " , "<< nueva_pos.z << std::endl;
 	// #########################FIN DE  PARTE COMPLICADA #############################
 
 	// modifico angulo de giro de la COLA
