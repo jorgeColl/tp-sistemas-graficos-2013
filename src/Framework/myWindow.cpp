@@ -166,7 +166,7 @@ void myWindow::cargarTexturasReflexion(std::vector<std::string> texturas,
 
 		int uniloc = glGetUniformLocation(programShader, nombreVariableUniforme.c_str());
 		if (uniloc >= 0) {
-			glUniform1i(uniloc, 0);
+			glUniform1i(uniloc, 2);
 		} else {
 			throw std::ios_base::failure(
 					"error al cargar textura en myWindow, metodo cargarTexturasReflexion");
@@ -176,10 +176,9 @@ void myWindow::cargarTexturasReflexion(std::vector<std::string> texturas,
 
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, this->cacheTextureId[texturas[0]]);
-		int uniloc = glGetUniformLocation(programShader,
-				nombreVariableUniforme.c_str());
+		int uniloc = glGetUniformLocation(programShader, nombreVariableUniforme.c_str());
 		if (uniloc >= 0) {
-			glUniform1i(uniloc, 0);
+			glUniform1i(uniloc, 2);
 		} else {
 			throw std::ios_base::failure(
 					"error al cargar textura en myWindow, metodo cargarTexturasReflexion");
@@ -208,7 +207,7 @@ void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
-
+	
 	glColorPointer(3, GL_FLOAT, 0, tangent_buff);
 	cargarTexturaYNormal(nombreTextura, this->programHandlePhongAndTextureAndNormalMapAndReflection,"Tex1",nombreTexturaNormales,"NormalMapTex");
 	cargarTexturasReflexion(texturas,this->programHandlePhongAndTextureAndNormalMapAndReflection,"CubeMapTex");
