@@ -64,7 +64,6 @@ void myWindow::cargarTextura(std::string nombreTextura, GLuint programShader, st
 }
 
 void myWindow::cargarTexturaYNormal(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme,std::string nombreTexturaNormal,std::string nombreVUniformeNormal){
-	unsigned int textureid;
 	int image_witdh;
 	int image_height;
 	int image_channels;
@@ -88,7 +87,9 @@ void myWindow::cargarTexturaYNormal(std::string nombreTextura, GLuint programSha
 		}else{
 			std::cout<< "error al cargar textura en myWindow, metodo cargarTexturaYNormal" <<std::endl;
 			std::cout<< "No se encontro: "+nombreVariableUniforme <<std::endl;
-				throw std::ios_base::failure("error al cargar textura en myWindow, metodo cargarTextura");
+			std::cout<< "program handle: "+programShader <<std::endl;
+
+				throw std::ios_base::failure("");
 			}
 
 				// Copy moss texture to OpenGL
@@ -138,26 +139,20 @@ void myWindow::cargarTexturaYNormal(std::string nombreTextura, GLuint programSha
 void myWindow::cargarTexturasReflexion(std::vector<std::string> texturas,
 		GLuint programShader, std::string nombreVariableUniforme) {
 
-	unsigned int textureid;
-	int image_witdh;
-	int image_height;
-	int image_channels;
-	unsigned char* image_buffer;
+	glActiveTexture(GL_TEXTURE0);
 	if (this->cacheTextureId.count(texturas[0]) == 0) {
-		glActiveTexture(GL_TEXTURE2);
-		GLuint texID;
-		glGenTextures(1, &texID);
-		this->cacheTextureId[texturas[0]]=texID;
-		glBindTexture(GL_TEXTURE_CUBE_MAP, texID);
-		GLuint targets[] = {
-				GL_TEXTURE_CUBE_MAP_NEGATIVE_X,GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
-				GL_TEXTURE_CUBE_MAP_POSITIVE_X,GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_TEXTURE_CUBE_MAP_POSITIVE_Z };
-		for (int i = 0; i < 6; i++) {
-
-			image_buffer = SOIL_load_image(texturas[i].c_str(), &image_witdh,&image_height, &image_channels, SOIL_LOAD_RGBA);
-			glTexImage2D(targets[i], 0, GL_RGBA, image_witdh, image_height,0, GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
+		GLuint tex_cube = SOIL_load_OGL_cubemap(texturas[0].c_str(),
+				texturas[1].c_str(), texturas[2].c_str(), texturas[3].c_str(),
+				texturas[4].c_str(), texturas[5].c_str(), SOIL_LOAD_RGB,
+				SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
+		if(tex_cube==0){
+			std::cout<<"ERROR CARGA DE CUBEMAP"<<std::endl;
 		}
-		// Typical cube map settings
+		this->cacheTextureId[texturas[0]] = tex_cube;
+
+	}else{
+		glBindTexture(GL_TEXTURE_CUBE_MAP, this->cacheTextureId[texturas[0]]);
+
 		glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -166,19 +161,7 @@ void myWindow::cargarTexturasReflexion(std::vector<std::string> texturas,
 
 		int uniloc = glGetUniformLocation(programShader, nombreVariableUniforme.c_str());
 		if (uniloc >= 0) {
-			glUniform1i(uniloc, 2);
-		} else {
-			throw std::ios_base::failure(
-					"error al cargar textura en myWindow, metodo cargarTexturasReflexion");
-		}
-
-	}else{
-
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, this->cacheTextureId[texturas[0]]);
-		int uniloc = glGetUniformLocation(programShader, nombreVariableUniforme.c_str());
-		if (uniloc >= 0) {
-			glUniform1i(uniloc, 2);
+			glUniform1i(uniloc, 0);
 		} else {
 			throw std::ios_base::failure(
 					"error al cargar textura en myWindow, metodo cargarTexturasReflexion");
@@ -207,9 +190,11 @@ void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
+	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+	glEnable(GL_SAMPLER_CUBE_MAP_ARRAY);
 	
 	glColorPointer(3, GL_FLOAT, 0, tangent_buff);
-	cargarTexturaYNormal(nombreTextura, this->programHandlePhongAndTextureAndNormalMapAndReflection,"Tex1",nombreTexturaNormales,"NormalMapTex");
+	//cargarTexturaYNormal(nombreTextura, this->programHandlePhongAndTextureAndNormalMapAndReflection,"Tex1",nombreTexturaNormales,"NormalMapTex");
 	cargarTexturasReflexion(texturas,this->programHandlePhongAndTextureAndNormalMapAndReflection,"CubeMapTex");
 	glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
 
@@ -221,7 +206,7 @@ void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 
 	GLuint location_WorldCameraPosition = glGetUniformLocation(this->programHandlePhongAndTextureAndNormalMapAndReflection, "WorldCameraPosition");
 	if (location_WorldCameraPosition >= 0) {
-		glUniform3fv(location_WorldCameraPosition, 1, &this->m_pos[0]);
+		glUniform3fv(location_WorldCameraPosition, 1, &this->m_direct[0]);
 	}else {throw std::ios_base::failure("Error en Binding: reflectionFactor");}
 
 
@@ -486,6 +471,11 @@ void aux (int a, int b) {
 myWindow::~myWindow() {
 	delete this->mySphere;
 	delete this->myCube;
+	glDeleteProgram (this->programHandlePhongAndTexture);
+	glDeleteProgram (this->programHandlePhongAndTextureAndAnimation);
+	glDeleteProgram (this->programHandlePhongAndTextureAndNormalMap);
+	glDeleteProgram (this->programHandlePhongAndTextureAndNormalMapAndReflection);
+	glDeleteProgram (this->programHandleSoloPhong);
 }
 
 myWindow::myWindow():m_pos(8.0f, 0.0f,3.0f), m_direct(1.0f,0.0f,0.0f)
@@ -714,6 +704,8 @@ void myWindow::compilarPrograma(const char* nombreVertexShader, const char* nomb
 				}
 			} else {
 				glUseProgram(punteroProgramaFinal);
+				long num = punteroProgramaFinal;
+				std::cout << "Numero Recibido: "+ num << std::endl;
 			}
 		}
 	}
@@ -729,7 +721,7 @@ void  myWindow::OnInit()
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_DEPTH_TEST);
 
-	compilarPrograma("VertexSoloPhong+Fog.vert","FragmentSoloPhong+Fog.frag",this->programHandleSoloPhong);
+	compilarPrograma("VertexPhong+Fog.vert","FragmentPhong+Fog.frag",this->programHandleSoloPhong);
 	compilarPrograma("VertexPhong+Texture+Fog.vert", "FragmentPhong+Texture+Fog.frag",this->programHandlePhongAndTexture);
 	compilarPrograma("VertexPhong+Texture+Fog+Animation.vert", "FragmentPhong+Texture+Fog+Animation.frag",this->programHandlePhongAndTextureAndAnimation);
 	compilarPrograma("VertexPhong+Texture+NormalMap+Fog.vert","FragmentPhong+Texture+NormalMap+Fog.frag",this->programHandlePhongAndTextureAndNormalMap);

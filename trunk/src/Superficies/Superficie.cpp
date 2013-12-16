@@ -46,12 +46,12 @@ void Superficie::render (glm::mat4 view_model_matrix) {
 		if(nombreTextura=="escamasPez.jpg"){
 			this->window->renderObject(view_model_matrix, vertex_buffer,tangent_buffer, normal_buffer,
 			texture_buffer, nombreTextura,nombreTexturaNormal,index_buffer, index_buffer_size, modo,ka,kd,ks,shininess
-			,"Peznegx.jpg",
-			"Peznegy.jpg",
-			"Peznegz.jpg",
-			"Pezposx.jpg",
-			"Pezposy.jpg",
-			"Pezposz.jpg");
+			,"Peznegx.png",
+			"Peznegy.png",
+			"Peznegz.png",
+			"Pezposx.png",
+			"Pezposy.png",
+			"Pezposz.png");
 		}else if ((this->tangent_buffer != NULL) && (this->texture_buffer != NULL) && (this->debeAnimarse)) {
 			// superficie con textura y animacion senoidal
 			this->window->renderObject (view_model_matrix, vertex_buffer, tangent_buffer, normal_buffer, texture_buffer, nombreTextura,

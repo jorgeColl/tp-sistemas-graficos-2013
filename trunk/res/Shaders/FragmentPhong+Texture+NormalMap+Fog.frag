@@ -36,8 +36,7 @@ uniform sampler2D NormalMapTex;
 vec3 phongModel( vec3 norm, vec3 diffR ) {
 	vec3 r = reflect( -LightDir, norm );
 	r = normalize (r);
-	vec3 ambient = (La/2) * Ka;
-	
+	vec3 ambient = La * Ka;
 	float sDotN = max( dot(LightDir, norm), 0.0 );
 	
 	vec3 diffuse = Ld * diffR * sDotN;
