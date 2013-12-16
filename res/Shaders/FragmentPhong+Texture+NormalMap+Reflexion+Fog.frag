@@ -68,11 +68,15 @@ float getFogFactor (float positionZ) {
 }
 
 void main() {
-	float fogFactor = getFogFactor (Position_eye.z);
-	vec3 shadeColor = getShadeColor();
-	vec4 cubeMapColor = textureCube (CubeMapTex, ReflectDir);
+	//float fogFactor = getFogFactor (Position_eye.z);
+	//vec3 shadeColor = getShadeColor();
+	//vec4 cubeMapColor = textureCube (CubeMapTex, ReflectDir);
+	// PARCHE PARA QUE ANDE Y VARIE TEXTURA
+	vec4 cubeMapColor = textureCube (CubeMapTex,Position_eye );
 	
-	vec3 color = mix (FogColor, shadeColor, fogFactor);
-	color = mix (color, cubeMapColor.rgb ,ReflectFactor);
+	//vec3 color = mix (FogColor, shadeColor, fogFactor);
+	//color = mix (color, cubeMapColor.rgb ,ReflectFactor);
+	// PARCHE 2
+	vec3 color = cubeMapColor.rgb;
 	gl_FragColor = vec4(color, 1.0);
 }
