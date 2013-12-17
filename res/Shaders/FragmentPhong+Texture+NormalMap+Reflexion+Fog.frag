@@ -68,15 +68,17 @@ float getFogFactor (float positionZ) {
 }
 
 void main() {
-	//float fogFactor = getFogFactor (Position_eye.z);
-	//vec3 shadeColor = getShadeColor();
-	//vec4 cubeMapColor = textureCube (CubeMapTex, ReflectDir);
-	// PARCHE PARA QUE ANDE Y VARIE TEXTURA
-	vec4 cubeMapColor = textureCube (CubeMapTex,Position_eye );
+	float fogFactor = getFogFactor (Position_eye.z);
+	vec3 shadeColor = getShadeColor();
+	//vec3 shadeColor = vec3(0.3, 0.0, 0.0); // DESCOMENTAR ESTA LINEA PARA PROBAR REFLEXION CON MALLA DE UN SOLO COLOR
 	
-	//vec3 color = mix (FogColor, shadeColor, fogFactor);
-	//color = mix (color, cubeMapColor.rgb ,ReflectFactor);
+	// PARCHE PARA QUE ANDE Y VARIE TEXTURA
+	vec4 cubeMapColor = textureCube (CubeMapTex, ReflectDir); // me gusta mas con ReflectDir cambiaria las imagenes
+	//vec4 cubeMapColor = textureCube (CubeMapTex,Position_eye );
+	
 	// PARCHE 2
-	vec3 color = cubeMapColor.rgb;
+	float reflection = clamp (ReflectFactor, 0.0, 1.0);
+	vec3 color = mix (shadeColor, cubeMapColor.rgb, 0.15); // no me toma reflection, hardcodeo 0.15
+	color = mix (FogColor, color, fogFactor); // el fog va siempre al final
 	gl_FragColor = vec4(color, 1.0);
 }
