@@ -190,15 +190,16 @@ void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
-	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-	glEnable(GL_SAMPLER_CUBE_MAP_ARRAY);
 	
 	glColorPointer(3, GL_FLOAT, 0, tangent_buff);
 	//cargarTexturaYNormal(nombreTextura, this->programHandlePhongAndTextureAndNormalMapAndReflection,"Tex1",nombreTexturaNormales,"NormalMapTex");
+	
+	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+	glEnable(GL_SAMPLER_CUBE_MAP_ARRAY);
 	cargarTexturasReflexion(texturas,this->programHandlePhongAndTextureAndNormalMapAndReflection,"CubeMapTex");
 	glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
-
-	float reflectionFactor = 0.5;
+	
+	float reflectionFactor = 0.1;
 	GLuint location_reflectionFactor = glGetUniformLocation(this->programHandlePhongAndTextureAndNormalMapAndReflection, "ReflectFactor");
 	if (location_reflectionFactor >= 0) {
 		glUniform1fv(location_reflectionFactor, 1, &reflectionFactor);

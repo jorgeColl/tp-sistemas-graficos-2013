@@ -19,6 +19,7 @@ uniform vec3 Ka; // Ambient reflectivity (0<= ka <=1)
 uniform vec3 Kd; // Diffuse reflectivity
 uniform vec3 Ks; // Specular reflectivity ( max es (1,1,1) min es (0,0,0) )
 uniform float Shininess; // Specular shininess factor
+uniform float ReflectFactor;
 
 // PROPIEDADES DE LA NIEBLA
 uniform float FogMaxDist;
