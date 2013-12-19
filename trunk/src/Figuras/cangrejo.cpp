@@ -44,6 +44,9 @@ PataMusloCangrejo::PataMusloCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
+	
+	this->mi_superficie->ks = glm::vec3(0.35, 0.35, 0.35);
+	this->mi_superficie->shininess = 100.0;
 }
 PataMusloCangrejo::~PataMusloCangrejo() { }
 
@@ -80,6 +83,9 @@ PataGemeloCangrejo::PataGemeloCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
+	
+	this->mi_superficie->ks = glm::vec3(0.35, 0.35, 0.35);
+	this->mi_superficie->shininess = 100.0;
 }
 PataGemeloCangrejo::~PataGemeloCangrejo() { }
 
@@ -116,6 +122,9 @@ PataPieCangrejo::PataPieCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
+	
+	this->mi_superficie->ks = glm::vec3(0.35, 0.35, 0.35);
+	this->mi_superficie->shininess = 100.0;
 }
 PataPieCangrejo::~PataPieCangrejo() { }
 
@@ -167,6 +176,9 @@ AntenaCangrejo::AntenaCangrejo(myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="cangrejoAntena.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
+	
+	this->mi_superficie->ks = glm::vec3(0.35, 0.35, 0.35);
+	this->mi_superficie->shininess = 100.0;
 }
 AntenaCangrejo::~AntenaCangrejo() { }
 
@@ -261,6 +273,9 @@ AntebrazoCangrejo::AntebrazoCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
+	
+	this->mi_superficie->ks = glm::vec3(0.35, 0.35, 0.35);
+	this->mi_superficie->shininess = 100.0;
 }
 AntebrazoCangrejo::~AntebrazoCangrejo() { }
 
@@ -298,6 +313,9 @@ BrazoMedioCangrejo::BrazoMedioCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
+	
+	this->mi_superficie->ks = glm::vec3(0.35, 0.35, 0.35);
+	this->mi_superficie->shininess = 100.0;
 }
 BrazoMedioCangrejo::~BrazoMedioCangrejo() { }
 
@@ -331,6 +349,9 @@ TenazaSuperiorCangrejo::TenazaSuperiorCangrejo (myWindow* ventana) : Figura (ven
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
+	
+	this->mi_superficie->ks = glm::vec3(0.25, 0.25, 0.25);
+	this->mi_superficie->shininess = 100.0;
 }
 TenazaSuperiorCangrejo::~TenazaSuperiorCangrejo() { }
 
@@ -384,6 +405,9 @@ TenazaInferiorCangrejo::TenazaInferiorCangrejo (myWindow* ventana) : Figura (ven
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
+	
+	this->mi_superficie->ks = glm::vec3(0.25, 0.25, 0.25);
+	this->mi_superficie->shininess = 100.0;
 }
 TenazaInferiorCangrejo::~TenazaInferiorCangrejo() { }
 
@@ -432,6 +456,11 @@ TorsoCangrejo::TorsoCangrejo(myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="cangrejoTorso.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoTorsoNormal.jpg";
+	
+	//this->ka = glm::vec3(0.5, 0.5, 0.5);
+	//this->kd = glm::vec3(0.5, 0.5, 0.5);
+	this->mi_superficie->ks = glm::vec3(0.35, 0.35, 0.35);
+	this->mi_superficie->shininess = 100.0;
 }
 TorsoCangrejo::~TorsoCangrejo() { }
 

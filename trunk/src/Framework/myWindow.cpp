@@ -170,7 +170,7 @@ void myWindow::cargarTexturasReflexion(std::vector<std::string> texturas,
 
 }
 
-void myWindow::cargarTexturaYNormalParaReflexion(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme,std::string nombreTexturaNormal,std::string nombreVUniformeNormal, GLfloat* texture_buff){
+void myWindow::cargarTexturaYNormalParaReflexion(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme,std::string nombreTexturaNormal,std::string nombreVUniformeNormal){
 	int image_witdh;
 	int image_height;
 	int image_channels;
@@ -198,10 +198,6 @@ void myWindow::cargarTexturaYNormalParaReflexion(std::string nombreTextura, GLui
 			std::cout<< "program handle: " << programShader <<std::endl;
 			throw std::ios_base::failure("");
 		}
-		// cargo los u,v para la texture unit 1
-		//~ glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		//~ glClientActiveTexture(GL_TEXTURE1);
-		//~ glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
 		
 		// Copy normal texture to OpenGL
 		glActiveTexture(GL_TEXTURE2);
@@ -234,10 +230,6 @@ void myWindow::cargarTexturaYNormalParaReflexion(std::string nombreTextura, GLui
 			throw std::ios_base::failure(
 					"error al cargar textura en myWindow, metodo cargarTexturaYNormalParaReflexion");
 		}
-		// cargo los u,v para la texture unit 1
-		//~ glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		//~ glClientActiveTexture(GL_TEXTURE1);
-		//~ glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
 		
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, cacheTextureId[nombreTexturaNormal]);
@@ -280,7 +272,7 @@ void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 	
 	glEnableClientState(GL_COLOR_ARRAY);
 	glColorPointer(3, GL_FLOAT, 0, tangent_buff);
-	cargarTexturaYNormalParaReflexion(nombreTextura, this->programHandlePhongAndTextureAndNormalMapAndReflection,"Tex1",nombreTexturaNormales,"NormalMapTex", texture_buff);
+	cargarTexturaYNormalParaReflexion(nombreTextura, this->programHandlePhongAndTextureAndNormalMapAndReflection,"Tex1",nombreTexturaNormales,"NormalMapTex");
 	
 	float reflectionFactor = 0.1;
 	GLuint location_reflectionFactor = glGetUniformLocation(this->programHandlePhongAndTextureAndNormalMapAndReflection, "ReflectFactor");
@@ -301,7 +293,6 @@ void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 	renderObjectCore(model_matrix, vertex_buff, normal_buff, index_buff,index_buff_size, modo, Ka, Kd, Ks, Shininess,this->programHandlePhongAndTextureAndNormalMapAndReflection);
 
 	glDisableClientState(GL_COLOR_ARRAY);
-	//~ glClientActiveTexture(GL_TEXTURE1); // deshabilito el array en la unit 1
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 // RENDER CON BUFFERS DE TANGENTES Y TEXTURAS Y MAPA DE NORMALES
