@@ -15,6 +15,8 @@ Piso::Piso(myWindow* ventana):Figura(ventana) {
 	this->mi_superficie->nombreTextura="piso.jpg";
 	//this->mi_superficie->nombreTexturaNormal="pisoNormal.jpg";
 	
+	this->mi_superficie->ka = glm::vec3(0.5, 0.5, 0.5);
+	this->mi_superficie->kd = glm::vec3(0.5, 0.5, 0.5);
 	this->mi_superficie->ks = glm::vec3(0.25, 0.25, 0.25);
 	this->mi_superficie->shininess = 100.0;
 }

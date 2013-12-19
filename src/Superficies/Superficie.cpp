@@ -16,8 +16,8 @@ void Superficie::init () {
 	this->index_buffer_size = 0;
 	this->modo = GL_TRIANGLE_STRIP;
 	
-	this->ka = glm::vec3(0.5, 0.5, 0.5);
-	this->kd = glm::vec3(0.5, 0.5, 0.5);
+	this->ka = glm::vec3(0.8, 0.8, 0.8);
+	this->kd = glm::vec3(0.6, 0.6, 0.6);
 	this->ks = glm::vec3(0.5, 0.5, 0.5);
 	this->shininess = 20.0;
 	this->nombreTextura="defaultTexture.jpg";

@@ -16,7 +16,6 @@ class Curva {
 		
 		/* Metodos */
 		void init (glm::vec3 centro, glm::vec3 orientacion);
-		void redondear_valor (float& valor);
 		
 		enum OrdenBase {
 			Cero, PrimeraDerivada, SegundaDerivada

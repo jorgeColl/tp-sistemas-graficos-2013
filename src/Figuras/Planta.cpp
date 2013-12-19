@@ -45,6 +45,12 @@ HojaPlanta::HojaPlanta(myWindow* ventana): Figura(ventana) {
 	this->mi_superficie->nombreTextura="hoja.jpg";
 	//this->mi_superficie->nombreTexturaNormal="hojaNormal.jpg";
 	
+	this->mi_superficie->ka = glm::vec3(0.8, 0.8, 1.0);
+	this->mi_superficie->kd = glm::vec3(0.8, 0.8, 0.8);
+	this->mi_superficie->ks = glm::vec3(0.3, 0.3, 0.3);
+	this->mi_superficie->shininess = 35.0;
+	
+	
 	float amplitud = Helper::num_aleatorio (0.10, 0.15);
 	float numeroOnda = 2; // long de onda = PI
 	float velocidad = 0.1 * PI * Helper::num_aleatorio (0.0, PI / 20.0); // atenuacion * long de onda * frecuencia
@@ -78,6 +84,6 @@ FuncionCurvaBezier HojaPlanta::crear_funcion () {
 	std::vector<glm::vec3> puntos;
 	puntos.push_back ( glm::vec3 (0.0, 0.15, 0.0) );
 	puntos.push_back ( glm::vec3 (0.5 * this->obtener_pasos_trayectoria(), 1.0, 0.0) );
-	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.0, 0.0) );
+	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.005, 0.0) );
 	return (FuncionCurvaBezier(puntos));
 }

@@ -49,8 +49,26 @@ glm::vec3 CurvaBSpline::dameTangente (float u) {
 	return (this->dameVectorDeTramo (u, Tangente));
 }
 
-glm::vec3 CurvaBSpline::dameNormal   (float u) {
-	return (this->dameVectorDeTramo (u, Normal));
+glm::vec3 CurvaBSpline::dameNormal (float u) {
+	glm::vec3 normal = this->dameVectorDeTramo (u, Normal);
+	
+	bool fin = false;
+	float param = float(int(u));
+	int vueltas = 1;
+	float sentido = 1.0;
+	while ((Helper::is_zero(normal)) && (!fin)) {
+		try {
+			normal = this->dameVectorDeTramo (param + sentido * vueltas, Normal);
+			++vueltas;
+		} catch (std::exception error) {
+			if (sentido == 1.0) {
+				param -= 0.001;
+				vueltas = 1.0;
+				sentido = -1.0;
+			} else fin = true;
+		}
+	}
+	return normal;
 }
 
 glm::vec3 CurvaBSpline::dameBinormal (float u) {

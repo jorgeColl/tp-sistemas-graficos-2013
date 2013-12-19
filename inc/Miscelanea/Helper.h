@@ -26,4 +26,6 @@ class  Helper {
 		static float coef_binomial (int n, int i);
 		static float num_aleatorio (float lim_inf, float lim_sup);
 		static bool is_nan (glm::vec3 vector);
+		static bool is_zero (glm::vec3 vector);
+		static void redondear_valor (float& valor);
 };
