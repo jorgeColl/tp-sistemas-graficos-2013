@@ -59,6 +59,16 @@ void SuperficieBarrido::inicializarNulo () {
 	this->index_buffer = new GLuint[this->index_buffer_size];
 }
 
+glm::vec3 SuperficieBarrido::calcular_normal (float v, glm::vec3 normalAnterior) {
+	glm::vec3 normal = this->seccion->dameNormal (v);
+	glm::vec3 resultado = normal + normalAnterior;
+	Helper::redondear_valor (resultado.x);
+	Helper::redondear_valor (resultado.y);
+	Helper::redondear_valor (resultado.z);
+	if ((Helper::is_zero(resultado)) && (!(Helper::is_zero(normal)))) return (-normal);
+	return normal;
+}
+
 void SuperficieBarrido::crear_puntos () {
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> tangentes;
@@ -67,6 +77,7 @@ void SuperficieBarrido::crear_puntos () {
 	std::vector<unsigned int> indices;
 	std::list<unsigned int> indices_seccion;
 	
+	glm::vec3 normalAnterior(0.0,0.0,0.0);
 	for (unsigned int i = 0; i <= this->pasos_trayectoria ; i++) {
 		float ui = this->preparar_seccion (i);
 		
@@ -75,7 +86,11 @@ void SuperficieBarrido::crear_puntos () {
 			float v = vi * this->seccion->cantidad_tramos();
 			vertices.push_back  (this->seccion->damePunto (v));
 			tangentes.push_back (this->seccion->dameTangente (v));
-			normales.push_back  (this->seccion->dameNormal (v));
+			
+			glm::vec3 normal = this->calcular_normal (v, normalAnterior);
+			normalAnterior = normal;
+			normales.push_back  (normal);
+			
 			textura.push_back (glm::vec2 (ui,vi));
 			this->cargar_indices (i, j, &indices_seccion, &indices);
 		}

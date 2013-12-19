@@ -603,10 +603,10 @@ void myWindow::setDefault(GLuint programHandle){
 
 	    //////////////////////////////////////
 	    // Bind Light Settings
-	    glm::vec4 light_position = glm::vec4( 0.0, 0.0, 15.0, 1.0 ); // 8.0, 8.0, 2.0, 1.0
+	    glm::vec4 light_position = glm::vec4( 0.0, 0.0, 12.5, 1.0 ); // 8.0, 8.0, 2.0, 1.0
 	    light_position = this->view_matrix * light_position; // la llevo al eye space
-	    glm::vec3 light_intensity = glm::vec3( 1.0f, 1.0f, 1.0f );
-	    glm::vec3 light_La = glm::vec3( 0.2f, 0.2f, 0.3f );
+	    glm::vec3 light_intensity = glm::vec3 (1.0f, 1.0f, 1.0f);
+	    glm::vec3 light_La = glm::vec3( 0.1f, 0.15f, 0.25f );
 	    glm::vec3 light_Ls = glm::vec3( 1.0f, 1.0f, 1.0f );
 
 	    GLuint location_light_position = glGetUniformLocation( programHandle, "LightPosition");
@@ -796,7 +796,7 @@ void  myWindow::OnInit()
 {
     this->mySphere = new Esfera (this, 1.0, 32, 32);
     this->myCube = new Cubo (this);
-	this->background_color = glm::vec3 (0.0f, 0.2f, 0.35f);
+	this->background_color = glm::vec3 (0.0f, 0.15f, 0.3f);
 	glClearColor(background_color.x, background_color.y, background_color.z, 0.0f);
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_DEPTH_TEST);

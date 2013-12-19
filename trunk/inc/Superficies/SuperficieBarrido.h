@@ -13,7 +13,7 @@
 #include "CurvaBSpline.h"
 #include "Superficie.h"
 #include "Funcion.h"
-
+#include "Helper.h"
 
 class SuperficieBarrido : public Superficie {
 	
@@ -30,6 +30,7 @@ class SuperficieBarrido : public Superficie {
 		void inicializarNulo();
 		void crear_puntos();
 		float preparar_seccion (unsigned int i);
+		glm::vec3 calcular_normal (float v, glm::vec3 normalAnterior);
 		void cargar_indices (unsigned int i, unsigned int j, std::list<unsigned int>* indices_seccion,
 							 std::vector<unsigned int>* indices);
 		void cargar_puntos (std::vector<glm::vec3>* vertices, std::vector<glm::vec3>* tangentes, std::vector<glm::vec3>* normales,

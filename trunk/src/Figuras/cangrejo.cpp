@@ -11,6 +11,11 @@
 
 using namespace std;
 
+#define KA_CANGREJO 0.04, 0.07, 0.15
+#define KD_CANGREJO 0.8, 0.8, 0.8
+#define KS_CANGREJO 0.2, 0.2, 0.2
+#define SHIN_CANGREJO 40.0
+
 
 // **************************** PATA ENTERA ****************************
 PataCangrejo::PataCangrejo(myWindow* ventana) : Figura (ventana),
@@ -25,16 +30,14 @@ void PataCangrejo::renderizar(glm::mat4 model_matrix) {
 		// primera parte de la pata
 		this->muslo.renderizar(model_matrix);
 
+		// segunda parte de la pata
 		model_matrix = glm::translate(model_matrix, glm::vec3 (0.0f, 0.0f, 3.5f));
 		model_matrix = glm::rotate(model_matrix, this->ang_braz2_X, glm::vec3 ( 1.0f,0.0f,0.0f));
-
-		// segunda parte de la pata
 		this->gemelo.renderizar(model_matrix);
 
+		// pie de la pata
 		model_matrix= glm::translate(model_matrix, glm::vec3 (0.0f, 0.0f, 3.5f));
 		model_matrix = glm::rotate(model_matrix, this->ang_mano, glm::vec3 (1.0f,0.0f,0.0f));
-
-		// pie de la pata
 		this->pie.renderizar(model_matrix);
 }
 
@@ -45,8 +48,10 @@ PataMusloCangrejo::PataMusloCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
 	
-	this->mi_superficie->ks = glm::vec3(0.35, 0.35, 0.35);
-	this->mi_superficie->shininess = 100.0;
+	this->mi_superficie->ka = glm::vec3(KA_CANGREJO);
+	this->mi_superficie->kd = glm::vec3(KD_CANGREJO);
+	this->mi_superficie->ks = glm::vec3(KS_CANGREJO);
+	this->mi_superficie->shininess = SHIN_CANGREJO;
 }
 PataMusloCangrejo::~PataMusloCangrejo() { }
 
@@ -84,17 +89,19 @@ PataGemeloCangrejo::PataGemeloCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
 	
-	this->mi_superficie->ks = glm::vec3(0.35, 0.35, 0.35);
-	this->mi_superficie->shininess = 100.0;
+	this->mi_superficie->ka = glm::vec3(KA_CANGREJO);
+	this->mi_superficie->kd = glm::vec3(KD_CANGREJO);
+	this->mi_superficie->ks = glm::vec3(KS_CANGREJO);
+	this->mi_superficie->shininess = SHIN_CANGREJO;
 }
 PataGemeloCangrejo::~PataGemeloCangrejo() { }
 
 Curva* PataGemeloCangrejo::crear_curva_trayectoria () {
 	std::vector<glm::vec3> control_trayectoria;
 	
-	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.0, 0.0) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.1, 0.0) );
 	control_trayectoria.push_back ( glm::vec3 ( 0.0, -0.45, 1.75) );
-	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.0, 3.58) );
+	control_trayectoria.push_back ( glm::vec3 ( 0.0, 0.1, 3.58) );
 	return (new CurvaBezier (control_trayectoria, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
 }
 Curva* PataGemeloCangrejo::crear_curva_seccion () {
@@ -123,8 +130,10 @@ PataPieCangrejo::PataPieCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
 	
-	this->mi_superficie->ks = glm::vec3(0.35, 0.35, 0.35);
-	this->mi_superficie->shininess = 100.0;
+	this->mi_superficie->ka = glm::vec3(KA_CANGREJO);
+	this->mi_superficie->kd = glm::vec3(KD_CANGREJO);
+	this->mi_superficie->ks = glm::vec3(KS_CANGREJO);
+	this->mi_superficie->shininess = SHIN_CANGREJO;
 }
 PataPieCangrejo::~PataPieCangrejo() { }
 
@@ -177,8 +186,10 @@ AntenaCangrejo::AntenaCangrejo(myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie->nombreTextura="cangrejoAntena.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
 	
-	this->mi_superficie->ks = glm::vec3(0.35, 0.35, 0.35);
-	this->mi_superficie->shininess = 100.0;
+	this->mi_superficie->ka = glm::vec3(KA_CANGREJO);
+	this->mi_superficie->kd = glm::vec3(KD_CANGREJO);
+	this->mi_superficie->ks = glm::vec3(KS_CANGREJO);
+	this->mi_superficie->shininess = SHIN_CANGREJO;
 }
 AntenaCangrejo::~AntenaCangrejo() { }
 
@@ -274,8 +285,10 @@ AntebrazoCangrejo::AntebrazoCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
 	
-	this->mi_superficie->ks = glm::vec3(0.35, 0.35, 0.35);
-	this->mi_superficie->shininess = 100.0;
+	this->mi_superficie->ka = glm::vec3(KA_CANGREJO);
+	this->mi_superficie->kd = glm::vec3(KD_CANGREJO);
+	this->mi_superficie->ks = glm::vec3(KS_CANGREJO);
+	this->mi_superficie->shininess = SHIN_CANGREJO;
 }
 AntebrazoCangrejo::~AntebrazoCangrejo() { }
 
@@ -314,8 +327,10 @@ BrazoMedioCangrejo::BrazoMedioCangrejo (myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
 	
-	this->mi_superficie->ks = glm::vec3(0.35, 0.35, 0.35);
-	this->mi_superficie->shininess = 100.0;
+	this->mi_superficie->ka = glm::vec3(KA_CANGREJO);
+	this->mi_superficie->kd = glm::vec3(KD_CANGREJO);
+	this->mi_superficie->ks = glm::vec3(KS_CANGREJO);
+	this->mi_superficie->shininess = SHIN_CANGREJO;
 }
 BrazoMedioCangrejo::~BrazoMedioCangrejo() { }
 
@@ -350,8 +365,10 @@ TenazaSuperiorCangrejo::TenazaSuperiorCangrejo (myWindow* ventana) : Figura (ven
 	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
 	
-	this->mi_superficie->ks = glm::vec3(0.25, 0.25, 0.25);
-	this->mi_superficie->shininess = 100.0;
+	this->mi_superficie->ka = glm::vec3(KA_CANGREJO);
+	this->mi_superficie->kd = glm::vec3(KD_CANGREJO);
+	this->mi_superficie->ks = glm::vec3(KS_CANGREJO);
+	this->mi_superficie->shininess = SHIN_CANGREJO;
 }
 TenazaSuperiorCangrejo::~TenazaSuperiorCangrejo() { }
 
@@ -386,16 +403,16 @@ Curva* TenazaSuperiorCangrejo::crear_curva_seccion () {
 	return (new CurvaBSpline (control_seccion, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
 }
 int TenazaSuperiorCangrejo::obtener_pasos_trayectoria () {
-	return 50;
+	return 18;
 }
 int TenazaSuperiorCangrejo::obtener_pasos_seccion () {
-	return 100;
+	return 1500;
 }
 FuncionCurvaBezier TenazaSuperiorCangrejo::crear_funcion () {
 	std::vector<glm::vec3> puntos;
 	puntos.push_back ( glm::vec3 (0.0, 1.0, 0.0) );
 	puntos.push_back ( glm::vec3 (0.3 * this->obtener_pasos_trayectoria(), 5.0 , 0.0) );
-	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.0, 0.0) );
+	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.0001, 0.0) );
 	return (FuncionCurvaBezier(puntos));
 }
 
@@ -406,8 +423,10 @@ TenazaInferiorCangrejo::TenazaInferiorCangrejo (myWindow* ventana) : Figura (ven
 	this->mi_superficie->nombreTextura="cangrejoExtremidad.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoExtremidadNormal.jpg";
 	
-	this->mi_superficie->ks = glm::vec3(0.25, 0.25, 0.25);
-	this->mi_superficie->shininess = 100.0;
+	this->mi_superficie->ka = glm::vec3(KA_CANGREJO);
+	this->mi_superficie->kd = glm::vec3(KD_CANGREJO);
+	this->mi_superficie->ks = glm::vec3(KS_CANGREJO);
+	this->mi_superficie->shininess = SHIN_CANGREJO;
 }
 TenazaInferiorCangrejo::~TenazaInferiorCangrejo() { }
 
@@ -438,16 +457,16 @@ Curva* TenazaInferiorCangrejo::crear_curva_seccion () {
 	return (new CurvaBSpline (control_seccion, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
 }
 int TenazaInferiorCangrejo::obtener_pasos_trayectoria () {
-	return 50;
+	return 18;
 }
 int TenazaInferiorCangrejo::obtener_pasos_seccion () {
-	return 100;
+	return 1500;
 }
 FuncionCurvaBezier TenazaInferiorCangrejo::crear_funcion () {
 	std::vector<glm::vec3> puntos;
 	puntos.push_back ( glm::vec3 (0.0, 1.0, 0.0) );
 	puntos.push_back ( glm::vec3 (0.85 * this->obtener_pasos_trayectoria(), 3.0 , 0.0) );
-	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.0, 0.0) );
+	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.0001, 0.0) );
 	return (FuncionCurvaBezier(puntos));
 }
 
@@ -457,10 +476,10 @@ TorsoCangrejo::TorsoCangrejo(myWindow* ventana) : Figura (ventana) {
 	this->mi_superficie->nombreTextura="cangrejoTorso.jpg";
 	this->mi_superficie->nombreTexturaNormal="cangrejoTorsoNormal.jpg";
 	
-	//this->ka = glm::vec3(0.5, 0.5, 0.5);
-	//this->kd = glm::vec3(0.5, 0.5, 0.5);
-	this->mi_superficie->ks = glm::vec3(0.35, 0.35, 0.35);
-	this->mi_superficie->shininess = 100.0;
+	this->mi_superficie->ka = glm::vec3(KA_CANGREJO);
+	this->mi_superficie->kd = glm::vec3(KD_CANGREJO);
+	this->mi_superficie->ks = glm::vec3(KS_CANGREJO);
+	this->mi_superficie->shininess = SHIN_CANGREJO;
 }
 TorsoCangrejo::~TorsoCangrejo() { }
 

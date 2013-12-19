@@ -45,13 +45,13 @@ glm::vec3 Curva::dameVector (float u, OrdenBase orden) {
 	for ( int i = 0 ; i < total ; i++ ) {
 		glm::vec3 unPunto = puntosControl->at(i);
 		float unaBase = calcular_base_en_orden (total-1, i, u, orden);
-		this->redondear_valor (unaBase);
+		Helper::redondear_valor (unaBase);
 		puntoFinal += (unPunto * unaBase);
 	}
 	
-	this->redondear_valor (puntoFinal.x);
-	this->redondear_valor (puntoFinal.y);
-	this->redondear_valor (puntoFinal.z);
+	Helper::redondear_valor (puntoFinal.x);
+	Helper::redondear_valor (puntoFinal.y);
+	Helper::redondear_valor (puntoFinal.z);
 	
 	return puntoFinal;
 }
@@ -92,9 +92,9 @@ glm::vec3 Curva::dameBinormal (float u) {
 	glm::vec3 binormal = glm::cross (pDerivada, sDerivada);
 	if (Helper::is_nan (binormal)) return (this->dameOrientacion());
 	
-	this->redondear_valor (binormal.x);
-	this->redondear_valor (binormal.y);
-	this->redondear_valor (binormal.z);
+	Helper::redondear_valor (binormal.x);
+	Helper::redondear_valor (binormal.y);
+	Helper::redondear_valor (binormal.z);
 	
 	if ((binormal.x == 0.0) && (binormal.y == 0.0) && (binormal.z == 0.0)) return (this->dameOrientacion());
 	binormal = glm::normalize (binormal);
@@ -103,9 +103,9 @@ glm::vec3 Curva::dameBinormal (float u) {
 
 glm::vec3 Curva::corregirBinormal (glm::vec3 binormal) {
 	glm::vec3 resultado = (binormal + this->dameOrientacion()); // si la suma da cero, entonces la binormal se dio vuelta
-	this->redondear_valor (resultado.x);
-	this->redondear_valor (resultado.y);
-	this->redondear_valor (resultado.z);
+	Helper::redondear_valor (resultado.x);
+	Helper::redondear_valor (resultado.y);
+	Helper::redondear_valor (resultado.z);
 	
 	if ((resultado.x == 0.0) && (resultado.y == 0.0) && (resultado.z == 0.0)) binormal *= (-1);
 	return binormal;
@@ -118,9 +118,9 @@ glm::vec3 Curva::dameNormal (float u) {
 	
 	if (Helper::is_nan (normal)) normal = glm::vec3 (0.0, 0.0, 0.0);
 	
-	this->redondear_valor (normal.x);
-	this->redondear_valor (normal.y);
-	this->redondear_valor (normal.z);
+	Helper::redondear_valor (normal.x);
+	Helper::redondear_valor (normal.y);
+	Helper::redondear_valor (normal.z);
 	
 	if ((normal.x != 0.0) || (normal.y != 0.0) || (normal.z != 0.0)) normal = glm::normalize (normal);
 	return normal;
@@ -134,19 +134,12 @@ glm::vec3 Curva::dameOrientacion () {
 	return (this->miOrientacion);
 }
 
-void Curva::redondear_valor (float& valor) {
-	float min_value = 0.00001; // redondeo para reducir errores numericos
-	if ((valor < min_value) && (valor > 0.0)) valor = 0.0;
-	if ((((-1.0) * valor) < min_value) && (valor < 0.0)) valor = 0.0;
-	if (valor == -0.0) valor = 0.0;
-}
-
 glm::vec3 Curva::transformar_punto (glm::vec3 punto, glm::mat4 matriz) {
 	glm::vec4 puntoTemp (punto.x, punto.y, punto.z, 1.0);
 	puntoTemp = matriz * puntoTemp;
-	this->redondear_valor (puntoTemp.x);
-	this->redondear_valor (puntoTemp.y);
-	this->redondear_valor (puntoTemp.z);
+	Helper::redondear_valor (puntoTemp.x);
+	Helper::redondear_valor (puntoTemp.y);
+	Helper::redondear_valor (puntoTemp.z);
 	
 	return ( glm::vec3 (puntoTemp.x, puntoTemp.y, puntoTemp.z) );
 }

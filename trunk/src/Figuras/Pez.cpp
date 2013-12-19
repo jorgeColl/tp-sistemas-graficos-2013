@@ -8,12 +8,22 @@
 #include "Pez.h"
 #include <vector>
 
+#define KA_PEZ 0.04, 0.07, 0.15
+#define KD_PEZ 0.8, 0.8, 0.8
+#define KS_PEZ 1.0, 1.0, 1.0
+#define SHIN_PEZ 15.0
+
 
 // ******************************* ALETA *******************************
 AletaPez::AletaPez(myWindow* ventana) :Figura(ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="aletaPez.jpg";
 	this->mi_superficie->nombreTexturaNormal="aletaPezNormal.jpg";
+	
+	this->mi_superficie->ka = glm::vec3(KA_PEZ);
+	this->mi_superficie->kd = glm::vec3(KD_PEZ);
+	this->mi_superficie->ks = glm::vec3(KS_PEZ);
+	this->mi_superficie->shininess = SHIN_PEZ;
 }
 AletaPez::~AletaPez() { }
 void AletaPez::renderizar(glm::mat4 model_matrix) {
@@ -54,6 +64,11 @@ ColaPez::ColaPez(myWindow* ventana) :Figura(ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="colaPez.jpg";
 	this->mi_superficie->nombreTexturaNormal="colaPezNormal.jpg";
+	
+	this->mi_superficie->ka = glm::vec3(KA_PEZ);
+	this->mi_superficie->kd = glm::vec3(KD_PEZ);
+	this->mi_superficie->ks = glm::vec3(KS_PEZ);
+	this->mi_superficie->shininess = SHIN_PEZ;
 }
 ColaPez::~ColaPez() { }
 void ColaPez::renderizar(glm::mat4 model_matrix) {
@@ -94,6 +109,11 @@ TorsoPez::TorsoPez(myWindow* ventana) :Figura(ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="escamasPez.jpg";
 	this->mi_superficie->nombreTexturaNormal="escamasPezNormal.jpg";
+	
+	this->mi_superficie->ka = glm::vec3(KA_PEZ);
+	this->mi_superficie->kd = glm::vec3(KD_PEZ);
+	this->mi_superficie->ks = glm::vec3(KS_PEZ);
+	this->mi_superficie->shininess = SHIN_PEZ;
 }
 TorsoPez::~TorsoPez() { }
 void TorsoPez::renderizar(glm::mat4 model_matrix) {
@@ -136,6 +156,11 @@ AletaDorsal::AletaDorsal(myWindow* ventana): Figura(ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="aletaDorsalPez.jpg";
 	this->mi_superficie->nombreTexturaNormal="aletaDorsalPezNormal.jpg";
+	
+	this->mi_superficie->ka = glm::vec3(KA_PEZ);
+	this->mi_superficie->kd = glm::vec3(KD_PEZ);
+	this->mi_superficie->ks = glm::vec3(KS_PEZ);
+	this->mi_superficie->shininess = SHIN_PEZ;
 }
 AletaDorsal::~AletaDorsal(){ }
 void AletaDorsal::renderizar(glm::mat4 model_matrix) {
@@ -174,6 +199,9 @@ FuncionCurvaBezier AletaDorsal::crear_funcion () {
 Ojo::Ojo(myWindow* ventana):Figura(ventana) {
 	this->mi_superficie = this->crear_superficie (ventana);
 	this->mi_superficie->nombreTextura="ojoPez.jpg";
+	
+	this->mi_superficie->ks = glm::vec3(KS_PEZ);
+	this->mi_superficie->shininess = SHIN_PEZ;
 }
 Ojo::~Ojo() { }
 
