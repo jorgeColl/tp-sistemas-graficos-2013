@@ -169,6 +169,91 @@ void myWindow::cargarTexturasReflexion(std::vector<std::string> texturas,
 	}
 
 }
+
+void myWindow::cargarTexturaYNormalParaReflexion(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme,std::string nombreTexturaNormal,std::string nombreVUniformeNormal, GLfloat* texture_buff){
+	int image_witdh;
+	int image_height;
+	int image_channels;
+	unsigned char* image_buffer;
+
+	GLuint texIDs[2];
+	if ((this->cacheTextureId.count(nombreTextura) == 0) || (this->cacheTextureId.count(nombreTexturaNormal) == 0)) {
+		glGenTextures(2, texIDs);
+		this->cacheTextureId[nombreTextura]=texIDs[0];
+		this->cacheTextureId[nombreTexturaNormal]=texIDs[1];
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texIDs[0]);
+		image_buffer = SOIL_load_image(nombreTextura.c_str(), &image_witdh,&image_height, &image_channels, SOIL_LOAD_RGBA);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height,0, GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		// Set the Tex sampler uniform to texture unit 1
+		int uniloc = glGetUniformLocation(programShader, nombreVariableUniforme.c_str());
+		if (uniloc >= 0){
+			glUniform1i(uniloc, 1);
+		}else{
+			std::cout<< "error al cargar textura en myWindow, metodo cargarTexturaYNormalParaReflexion" <<std::endl;
+			std::cout<< "no se pudo cargar por primera vez la textura: " + nombreTextura << std::endl;
+			std::cout<< "No se encontro: "+nombreVariableUniforme <<std::endl;
+			std::cout<< "program handle: " << programShader <<std::endl;
+			throw std::ios_base::failure("");
+		}
+		// cargo los u,v para la texture unit 1
+		//~ glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		//~ glClientActiveTexture(GL_TEXTURE1);
+		//~ glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
+		
+		// Copy normal texture to OpenGL
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, texIDs[1]);
+		image_buffer = SOIL_load_image(nombreTexturaNormal.c_str(), &image_witdh,&image_height, &image_channels, SOIL_LOAD_RGBA);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_witdh, image_height,0, GL_RGBA, GL_UNSIGNED_BYTE, image_buffer);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		// Set the normalmap sampler uniform to texture unit 2
+		uniloc = glGetUniformLocation(programShader, nombreVUniformeNormal.c_str());
+		if (uniloc >= 0){
+			glUniform1i(uniloc, 2);
+		}else{
+			std::cout<< "error al cargar textura en myWindow, metodo cargarTexturaYNormalParaReflexion" <<std::endl;
+			std::cout<< "no se pudo cargar por primera vez la textura: " + nombreTexturaNormal << std::endl;
+			std::cout<< "No se encontro: "+nombreVUniformeNormal <<std::endl;
+			throw std::ios_base::failure("error al cargar textura en myWindow, metodo cargarTexturaYNormalParaReflexion");
+		}
+
+	}else{
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, this->cacheTextureId[nombreTextura]);
+		int uniloc = glGetUniformLocation(programShader,nombreVariableUniforme.c_str());
+		if (uniloc >= 0) {
+			glUniform1i(uniloc, 1);
+		} else {
+			std::cout<< "error al cargar textura en myWindow, metodo cargarTexturaYNormalParaReflexion" <<std::endl;
+			std::cout<< "no se pudo cargar desde el cacheTexture la textura: " + nombreTextura << std::endl;
+			std::cout<< "No se encontro: "+nombreVariableUniforme <<std::endl;
+			throw std::ios_base::failure(
+					"error al cargar textura en myWindow, metodo cargarTexturaYNormalParaReflexion");
+		}
+		// cargo los u,v para la texture unit 1
+		//~ glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		//~ glClientActiveTexture(GL_TEXTURE1);
+		//~ glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
+		
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, cacheTextureId[nombreTexturaNormal]);
+		uniloc = glGetUniformLocation(programShader, nombreVUniformeNormal.c_str());
+		if (uniloc >= 0) {
+			glUniform1i(uniloc, 2);
+		} else {
+			std::cout<< "error al cargar textura en myWindow, metodo cargarTexturaYNormalParaReflexion" <<std::endl;
+			std::cout<< "no se pudo cargar desde el cacheTexture la textura: " + nombreTexturaNormal << std::endl;
+			std::cout<< "No se encontro: "+nombreVUniformeNormal <<std::endl;
+			throw std::ios_base::failure(
+					"error al cargar textura en myWindow, metodo cargarTexturaYNormalParaReflexion");
+		}
+	}
+}
+
 // RENDER CON BUFFERS DE TANGENTES Y TEXTURAS Y MAPA DE NORMALES Y TEXTURAS DE REFLEXION
 // PHONG RECIBIDO POR PARAMETRO
 void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
@@ -187,17 +272,15 @@ void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 	texturas.push_back(posx);
 	texturas.push_back(posy);
 	texturas.push_back(posz);
-
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
 	
-	glColorPointer(3, GL_FLOAT, 0, tangent_buff);
-	//cargarTexturaYNormal(nombreTextura, this->programHandlePhongAndTextureAndNormalMapAndReflection,"Tex1",nombreTexturaNormales,"NormalMapTex");
 	
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	glEnable(GL_SAMPLER_CUBE_MAP_ARRAY);
 	cargarTexturasReflexion(texturas,this->programHandlePhongAndTextureAndNormalMapAndReflection,"CubeMapTex");
-	glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
+	
+	glEnableClientState(GL_COLOR_ARRAY);
+	glColorPointer(3, GL_FLOAT, 0, tangent_buff);
+	cargarTexturaYNormalParaReflexion(nombreTextura, this->programHandlePhongAndTextureAndNormalMapAndReflection,"Tex1",nombreTexturaNormales,"NormalMapTex", texture_buff);
 	
 	float reflectionFactor = 0.1;
 	GLuint location_reflectionFactor = glGetUniformLocation(this->programHandlePhongAndTextureAndNormalMapAndReflection, "ReflectFactor");
@@ -209,11 +292,16 @@ void myWindow::renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 	if (location_WorldCameraPosition >= 0) {
 		glUniform3fv(location_WorldCameraPosition, 1, &this->m_direct[0]);
 	}else {throw std::ios_base::failure("Error en Binding: reflectionFactor");}
-
+	
+	// cargo los u,v para la texture unit 1
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	//~ glClientActiveTexture(GL_TEXTURE1);
+	glTexCoordPointer(2, GL_FLOAT, 0, texture_buff);
 
 	renderObjectCore(model_matrix, vertex_buff, normal_buff, index_buff,index_buff_size, modo, Ka, Kd, Ks, Shininess,this->programHandlePhongAndTextureAndNormalMapAndReflection);
 
 	glDisableClientState(GL_COLOR_ARRAY);
+	//~ glClientActiveTexture(GL_TEXTURE1); // deshabilito el array en la unit 1
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 // RENDER CON BUFFERS DE TANGENTES Y TEXTURAS Y MAPA DE NORMALES
@@ -706,7 +794,7 @@ void myWindow::compilarPrograma(const char* nombreVertexShader, const char* nomb
 			} else {
 				glUseProgram(punteroProgramaFinal);
 				long num = punteroProgramaFinal;
-				std::cout << "Numero Recibido: "+ num << std::endl;
+				std::cout << "Numero Recibido: "<< num << std::endl;
 			}
 		}
 	}

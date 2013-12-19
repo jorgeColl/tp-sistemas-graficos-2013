@@ -60,7 +60,7 @@ void main() {
 	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * gl_Vertex;
 	// Pasamos las coordenadas de texturas a los FShaders
 	TexCoord = gl_MultiTexCoord0.xy;
-	
+	//TexCoord = vec2 (0.0,0.0);
 	
 	// para el reflejo
 	vec3 worldPos = vec3( ModelMatrix * gl_Vertex );
