@@ -10,7 +10,7 @@
 Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 (ventana),
 				piedra1(ventana), piedra2(ventana), piedra3(ventana), piedra4(ventana), piedra5(ventana),
 				planta1(ventana), planta2(ventana), planta3(ventana), planta4(ventana), planta5(ventana),
-				piso(ventana) {
+				piso(ventana), techo(ventana) {
 	pos_cangrejo1=glm::vec3 (0,-12,1.3f);
 	pos_pez1 = glm::vec3 (0,0,4.0f);
 
@@ -27,6 +27,7 @@ Escenario::Escenario(myWindow* ventana):Figura(ventana),pez1(ventana),cangrejo1 
 	figuras.push_back(&planta4);
 	figuras.push_back(&planta5);
 	figuras.push_back(&piso);
+	figuras.push_back(&techo);
 
 
 	std::vector<glm::vec3> puntos;
@@ -77,7 +78,11 @@ const bool Escenario::DEBUG = false;
 
 void Escenario::renderizar(glm::mat4 model_matrix) {
 	if (Escenario::DEBUG) this->grilla_debug->render(model_matrix);
-		else this->piso.renderizar(model_matrix);
+	else {
+		this->piso.renderizar(model_matrix);
+		glm::mat4 model_matrix_techo = glm::translate(model_matrix, glm::vec3(0.0f, 0.0f, 15.0f));
+		this->techo.renderizar(model_matrix_techo);
+	}
 
 	glm::mat4 model_matrix_pez1=model_matrix;
 	model_matrix_pez1 = glm::translate(model_matrix, pos_pez1);

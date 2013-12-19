@@ -37,7 +37,9 @@ public:
 	// Scene functions
 	void cargarTextura(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme);
 	void cargarTexturaYNormal(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme,std::string nombreTexturaNormal,std::string nombreVUniformeNormal);
+	void cargarTexturaYNormalParaReflexion(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme,std::string nombreTexturaNormal,std::string nombreVUniformeNormal, GLfloat* texture_buff);
 	void cargarTexturasReflexion(std::vector<std::string> texturas,GLuint programShader,std::string nombreVariableUniforme);
+	
 	// render CON buffers de tangentes y texturas
 	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,

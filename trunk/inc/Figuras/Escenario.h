@@ -13,6 +13,7 @@
 #include "piedra.h"
 #include "Planta.h"
 #include "Piso.h"
+#include "Techo.h"
 #include "Pez.h"
 #include "Grilla.h"
 
@@ -38,6 +39,7 @@ protected:
 	Planta planta5;
 
 	Piso piso;
+	Techo techo;
 	std::vector<Figura*> figuras;
 	glm::vec3 pos_cangrejo1,pos_pez1;
 

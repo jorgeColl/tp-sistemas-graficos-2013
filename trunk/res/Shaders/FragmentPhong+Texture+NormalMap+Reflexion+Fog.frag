@@ -70,6 +70,7 @@ float getFogFactor (float positionZ) {
 void main() {
 	float fogFactor = getFogFactor (Position_eye.z);
 	vec3 shadeColor = getShadeColor();
+	//vec3 shadeColor = vec3(texColor.rgb);
 	//vec3 shadeColor = vec3(0.3, 0.0, 0.0); // DESCOMENTAR ESTA LINEA PARA PROBAR REFLEXION CON MALLA DE UN SOLO COLOR
 	
 	// PARCHE PARA QUE ANDE Y VARIE TEXTURA
