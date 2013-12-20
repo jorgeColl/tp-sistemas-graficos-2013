@@ -40,6 +40,8 @@ public:
 	void cargarTexturaYNormalParaReflexion(std::string nombreTextura, GLuint programShader, std::string nombreVariableUniforme,std::string nombreTexturaNormal,std::string nombreVUniformeNormal);
 	void cargarTexturasReflexion(std::vector<std::string> texturas,GLuint programShader,std::string nombreVariableUniforme);
 	
+	void disableTextureUnits (int maxUnit, GLenum target0, GLenum target1, GLenum target2);
+	
 	// render CON buffers de tangentes y texturas
 	void renderObject(glm::mat4 model_matrix, GLfloat* vertex_buff,
 			GLfloat* tangent_buff, GLfloat* normal_buff, GLfloat* texture_buff,

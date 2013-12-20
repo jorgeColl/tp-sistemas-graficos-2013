@@ -10,8 +10,8 @@
 
 #define KA_PEZ 0.04, 0.07, 0.15
 #define KD_PEZ 0.8, 0.8, 0.8
-#define KS_PEZ 1.0, 1.0, 1.0
-#define SHIN_PEZ 15.0
+#define KS_PEZ 0.5, 0.5, 0.5
+#define SHIN_PEZ 20.0
 
 
 // ******************************* ALETA *******************************
@@ -143,11 +143,11 @@ int TorsoPez::obtener_pasos_seccion () {
 }
 FuncionCurvaBezier TorsoPez::crear_funcion () {
 	std::vector<glm::vec3> puntos;
-	puntos.push_back ( glm::vec3 (0.0, 0.0, 0.0) );
+	puntos.push_back ( glm::vec3 (0.0, 0.0001, 0.0) );
 	puntos.push_back ( glm::vec3 (0.03 * this->obtener_pasos_trayectoria(), 1.7, 0.0) );
 	puntos.push_back ( glm::vec3 (0.5 * this->obtener_pasos_trayectoria(), 1.0, 0.0) );
 	puntos.push_back ( glm::vec3 (0.97 * this->obtener_pasos_trayectoria(), 1.7, 0.0) );
-	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.0, 0.0) );
+	puntos.push_back ( glm::vec3 (this->obtener_pasos_trayectoria(), 0.0001, 0.0) );
 	return (FuncionCurvaBezier(puntos));
 }
 
@@ -368,7 +368,7 @@ void Pez::animar() {
 	}
 	if (!aleta_girando) {
 		angAleta--;
-		if (angAleta < 7.0f) {
+		if (angAleta < 12.0f) {
 			aleta_girando = true;
 		}
 	}
