@@ -39,6 +39,7 @@ public:
 	float shininess;
 	std::string nombreTextura;
 	std::string nombreTexturaNormal;
+	bool reflexionActivada;
 	
 	myWindow* window;
 	Superficie();
