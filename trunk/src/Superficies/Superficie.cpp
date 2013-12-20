@@ -28,6 +28,8 @@ void Superficie::init () {
 	this->amplitud = 0;
 	this->numeroOnda = 0;
 	this->velocidad = 0;
+	
+	this->reflexionActivada = false;
 }
 
 Superficie::Superficie () {
@@ -41,9 +43,7 @@ Superficie::Superficie (myWindow* passed_window) {
 
 void Superficie::render (glm::mat4 view_model_matrix) {
 	if (this->window != NULL) {
-		// negrada a la vista mi señorr
-		// JAJAJA TE TOMASTE LO DE REFLEXION MUY A PECHO ;)
-		if(nombreTextura=="escamasPez.jpg"){
+		if(this->reflexionActivada){
 			this->window->renderObject(view_model_matrix, vertex_buffer,tangent_buffer, normal_buffer,
 			texture_buffer, nombreTextura,nombreTexturaNormal,index_buffer, index_buffer_size, modo,ka,kd,ks,shininess
 			,"Peznegx.png",

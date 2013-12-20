@@ -24,6 +24,8 @@ AletaPez::AletaPez(myWindow* ventana) :Figura(ventana) {
 	this->mi_superficie->kd = glm::vec3(KD_PEZ);
 	this->mi_superficie->ks = glm::vec3(KS_PEZ);
 	this->mi_superficie->shininess = SHIN_PEZ;
+	
+	this->mi_superficie->reflexionActivada = true;
 }
 AletaPez::~AletaPez() { }
 void AletaPez::renderizar(glm::mat4 model_matrix) {
@@ -69,6 +71,8 @@ ColaPez::ColaPez(myWindow* ventana) :Figura(ventana) {
 	this->mi_superficie->kd = glm::vec3(KD_PEZ);
 	this->mi_superficie->ks = glm::vec3(KS_PEZ);
 	this->mi_superficie->shininess = SHIN_PEZ;
+	
+	this->mi_superficie->reflexionActivada = true;
 }
 ColaPez::~ColaPez() { }
 void ColaPez::renderizar(glm::mat4 model_matrix) {
@@ -114,6 +118,8 @@ TorsoPez::TorsoPez(myWindow* ventana) :Figura(ventana) {
 	this->mi_superficie->kd = glm::vec3(KD_PEZ);
 	this->mi_superficie->ks = glm::vec3(KS_PEZ);
 	this->mi_superficie->shininess = SHIN_PEZ;
+	
+	this->mi_superficie->reflexionActivada = true;
 }
 TorsoPez::~TorsoPez() { }
 void TorsoPez::renderizar(glm::mat4 model_matrix) {
@@ -161,6 +167,8 @@ AletaDorsal::AletaDorsal(myWindow* ventana): Figura(ventana) {
 	this->mi_superficie->kd = glm::vec3(KD_PEZ);
 	this->mi_superficie->ks = glm::vec3(KS_PEZ);
 	this->mi_superficie->shininess = SHIN_PEZ;
+	
+	this->mi_superficie->reflexionActivada = true;
 }
 AletaDorsal::~AletaDorsal(){ }
 void AletaDorsal::renderizar(glm::mat4 model_matrix) {
